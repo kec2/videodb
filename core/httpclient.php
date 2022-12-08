@@ -138,9 +138,27 @@ function httpClient($url, $cache = false, $para = null, $reload = false)
         $requestConfig += ['headers' => ['Accept-Language' => $config['http_header_accept_language']]];
     }
 
+    addRequestHeader($requestConfig, $para);
+
     // additional request headers
     if (!empty($para) && !empty($para['header'])) {
         $requestConfig += ['headers' => $para['header']];
+    }
+
+    if (empty($requestConfig['headers']['Accept'])) {
+        $requestConfig['headers']['Accept'] = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
+    }
+    if (empty($requestConfig['headers']['Accept-Language'])) {
+        $requestConfig['headers']['Accept-Language'] = filter_input(INPUT_SERVER, 'HTTP_ACCEPT_LANGUAGE'); // @todo make this configurable
+    }
+    if (empty($requestConfig['headers']['DNT'])) {
+        $requestConfig['headers']['DNT'] = '1';
+    }
+    if (empty($requestConfig['headers']['User-Agent'])) {
+        $requestConfig['headers']['User-Agent'] = filter_input(INPUT_SERVER, 'HTTP_USER_AGENT');
+    }
+    if (empty($requestConfig['headers']['Referer'])) {
+        $requestConfig['headers']['Referer'] = 'https://www.imdb.com';
     }
 
     $resp = $client->request($method, $url, $requestConfig);
@@ -186,6 +204,39 @@ function httpClient($url, $cache = false, $para = null, $reload = false)
     return $response;
 }
 
+function addRequestHeader($requestConfig, $para)
+{
+    if (!empty($config['http_header_accept_language'])) {
+        $requestConfig['headers']['Accept-Language'] = $config['http_header_accept_language'];
+    }
+
+    if (empty($requestConfig['headers']['Accept'])) {
+        $requestConfig['headers']['Accept'] = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
+    }
+
+    if (empty($requestConfig['headers']['Accept-Language'])) {
+        $requestConfig['headers']['Accept-Language'] = filter_input(INPUT_SERVER, 'HTTP_ACCEPT_LANGUAGE'); // @todo make this configurable
+    }
+
+    if (empty($requestConfig['headers']['DNT'])) {
+        $requestConfig['headers']['DNT'] = '1';
+    }
+
+    if (empty($requestConfig['headers']['User-Agent'])) {
+        $requestConfig['headers']['User-Agent'] = filter_input(INPUT_SERVER, 'HTTP_USER_AGENT');
+    }
+
+    if (empty($requestConfig['headers']['Referer'])) {
+        $requestConfig['headers']['Referer'] = 'https://www.imdb.com';
+    }
+
+    // additional request headers
+    if (!empty($para) && !empty($para['header'])) {
+        $requestConfig += ['headers' => $para['header']];
+    }
+
+    return $requestConfig;
+}
 
 /**
  * Print all header info using echo
