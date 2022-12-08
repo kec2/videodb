@@ -58,7 +58,7 @@ extract($_REQUEST);
 
 // security check
 if ($id) validate_input($id);
-if ($ajax_update) validate_input($ajax_update);
+if (!empty($ajax_update)) validate_input($ajax_update);
 
 // Smarty setup
 $smarty = new Smarty();
@@ -143,7 +143,7 @@ function load_config($force_reload = false)
 {
 	global $config, $lang, $smarty;
     // configuration cached and not outdated?
-    if (!$force_reload && !$config['recompile'] && session_get('config') &&
+    if (!$force_reload && empty($config['recompile']) && session_get('config') &&
        (session_get('config_userid') === $_COOKIE['VDBuserid']) &&
        (session_get('config_timestamp') == filemtime(CONFIG_FILE)))
     {
@@ -397,11 +397,12 @@ function get_actor_image_from_cache($result, $name, $actorid, $imageUrl)
   //  dlog("get_actor_image_from_cache: $imageUrl");
 
     $imgurl = 'img.php?name='.urlencode($name);
-    if (!empty($imageUrl)) {
-        $imgurl .= '&imgurl='.$imageUrl;
-    }
+
     if ($actorid) {
         $imgurl .= '&actorid='.urlencode($actorid);
+    }
+    if (!empty($imageUrl)) {
+        $imgurl .= '&imgurl='.urlencode($imageUrl);
     }
 
     // really an image?
@@ -483,7 +484,7 @@ function getThumbnail($imgurl, $name = '')
         else
 		{
             // add cache_ignore=1& to suppress additional cache lookup in img.php
-            return('img.php?url='.urlencode($imgurl));
+            return 'img.php?url='.$imgurl;
 		}
 	}
 

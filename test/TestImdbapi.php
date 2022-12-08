@@ -41,8 +41,6 @@ class TestIMDbApi extends TestCase
         echo '</pre>';
     }
 
-    //function testGetDataUsMovieWithEnLanguage(){}
-    //function testGetDataUsMovieWithDeLanguage(){}
     function testGetDataDeMovieWithEnLanguage(){}
     function testGetDataDeMovieWithDeLanguage(){}
 
@@ -51,22 +49,16 @@ class TestIMDbApi extends TestCase
     function testSearchUrlNoInput(){}
     function testSearchUrlWithDeLanguage(){}
 
-
     function testContentUrl(){}
     function testContentUrlNoInput(){}
     function testContentUrlWithDeLanguage(){}
-
-    function testActorUrlNoInput(){}
-    function testActorUrlWithName(){}
-    function testActorUrlWithId(){}
-    function testActorUrlWithNameAndId(){}
 
     function testActorImageUrl(){}
     function testActorImageUrlNoImage(){}
 
 
 
-    function testDutchLanguageWithAmericanMovie()
+    function testGetDataUsMovieWithDeLanguage()
     {
         // get German version.
         global $config;
@@ -98,20 +90,19 @@ class TestIMDbApi extends TestCase
         $this->assertEquals('Englisch, Sanskrit', $data['language']);
         $this->assertEquals('Aktion, Abenteuer, Fantasie', join(', ', $data['genres']));
 
-        # cast tests changed to be independent of order
-        $cast = explode("\n", $data['cast']);
+        $this->assertMatchesRegularExpression('#Liam Neeson::Qui-Gon Jinn::imdbapi:nm0000553#', $data['cast']);
+        $this->assertMatchesRegularExpression('#Ewan McGregor::Obi-Wan Kenobi::imdbapi:nm0000191#', $data['cast']);
+        $this->assertMatchesRegularExpression('#Natalie Portman::Queen Amidala / Padmé::imdbapi:nm0000204#', $data['cast']);
+        $this->assertMatchesRegularExpression('#Anthony Daniels::C-3PO \(voice\)::imdbapi:nm0000355#', $data['cast']);
+        $this->assertMatchesRegularExpression('#Kenny Baker::R2-D2::imdbapi:nm0048652#', $data['cast']);
 
-        $this->assertTrue(in_array('Liam Neeson::Qui-Gon Jinn::imdbapi:nm0000553', $cast));
-        $this->assertTrue(in_array('Ewan McGregor::Obi-Wan Kenobi::imdbapi:nm0000191', $cast));
-        $this->assertTrue(in_array('Natalie Portman::Queen Amidala / Padmé::imdbapi:nm0000204', $cast));
-        $this->assertTrue(in_array('Anthony Daniels::C-3PO (voice)::imdbapi:nm0000355', $cast));
-        $this->assertTrue(in_array('Kenny Baker::R2-D2::imdbapi:nm0048652', $cast));
+        $cast = explode("\n", $data['cast']);
         $this->assertTrue(sizeof($cast) > 90);
 
         $this->assertMatchesRegularExpression('/Rund 30 Jahre vor den Ereignissen des ersten Star Wars-Films nimmt die Legende ihren Anfang/', $data['plot']);
     }
 
-    function testEnglishLanguageWithAmericanMovie()
+    function testGetDataUsMovieWithEnLanguage()
     {
         // Star Wars: Episode I
         // https://imdb.com/title/tt0120915/
@@ -137,13 +128,13 @@ class TestIMDbApi extends TestCase
         $this->assertEquals('English, Sanskrit', $data['language']);
         $this->assertEquals('Action, Adventure, Fantasy', join(', ', $data['genres']));
 
-        # cast tests changed to be independent of order
+        $this->assertMatchesRegularExpression('#Liam Neeson::Qui-Gon Jinn::imdbapi:nm0000553#', $data['cast']);
+        $this->assertMatchesRegularExpression('#Ewan McGregor::Obi-Wan Kenobi::imdbapi:nm0000191#', $data['cast']);
+        $this->assertMatchesRegularExpression('#Natalie Portman::Queen Amidala / Padmé::imdbapi:nm0000204#', $data['cast']);
+        $this->assertMatchesRegularExpression('#Anthony Daniels::C-3PO \(voice\)::imdbapi:nm0000355#', $data['cast']);
+        $this->assertMatchesRegularExpression('#Kenny Baker::R2-D2::imdbapi:nm0048652#', $data['cast']);
+
         $cast = explode("\n", $data['cast']);
-        $this->assertTrue(in_array('Liam Neeson::Qui-Gon Jinn::imdbapi:nm0000553', $cast));
-        $this->assertTrue(in_array('Ewan McGregor::Obi-Wan Kenobi::imdbapi:nm0000191', $cast));
-        $this->assertTrue(in_array('Natalie Portman::Queen Amidala / Padmé::imdbapi:nm0000204', $cast));
-        $this->assertTrue(in_array('Anthony Daniels::C-3PO (voice)::imdbapi:nm0000355', $cast));
-        $this->assertTrue(in_array('Kenny Baker::R2-D2::imdbapi:nm0048652', $cast));
         $this->assertTrue(sizeof($cast) > 90);
 
         $this->assertMatchesRegularExpression('/Two Jedi escape a hostile blockade to find allies and come across a young boy who may bring balance to the Force/', $data['plot']);
@@ -327,14 +318,13 @@ class TestIMDbApi extends TestCase
         $this->assertEquals('Englisch', $data['language']);
         $this->assertEquals('Aktion, Abenteuer, Science-Fiction', join(', ', $data['genres']));
 
+        $this->assertMatchesRegularExpression('#Patrick Stewart::Capt. Jean-Luc Picard::imdbapi:nm0001772#', $data['cast']);
+        $this->assertMatchesRegularExpression('#Jonathan Frakes::Cmdr. William Riker::imdbapi:nm0000408#', $data['cast']);
+        $this->assertMatchesRegularExpression('#Marina Sirtis::Counselor Deanna Troi::imdbapi:nm0000642#', $data['cast']);
+        $this->assertMatchesRegularExpression('#John de Lancie::Q::imdbapi:nm0209496#', $data['cast']);
+        $this->assertMatchesRegularExpression('#Rob Bowman::Borg::imdbapi:nm0101385#', $data['cast']);
+
         $cast = explode("\n", $data['cast']);
-
-        $this->assertTrue(in_array('Patrick Stewart::Capt. Jean-Luc Picard::imdbapi:nm0001772', $cast));
-        $this->assertTrue(in_array('Jonathan Frakes::Cmdr. William Riker::imdbapi:nm0000408', $cast));
-        $this->assertTrue(in_array('Marina Sirtis::Counselor Deanna Troi::imdbapi:nm0000642', $cast));
-        $this->assertTrue(in_array('John de Lancie::Q::imdbapi:nm0209496', $cast));
-        $this->assertTrue(in_array('Rob Bowman::Borg::imdbapi:nm0101385', $cast));
-
         $this->assertTrue(sizeof($cast) > 15 && sizeof($cast) < 30);
         $this->assertEquals('46', $data['runtime']);
 
@@ -362,13 +352,13 @@ class TestIMDbApi extends TestCase
         $this->assertEquals('English', $data['language']);
         $this->assertEquals('Crime, Drama, Mystery', join(', ', $data['genres']));
 
-        $cast = explode("\n", $data['cast']);
+        $this->assertMatchesRegularExpression('/Clare Swinburne::Gabriella Patten::imdbapi:nm0842673/', $data['cast']);
+        $this->assertMatchesRegularExpression('/Mark Anthony Brighton::Kenneth Waring::imdbapi:nm1347940/', $data['cast']);
+        $this->assertMatchesRegularExpression('/Nathaniel Parker::Thomas Lynley::imdbapi:nm0662511/', $data['cast']);
+        $this->assertMatchesRegularExpression('/Andrew Clover::Hugh Patten::imdbapi:nm0167249/', $data['cast']);
+        $this->assertMatchesRegularExpression('/Anjalee Patel::Hadiyyah::imdbapi:nm1347125/', $data['cast']);
 
-        $this->assertTrue(in_array('Clare Swinburne::Gabriella Patten::imdbapi:nm0842673', $cast));
-        $this->assertTrue(in_array('Mark Anthony Brighton::Kenneth Waring::imdbapi:nm1347940', $cast));
-        $this->assertTrue(in_array('Nathaniel Parker::Thomas Lynley::imdbapi:nm0662511', $cast));
-        $this->assertTrue(in_array('Andrew Clover::Hugh Patten::imdbapi:nm0167249', $cast));
-        $this->assertTrue(in_array('Anjalee Patel::Hadiyyah::imdbapi:nm1347125', $cast));
+        $cast = explode("\n", $data['cast']);
         $this->assertTrue(sizeof($cast) > 12 && sizeof($cast) < 30);
 
         $this->assertMatchesRegularExpression('/Lynley seeks the help of profiler Helen Clyde when he investigates the asphyxiation death of superstar cricketer with a dysfunctional personal life./', $data['plot']);
@@ -413,6 +403,13 @@ class TestIMDbApi extends TestCase
 
         $this->assertEquals(1, $data['istv']);
         $this->assertEmpty($data['runtime']);
+    }
+
+    function testGetSearchUrl()
+    {
+        $url = engineGetSearchUrl('Clerks 2', 'imdbapi');
+
+        $this->assertMatchesRegularExpression('#https://imdb-api.com/en/api/SearchTitle/.+?/Clerks%202#', $url);
     }
 
     function testActorImageWithNameAndId() {

@@ -134,7 +134,7 @@ function httpClient($url, $cache = false, $para = null, $reload = false)
         $requestConfig += ['proxy' => sprintf('tcp://%s:%d', $server, $port)];
     }
 
-    addRequestHeader($requestConfig, $para);
+    $requestConfig = addRequestHeader($requestConfig, $para);
 
     $resp = $client->request($method, $url, $requestConfig);
 
@@ -181,6 +181,8 @@ function httpClient($url, $cache = false, $para = null, $reload = false)
 
 function addRequestHeader($requestConfig, $para)
 {
+    global $config;
+
     // is used in imdb to fetch title, description ao. in an other language
     if (!empty($config['http_header_accept_language'])) {
         $requestConfig['headers']['Accept-Language'] = $config['http_header_accept_language'];

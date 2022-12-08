@@ -278,12 +278,14 @@ function imdbapiData($imdbID) {
         $character = $actor->asCharacter;
         $actor     = $actor->name;
         $cast .= "$actor::$character::$imdbApiIdPrefix$actorid::$imgurl\n";
+//        $cast .= "$actor::$character::$imdbApiIdPrefix$actorid\n";
 
         // TODO - we really should use the $imgurl in stead of looking it up with getActorUrl.
     }
     // remove html entities and replace &nbsp; with simple space
-    $data['cast'] = html_clean_utf8($cast);
-
+//    $data['cast'] = html_clean_utf8($cast);
+    $data['cast'] = $cast;
+    
     // sometimes appearing in series (e.g. Scrubs)
     $data['cast'] = preg_replace('#/ ... #', '', $data['cast']);
 
