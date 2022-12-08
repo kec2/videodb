@@ -220,8 +220,14 @@ function imdbData($imdbID)
     $data= array(); // result
     $ary = array(); // temp
 
+    $header_param['User-Agent'] = get_useragent_from_header();
+    if (isset($config['http_header_accept_language'])) {
+        $header_param['Accept-Language'] = $config['http_header_accept_language'];
+    }
+    $param = ['header' => $header_param];
+
     // fetch mainpage
-    $resp = httpClient($imdbServer.'/title/tt'.$imdbID.'/', $cache);     // added trailing / to avoid redirect
+    $resp = httpClient($imdbServer.'/title/tt'.$imdbID.'/', $cache, $param);     // added trailing / to avoid redirect
     if (!$resp['success']) {
         $CLIENTERROR .= $resp['error']."\n";
     }
@@ -343,7 +349,7 @@ function imdbData($imdbID)
 
     // for Episodes - try to get some missing stuff from the main series page
     if ($data['istv'] ?? false and (!$data['runtime'] or !$data['country'] or !$data['language'] or !$data['coverurl'])) {
-        $sresp = httpClient($imdbServer.'/title/tt'.$data['tvseries_id'].'/', $cache);
+        $sresp = httpClient($imdbServer.'/title/tt'.$data['tvseries_id'].'/', $cache, $param);
         if (!$sresp['success']) $CLIENTERROR .= $resp['error']."\n";
 
         # runtime
@@ -447,10 +453,13 @@ function imdbGetCoverURL($data) {
     global $CLIENTERROR;
     global $cache;
 
+    $header_param['User-Agent'] = get_useragent_from_header();
+    $param = ['header' => $header_param];
+
     // find cover image url
     if (preg_match('/<a class="ipc-lockup-overlay ipc-focusable" href="(\/title\/tt\d+\/mediaviewer\/\??rm.+?)" aria-label=".*?Poster.*?"><div class="ipc-lockup-overlay__screen"><\/div><\/a>/s', $data, $ary)) {
         // Fetch the image page
-        $resp = httpClient($imdbServer.$ary[1], $cache);
+        $resp = httpClient($imdbServer.$ary[1], $cache, $param);
 
         if ($resp['success']) {
             // get big cover image.
@@ -507,8 +516,11 @@ function imdbActor($name, $actorid)
     global $imdbServer;
     global $cache;
 
+    $header_param['User-Agent'] = get_useragent_from_header();
+    $param = ['header' => $header_param];
+
     // search directly by id or via name?
-    $resp = httpClient(imdbActorUrl($name, $actorid), $cache);
+    $resp = httpClient(imdbActorUrl($name, $actorid), $cache, $param);
 
     // if not direct match load best match
     if (preg_match('#<b>Popular Names</b>.+?<a\s+href="(.*?)">#i', $resp['data'], $m)
@@ -518,7 +530,7 @@ function imdbActor($name, $actorid)
         if (!preg_match('/http/i', $m[1])) {
             $m[1] = $imdbServer.$m[1];
         }
-        $resp = httpClient($m[1], true);
+        $resp = httpClient($m[1], $cache, $param);
     }
 
     // now we should have loaded the best match

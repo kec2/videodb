@@ -41,6 +41,31 @@ class TestIMDbApi extends TestCase
         echo '</pre>';
     }
 
+    //function testGetDataUsMovieWithEnLanguage(){}
+    //function testGetDataUsMovieWithDeLanguage(){}
+    function testGetDataDeMovieWithEnLanguage(){}
+    function testGetDataDeMovieWithDeLanguage(){}
+
+    // search movie: The Terminator => The%20Terminator
+    function testSearchUrl(){}
+    function testSearchUrlNoInput(){}
+    function testSearchUrlWithDeLanguage(){}
+
+
+    function testContentUrl(){}
+    function testContentUrlNoInput(){}
+    function testContentUrlWithDeLanguage(){}
+
+    function testActorUrlNoInput(){}
+    function testActorUrlWithName(){}
+    function testActorUrlWithId(){}
+    function testActorUrlWithNameAndId(){}
+
+    function testActorImageUrl(){}
+    function testActorImageUrlNoImage(){}
+
+
+
     function testDutchLanguageWithAmericanMovie()
     {
         // get German version.

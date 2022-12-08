@@ -19,6 +19,7 @@ require_once './core/edit.core.php';
 
 require_once './engines/engines.php';
 
+error_reporting(E_ERROR);
 
 // check for localnet
 localnet_or_die();
@@ -30,8 +31,7 @@ permission_or_die(PERM_WRITE, ($id) ? get_owner_id($id) : PERM_ANY);
 $genres = (is_array($genres)) ? array_filter($genres) : array();
 
 // ajax autocomplete?
-if ($ajax_prefetch_id || $ajax_autocomplete_title || $ajax_autocomplete_subtitle)
-{
+if (!empty($ajax_prefetch_id) || !empty($ajax_autocomplete_title) || !empty($ajax_autocomplete_subtitle)) {
     // add some delay for debugging
     if ($config['debug'] && $_SERVER['SERVER_ADDR'] == '127.0.0.1')  usleep(rand(200,1000)*1000);
 
@@ -81,7 +81,7 @@ if ($ajax_prefetch_id || $ajax_autocomplete_title || $ajax_autocomplete_subtitle
 } 
 
 // duplicate check
-if ($ajax_check_duplicate)
+if (!empty($ajax_check_duplicate))
 {
     $q      = escapeSQL($ajax_check_duplicate);
     $res    = runSQL("SELECT id, title FROM ".TBL_DATA." WHERE imdbid='".$q."' OR title LIKE '%".$q."%' AND owner_id=".get_current_user_id());
@@ -91,7 +91,7 @@ if ($ajax_check_duplicate)
 }
 
 // XML import
-if ($config['xml'] && ($import == 'xml'))
+if ($config['xml'] && !empty($import) && $import == 'xml')
 {
     require_once './core/xml.php';
 
@@ -136,10 +136,14 @@ if ($config['xml'] && ($import == 'xml'))
 }
 
 // legacy
-if ($imdb) $lookup = 1;
+if (!empty($imdb)) {
+    $lookup = 1;
+}
 
 // get default lookup mode (0=ignore, 1=lookup, 2=overwrite) if not set
-if (!isset($lookup)) $lookup = (empty($id)) ? $lookup = $config['lookupdefault_new'] : $config['lookupdefault_edit'];
+if (!isset($lookup)) {
+    $lookup = (empty($id)) ? $lookup = $config['lookupdefault_new'] : $config['lookupdefault_edit'];
+}
 
 // preload old data for refresh all mechanism
 if ($lookup > 2)
@@ -212,8 +216,7 @@ if ($lookup && $imdbID)
         if (in_array($name, array('coverurl', 'genres', 'cast', 'id'))) continue;
 
         // use !$$ as empty($$) doesn't seem to work
-        if (!$$name || ($lookup > 1))
-        {
+        if (empty($$name) || $lookup > 1) {
             $$name = $imdbdata[$name];
         }
     }
@@ -232,8 +235,7 @@ if ($lookup && $imdbID)
 }
 
 // get fields from db if copying
-if ($copy && $copyid)
-{
+if (!empty($copy) && $copyid) {
     $video = runSQL('SELECT * FROM '.TBL_DATA.' WHERE id = '.$copyid);
 
     // get fields (according to list) from db to be saved later
@@ -264,7 +266,9 @@ if ($save)
     //if (!preg_match('/[0-9]{2+}/', $id)) break;
     
     // implicit owner id if not set
-    if (!$owner_id) $owner_id = get_current_user_id();
+    if (empty($owner_id)) {
+        $owner_id = get_current_user_id();
+    }
 
     // generate diskid
     if (empty($diskid) && $config['autoid'] && $mediatype != MEDIA_WISHLIST) $diskid = getDiskId();

@@ -44,33 +44,43 @@ function checkAmazonSmallImage($url, $ext, $file)
 
 
 // default - no url given or no image
+dlog("fdfds: $imgurl");
 $file = img();
 
+//dlog("fdfds: $name");
+
 // Get imgurl for the actor
-if ($name) 
-{
+if ($name) {
     require_once './engines/engines.php';
 
-    // name given
-	$name   = html_entity_decode($name);
-	$result = engineActor($name, $actorid, engineGetActorEngine($actorid));
+    if (!empty($imgurl) {
+        $url = $imgurl;
+        dlog("url: $url");
+    } else {
+        // name given
+        $name   = html_entity_decode($name);
+        $result = engineActor($name, $actorid, engineGetActorEngine($actorid));
 
-	if (!empty($result)) {
-		$url = $result[0][1];
+        if (!empty($result)) {
+            $url = $result[0][1];
+        }
+        if (preg_match('/nohs(-[f|m])?.gif$/', $url)) {
+            // imdb no-image picture
+            $url = '';
+        }
 	}
-	if (preg_match('/nohs(-[f|m])?.gif$/', $url)) {
-        // imdb no-image picture
-		$url = '';
-	} 
 
     // write actor last checked record
     // NOTE: this is only called if the template preparation has determined the actor record needs checking
+
+    // write only if HTTP lookup physically successful
     {
-        // write only if HTTP lookup physically successful
-        $SQL = 'REPLACE '.TBL_ACTORS." (name, imgurl, actorid, checked)
-                 VALUES ('".addslashes($name)."', '".addslashes($url)."', '".addslashes($actorid)."', NOW())";
-        runSQL($SQL);
+    $SQL = 'REPLACE '.TBL_ACTORS." (name, imgurl, actorid, checked)
+             VALUES ('".addslashes($name)."', '".addslashes($url)."', '".addslashes($actorid)."', NOW())";
+    runSQL($SQL);
     }
+
+//    dlog("sql: $sql");
 }
 
 // Get cached image for the given url

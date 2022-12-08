@@ -277,7 +277,7 @@ function imdbapiData($imdbID) {
         $imgurl    = $actor->image;
         $character = $actor->asCharacter;
         $actor     = $actor->name;
-        $cast .= "$actor::$character::$imdbApiIdPrefix$actorid\n";
+        $cast .= "$actor::$character::$imdbApiIdPrefix$actorid::$imgurl\n";
 
         // TODO - we really should use the $imgurl in stead of looking it up with getActorUrl.
     }
@@ -339,7 +339,10 @@ function imdbapiActor($name, $actorid) {
 
     // search directly by id or via name?
     $actorUrl = imdbapiActorUrl($name, $actorid);
-    $resp = httpClient($actorUrl, $cache);
+    $header_param['User-Agent'] = get_useragent_from_header();
+    $param = ['header' => $header_param];
+
+    $resp = httpClient($actorUrl, $cache, $param);
 
     // if not direct match load best match
     if (preg_match('#<b>Popular Names</b>.+?<a\s+href="(.*?)">#i', $resp['data'], $m)
@@ -349,7 +352,7 @@ function imdbapiActor($name, $actorid) {
         if (!preg_match('/http/i', $m[1])) {
             $m[1] = $imdbServer.$m[1];
         }
-        $resp = httpClient($m[1], true);
+        $resp = httpClient($m[1], $cache);
     }
 
     // now we should have loaded the best match

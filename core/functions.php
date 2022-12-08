@@ -377,8 +377,7 @@ function smarty_display($template, $id = null)
  * @param  string  filename of image
  * @return string  path to the image
  */
-function img($img = 'nocover.gif')
-{
+function img($img = 'nocover.gif') {
 	global $config;
 
 	$result = 'images/'.$img;
@@ -388,29 +387,34 @@ function img($img = 'nocover.gif')
 
 /**
  * Internal function for supporting actor image multi-queries
+ *
+ * This is creating a "url" to img.php from where we can look up images..
  */
-function get_actor_image_from_cache($result, $name, $actorid)
+function get_actor_image_from_cache($result, $name, $actorid, $imageUrl)
 {
     global $config;
 
+  //  dlog("get_actor_image_from_cache: $imageUrl");
+
     $imgurl = 'img.php?name='.urlencode($name);
-    if ($actorid) $imgurl .= '&actorid='.urlencode($actorid);
+    if (!empty($imageUrl)) {
+        $imgurl .= '&imgurl='.$imageUrl;
+    }
+    if ($actorid) {
+        $imgurl .= '&actorid='.urlencode($actorid);
+    }
 
     // really an image?
-    if (preg_match('/\.(jpe?g|gif|png)$/i', $result['imgurl'], $matches))
-    {
-        if (cache_file_exists($result['imgurl'], $cache_file, CACHE_IMG, $matches[1]))
-        {
-            return($cache_file);
+    if (preg_match('/\.(jpe?g|gif|png)$/i', $result['imgurl'], $matches)) {
+        if (cache_file_exists($result['imgurl'], $cache_file, CACHE_IMG, $matches[1])) {
+            return $cache_file;
         }
-    }
-    elseif (isset($result['cacheage']) && $result['cacheage'] <= $config['thumbAge'])
-    {
+    } elseif (isset($result['cacheage']) && $result['cacheage'] <= $config['thumbAge']) {
         // checked only recently
-        return(img());
+        return img();
     }
 
-    return($imgurl);
+    return $imgurl;
 }
 
 /**
@@ -420,9 +424,11 @@ function get_actor_image_from_cache($result, $name, $actorid)
  * @param  boolean idSearchAllowed can be used to search by name only if searching by id has already been performed before
  * @return string  the URL to the cached image if exists or a link to img.php
  */
-function getActorThumbnail($name, $actorid = 0, $idSearchAllowed = true)
+ function getActorThumbnail($name, $actorid = 0, $idSearchAllowed = true, $imageUrl = null)
 {
 	global $config;
+
+    //dlog("getActorThumbnail: $imageUrl");
 
     $SQL = 'SELECT name, imgurl, UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(checked) AS cacheage
               FROM '.TBL_ACTORS;
@@ -435,9 +441,7 @@ function getActorThumbnail($name, $actorid = 0, $idSearchAllowed = true)
         $result = runSQL($SQL . " WHERE name='" . addslashes(html_entity_decode($name)) . "'");
     }
 
-    $imgurl = get_actor_image_from_cache($result[0], $name, $actorid);
-
-	return($imgurl);
+    return get_actor_image_from_cache($result[0], $name, $actorid, $imageUrl);
 }
 
 function cleanFilename($filename) {
@@ -949,5 +953,24 @@ function get_username($userId)
     return $result[0]['name'];
 }
 
+/**
+ * Return the user agent for this browser and machine
+ * this is used where httpClient is called for imdb to stop 403 error
+ *
+ */
+function get_useragent_from_header()
+{
+    if(isset($_SERVER['HTTP_USER_AGENT']))
+    {
+        $header_useragent = $_SERVER['HTTP_USER_AGENT'];
+    }
+    else
+    {
+        $request_headers = getallheaders();
+        $header_useragent = $request_headers['User-Agent'];
+    }
+
+    return $header_useragent;
+}
 
 ?>

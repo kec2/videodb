@@ -340,8 +340,9 @@ function tpl_footer()
 /**
  * Function combines multiple actor thumbnail queries into single SQL query
  */
-function get_actor_thumbnails_batched(&$actors)
-{
+function get_actor_thumbnails_batched(&$actors) {
+//    dlog("get_actor_thumbnails_batched");
+
     if (!count($actors)) return;
     
     $ids    = "'".join("','", array_map('addslashes', array_column($actors, 'id')))."'";
@@ -353,15 +354,16 @@ function get_actor_thumbnails_batched(&$actors)
     $result = array_associate($result, 'actorid');
 
     // loop over actors from full-text field
-    foreach ($actors as $idx => $actor)
-    {
+    foreach ($actors as $idx => $actor) {
         // check for actor thumbnail
         $batch_result = $result[$actor['id']];
         
-        if ($batch_result)
-            $actors[$idx]['imgurl'] = get_actor_image_from_cache($batch_result, $actor['name'], $actor['id']);
-        else
-            $actors[$idx]['imgurl'] = getActorThumbnail($actor['name'], $actor['id'], false);
+        if ($batch_result) {
+            $actors[$idx]['imgurl'] = get_actor_image_from_cache($batch_result, $actor['name'], $actor['id'], $actor['imgurl']);
+        } else {
+            $actors[$idx]['imgurl'] = getActorThumbnail($actor['name'], $actor['id'], false, $actor['imgurl']);
+        }
+//        dlog($actors[$idx]['imgurl']);
     }
 }
 
@@ -376,6 +378,7 @@ function split_cast_array(&$actor, $key)
     $actor['name']   = $ary[0];
     $actor['roles']  = preg_split('[^</]', $ary[1]);
     $actor['id']     = $ary[2];
+    $actor['imgurl'] = $ary[3] ?? null;
 }
 
 /**
@@ -383,12 +386,13 @@ function split_cast_array(&$actor, $key)
  *
  * @author  Andreas Goetz    <cpuidle@gmx.de>
  */
-function prepare_cast($cast)
-{
+function prepare_cast($cast) {
 	global $config;
 
+//	dlog("prepare_cast: $cast");
+
     // convert text represenatation into array
-    $actors = array_filter(preg_split("/\r?\n/", trim($cast)));
+    $actors = array_filter(preg_split("/\n/", trim($cast)));
 
     // reformat roles
     $actors = preg_replace('/\((.*?)\)/', '<small>($1)</small>', $actors);
@@ -396,16 +400,22 @@ function prepare_cast($cast)
     array_walk($actors, 'split_cast_array');
 
     // check for actor thumbnails
-    if ($config['actorpics']) get_actor_thumbnails_batched($actors);
+    if ($config['actorpics']) {
+        get_actor_thumbnails_batched($actors);
+    }
 
     // loop over actors from full-text field
-    foreach ($actors as $idx => $actor)
-    {
+    foreach ($actors as $idx => $actor) {
+        // set url to actor.
         $actors[$idx]['imdburl'] = engineGetActorUrl($actor['name'], $actor['id'], engineGetActorEngine($actor['id']));
 
-        // check for actor thumbnail
-#        if ($config['actorpics']) $actor['imgurl'] = getActorThumbnail($actor['name'], $actor['id']);
+         // check for actor thumbnail
+#        if ($config['actorpics']) {
+#             $actor['imgurl'] = getActorThumbnail($actor['name'], $actor['id']);
+#        }
     }
+
+//    dlog("prepare_cast: $actors");
 
     return $actors;
 }
@@ -492,6 +502,7 @@ function tpl_edit($video)
 		$video['q_'.$key] = htmlspecialchars($video[$key]);
 	}
 
+
 	// use custom function for language
 	$video['f_language']  = custom_language_input('language', $video['language']);
 
@@ -511,8 +522,8 @@ function tpl_edit($video)
 	$item_genres = getItemGenres($video['id']);
 	// new-style
     $smarty->assign('genres', out_genres2($item_genres));
-#dlog(out_genres2($item_genres));
-#dlog($item_genres);
+# dlog(out_genres2($item_genres));
+# dlog($item_genres);
     // classic
     $smarty->assign('genreselect', out_genres($item_genres));
 
@@ -523,7 +534,7 @@ function tpl_edit($video)
 	if ($video['imdbID'])
     {
         require_once './engines/engines.php';
-        $engine = engineGetEngine($video['imdbID']);	
+        $engine = engineGetEngine($video['imdbID']);
         $smarty->assign('link', engineGetContentUrl($video['imdbID'], $engine));
         $smarty->assign('engine', $engine);
 	}
@@ -532,7 +543,7 @@ function tpl_edit($video)
     // populate autocomplete boxes
     $smarty->assign('audio_codecs', array_column(runSQL('SELECT DISTINCT audio_codec FROM '.TBL_DATA.' WHERE audio_codec IS NOT NULL'), 'audio_codec'));
     $smarty->assign('video_codecs', array_column(runSQL('SELECT DISTINCT video_codec FROM '.TBL_DATA.' WHERE video_codec IS NOT NULL'), 'video_codec'));
-*/        
+*/
 	$smarty->assign('lookup', array('0' => $lang['radio_look_ignore'],
 							        '1' => $lang['radio_look_lookup'],
 							        '2' => $lang['radio_look_overwrite']));

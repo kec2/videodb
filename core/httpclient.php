@@ -134,32 +134,7 @@ function httpClient($url, $cache = false, $para = null, $reload = false)
         $requestConfig += ['proxy' => sprintf('tcp://%s:%d', $server, $port)];
     }
 
-    if (!empty($config['http_header_accept_language'])) {
-        $requestConfig += ['headers' => ['Accept-Language' => $config['http_header_accept_language']]];
-    }
-
     addRequestHeader($requestConfig, $para);
-
-    // additional request headers
-    if (!empty($para) && !empty($para['header'])) {
-        $requestConfig += ['headers' => $para['header']];
-    }
-
-    if (empty($requestConfig['headers']['Accept'])) {
-        $requestConfig['headers']['Accept'] = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
-    }
-    if (empty($requestConfig['headers']['Accept-Language'])) {
-        $requestConfig['headers']['Accept-Language'] = filter_input(INPUT_SERVER, 'HTTP_ACCEPT_LANGUAGE'); // @todo make this configurable
-    }
-    if (empty($requestConfig['headers']['DNT'])) {
-        $requestConfig['headers']['DNT'] = '1';
-    }
-    if (empty($requestConfig['headers']['User-Agent'])) {
-        $requestConfig['headers']['User-Agent'] = filter_input(INPUT_SERVER, 'HTTP_USER_AGENT');
-    }
-    if (empty($requestConfig['headers']['Referer'])) {
-        $requestConfig['headers']['Referer'] = 'https://www.imdb.com';
-    }
 
     $resp = $client->request($method, $url, $requestConfig);
 
@@ -186,10 +161,10 @@ function httpClient($url, $cache = false, $para = null, $reload = false)
         $response['error'] .= " Reason: " . $resp->getReasonPhrase();
         return $response;
     } else {
-    // TODO find a better way to handle HTTP status == 200 and IMDb json->errorMessage not empty
+        // TODO find a better way to handle HTTP status == 200 and IMDb json->errorMessage not empty
         $json = json_decode($response['data']);
         if (!empty($json->errorMessage)) {
-            $response['error'] .= "IMDb api error message: " . $json->errorMessage;
+            $response['error'] = "IMDb api error message: " . $json->errorMessage;
             return $response;
         }
     }
@@ -206,6 +181,7 @@ function httpClient($url, $cache = false, $para = null, $reload = false)
 
 function addRequestHeader($requestConfig, $para)
 {
+    // is used in imdb to fetch title, description ao. in an other language
     if (!empty($config['http_header_accept_language'])) {
         $requestConfig['headers']['Accept-Language'] = $config['http_header_accept_language'];
     }
@@ -215,6 +191,7 @@ function addRequestHeader($requestConfig, $para)
         $requestConfig += ['headers' => $para['header']];
     }
 
+    // default values
     if (empty($requestConfig['headers']['Accept'])) {
         $requestConfig['headers']['Accept'] = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
     }
