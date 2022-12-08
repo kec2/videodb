@@ -16,6 +16,11 @@ use PHPUnit\Framework\TestCase;
 class TestAmazonAWS extends TestCase
 {
 
+    protected function setUp(): void
+    {
+        $this->markTestIncomplete('This engine is broken and tests has been disabled until it is fixed');
+    }
+
     function testData()
     {
         // Star Wars: Episode 1

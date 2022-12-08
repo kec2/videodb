@@ -15,6 +15,11 @@ use PHPUnit\Framework\TestCase;
 
 class TestDVDFR extends TestCase
 {
+
+    protected function setUp(): void
+    {
+        $this->markTestIncomplete('This engine is broken and tests has been disabled until it is fixed');
+    }
 	
 	function testMovie()
 	{

@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class TestIMDbApi extends TestCase
 {
-    private string $origImdbApiLanguage;
+    private static string $origImdbApiLanguage;
 
     protected function setUp(): void
     {
@@ -25,13 +25,13 @@ class TestIMDbApi extends TestCase
     public static function setUpBeforeClass(): void
     {
         global $config;
-        $origImdbApiLanguage = $config['imdbApiLanguage'];
+        self::$origImdbApiLanguage = $config['imdbApiLanguage'] ?? 'en';
     }
 
     public static function tearDownAfterClass(): void
     {
         global $config;
-        $config['imdbApiLanguage'] = $origImdbApiLanguage;
+        $config['imdbApiLanguage'] = self::$origImdbApiLanguage;
     }
 
     function testDutchLanguageWithAmericanMovie()

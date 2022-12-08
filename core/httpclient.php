@@ -102,7 +102,7 @@ function httpClient($url, $cache = false, $para = null, $reload = false)
     $requestConfig = [];
     $headers = '';  // additional HTTP headers, used for post data
 
-    if (!empty($para) && $para['cookies']) {
+    if (!empty($para) && !empty($para['cookies'])) {
         $jar = new GuzzleHttp\Cookie\CookieJar();
         $requestConfig += ['cookies' => $jar];
     }
@@ -139,7 +139,7 @@ function httpClient($url, $cache = false, $para = null, $reload = false)
     }
 
     // additional request headers
-    if (!empty($para) && $para['header']) {
+    if (!empty($para) && !empty($para['header'])) {
         $requestConfig += ['headers' => $para['header']];
     }
 
@@ -165,7 +165,7 @@ function httpClient($url, $cache = false, $para = null, $reload = false)
     // verify status code
     if ($resp->getStatusCode() != 200) {
         $response['error'] = 'Server returned wrong status: ' . $resp->getStatusCode();
-        $response['error'] .= " Reason: " . $resp . getReasonPhrase();
+        $response['error'] .= " Reason: " . $resp->getReasonPhrase();
         return $response;
     } else {
     // TODO find a better way to handle HTTP status == 200 and IMDb json->errorMessage not empty

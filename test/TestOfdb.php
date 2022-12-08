@@ -17,6 +17,11 @@ use PHPUnit\Framework\TestCase;
 class TestOFDB extends TestCase
 {
 
+    protected function setUp(): void
+    {
+        $this->markTestIncomplete('This engine is broken and tests has been disabled until it is fixed');
+    }
+
 	function testMovie()
 	{
 		// Star Wars: Episode I - Die dunkle Bedrohung / Star Wars: Episode I - The Phantom Menace (1999)

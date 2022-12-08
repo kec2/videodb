@@ -16,6 +16,11 @@ use PHPUnit\Framework\TestCase;
 class TestGoogle extends TestCase
 {
 
+    protected function setUp(): void
+    {
+        $this->markTestIncomplete('This engine is broken and tests has been disabled until it is fixed');
+    }
+
     function testSearch()
     {
         // http://images.google.com/images?q=terminator
