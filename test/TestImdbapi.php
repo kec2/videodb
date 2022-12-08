@@ -12,13 +12,14 @@ use PHPUnit\Framework\TestCase;
 
 class TestIMDbApi extends TestCase
 {
-    private static $origImdbApiLanguage;
+    private string $origImdbApiLanguage;
 
     protected function setUp(): void
     {
         // use english as default language.
         global $config;
         $config['imdbApiLanguage'] = 'en';
+        $this->markTestSkipped('These tests are disabled for now.');
     }
 
     public static function setUpBeforeClass(): void

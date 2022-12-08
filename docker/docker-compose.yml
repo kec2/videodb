@@ -29,4 +29,4 @@ services:
       ADMINER_DEFAULT_SERVER: mariadb
     restart: always
     ports:
-      - 7777:8080
+      - '7777:8080'
