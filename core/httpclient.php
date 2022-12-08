@@ -210,12 +210,17 @@ function addRequestHeader($requestConfig, $para)
         $requestConfig['headers']['Accept-Language'] = $config['http_header_accept_language'];
     }
 
+    // additional request headers
+    if (!empty($para) && !empty($para['header'])) {
+        $requestConfig += ['headers' => $para['header']];
+    }
+
     if (empty($requestConfig['headers']['Accept'])) {
         $requestConfig['headers']['Accept'] = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
     }
 
     if (empty($requestConfig['headers']['Accept-Language'])) {
-        $requestConfig['headers']['Accept-Language'] = filter_input(INPUT_SERVER, 'HTTP_ACCEPT_LANGUAGE'); // @todo make this configurable
+        $requestConfig['headers']['Accept-Language'] = filter_input(INPUT_SERVER, 'HTTP_ACCEPT_LANGUAGE');
     }
 
     if (empty($requestConfig['headers']['DNT'])) {
@@ -228,11 +233,6 @@ function addRequestHeader($requestConfig, $para)
 
     if (empty($requestConfig['headers']['Referer'])) {
         $requestConfig['headers']['Referer'] = 'https://www.imdb.com';
-    }
-
-    // additional request headers
-    if (!empty($para) && !empty($para['header'])) {
-        $requestConfig += ['headers' => $para['header']];
     }
 
     return $requestConfig;
