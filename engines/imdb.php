@@ -185,34 +185,15 @@ function imdbSearch($title, $aka=null)
     }
 
     // multiple matches
-    else if (preg_match_all('/<tr class="findResult.*?">(.*?)<\/tr>/i', $resp['data'], $multi, PREG_SET_ORDER)) {
-        foreach ($multi as $row) {
-            if (preg_match('/<td class="result_text">\s*<a href="\/title\/tt(\d+).*?" >(.*?)<\/a>\s?\(?(\d+)?\)?/i', $row[1], $ary)) {
-                if ($ary[1] && $ary[2]) {
-                    $info           = array();
-                    $info['id']     = $imdbIdPrefix.$ary[1];
-                    $info['title']  = $ary[2];
-                    $info['year']   = $ary[3];
-                    $data[]         = $info;
-                }
+    elseif (preg_match('/<section data-testid="find-results-section-title".+?>(.+?)<\/section>/i', $resp['data'], $ary)) {
+        if (preg_match_all('/<div class="ipc-metadata-list-summary-item__tc"><a class=".+?".+?href="\/title\/tt(\d+)\/\?ref_=fn_al_tt_\d+">(.+?)<\/a>.+?>(\d+)<\/label>/si', $ary[1], $rows, PREG_SET_ORDER)) {
+            foreach ($rows as $row) {
+                $info = [];
+                $info['id'] = $imdbIdPrefix.$row[1];
+                $info['title'] = $row[2];
+                $info['year'] = $row[3];
+                $data[] = $info;
             }
-#           dump($info);
-        }
-    } elseif (preg_match_all('/<div class="col-title">.+?<a href="\/title\/tt(\d+)\/\?ref_=adv_li_tt".+?>(.+?)<\/a>.+?<span .+?>\((\d+).*?\)<\/span>/is', $resp['data'], $ary, PREG_SET_ORDER)) {
-        foreach ($ary as $row) {
-            $info           = array();
-            $info['id']     = $imdbIdPrefix.$row[1];
-            $info['title']  = $row[2];
-            $info['year']   = $row[3];
-            $data[]         = $info;
-        }
-    } elseif (preg_match_all('/<div class="ipc-metadata-list-summary-item__tc"><a class="ipc-metadata-list-summary-item__t" .+? href="\/title\/tt(\d+)\/\?ref_=fn_al_tt_\d+">(.+?)<\/a>.+?<span class=".+?">(\d+)<\/span>/is', $resp['data'], $ary, PREG_SET_ORDER)) {
-        foreach ($ary as $row) {
-            $info           = array();
-            $info['id']     = $imdbIdPrefix.$row[1];
-            $info['title']  = $row[2];
-            $info['year']   = $row[3];
-            $data[]         = $info;
         }
     }
 
@@ -337,11 +318,8 @@ function imdbData($imdbID)
     }
 
     // Director
-    if (preg_match('/<li role="presentation" class="ipc-inline-list__item">(<a class="ipc-metadata-list-item__list-content-item ipc-metadata-list-item__list-content-item--link" rel="" href="\/name\/nm.+?\/?ref_=tt_ov_dr">.+?<\/a>.+?)<\/div>/si', $resp['data'], $ary)) {
-        if (preg_match_all('/<a class=.+? href="\/name\/nm.+?">(.+?)<\/a>/si', $ary[1], $ary, PREG_PATTERN_ORDER)) {
-            // TODO: Update templates to use multiple directors
-            $data['director']  = trim(join(', ', $ary[1]));
-        }
+    if (preg_match_all('/ref_=tt_cl_dr_\d+">(.+?)<\/a>/i', $resp['data'], $ary, PREG_PATTERN_ORDER)) {
+        $data['director'] = trim(join(', ', $ary[1]));
     }
 
     // Rating
@@ -354,7 +332,7 @@ function imdbData($imdbID)
     $data['country'] = trim(join(', ', $ary[1]));
 
     // Languages
-    preg_match_all('/<a class=".+?" rel="" href="\/search\/title\?title_type=feature&amp;primary_language=.+?&amp;sort=moviemeter,asc&amp;ref_=tt_dt_ln">(.+?)<\/a>/', $resp['data'], $ary, PREG_PATTERN_ORDER);
+    preg_match_all('/primary_language.+?ref_=tt_dt_ln">(.+?)<\/a>/si', $resp['data'], $ary, PREG_PATTERN_ORDER);
     $data['language'] = trim(strtolower(join(', ', $ary[1])));
 
     // Genres (as Array)
@@ -545,13 +523,10 @@ function imdbActor($name, $actorid)
 
     // now we should have loaded the best match
 
-    $ary = array();
-    // only search in img_primary <td> - or we get far to many useless images
-    if (preg_match('/<td.+?id="img_primary">(.*?)<\/td>/si', $resp['data'], $match)) {
-        if (preg_match('#<a.*?href="(/name/nm\d+/)m.+?src="(.+?)"#s', $match[1], $m)) {
-            $ary[0][0] = $m[1];
-            $ary[0][1] = $m[2];
-        }
+    $ary = [];
+    if (preg_match('/<div class="ipc-poster .+?<img.+?srcset="(https.+?)@@.+?".+?href="(\/name\/nm\d+\/)m/si', $resp['data'], $m)) {
+        $ary[0][0] = $m[2]; // /name/nm12345678/
+        $ary[0][1] = $m[1].'jpg'; // img url
     }
 
     return $ary;

@@ -319,7 +319,7 @@ function engineGetActorUrl($name, $id, $engine = 'imdb')
     $result = '';
     if (function_exists($func))
     {
-        $id = preg_replace('|^'.$engine.':|', '', $id);
+        $id = preg_replace('|^'.$engine.':|', '', $id ?? '');
         $result = $func($name, $id);
     }
 
@@ -424,16 +424,19 @@ function engine_clean_input(&$data)
 function engine_deduplicate_result($data)
 {
 	$keys = array();
-    for ($i=0; $i<count($data); $i++)
-    {
+    for ($i = 0; $i < count($data); $i++) {
         $id = $data[$i]['id'];
         // early exit if engine (e.g. google images) doesn't return ids
-        if (!$id) return $data;
+        if (!$id) {
+            return $data;
+        }
+
         // exclude duplicates
-        if (in_array($id, $keys))
+        if (in_array($id, $keys)) {
             unset($data[$i]);
-        else
+        } else {
             $keys[] = $id;
+        }
     }
 
     return $data;
