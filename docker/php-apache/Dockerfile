@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-# isntall GD dependencies
+# install GD dependencies
 RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 
-# intall mysql extention
+# install mysql extention
 RUN docker-php-ext-install mysqli
 
 # copy php config to installation.

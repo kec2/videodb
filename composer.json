@@ -1,20 +1,20 @@
 {
-    "name": "andig/videodb",
+    "name": "kec2/videodb",
     "type": "project",
     "require": {
         "guzzlehttp/guzzle": "^7.5",
-        "smarty/smarty": "^4.2",
+        "smarty/smarty": "^4.3",
         "pear/ole": "^v1.0.0RC8",
         "pear/spreadsheet_excel_writer": "^v0.9.7"
     },
     "require-dev": {
         "phpunit/phpunit": "^9",
-        "vimeo/psalm": "^4"
+        "vimeo/psalm": "^5"
     },
-    "authors": [
-        {
-            "name": "andig",
-            "email": "cpuidle@gmx.de"
-        }
-    ]
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true,
+        "process-timeout": 1200
+    }
 }

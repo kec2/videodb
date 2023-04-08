@@ -7,3 +7,4 @@ vendor
 .idea
 debug.log
 error.log
+httpClient.log
