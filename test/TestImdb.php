@@ -339,8 +339,8 @@ class TestIMDb extends TestCase
 
         $cast = explode("\n", $data['cast']);
 
-        $this->assertTrue(in_array('Patrick Stewart::Capt. Jean-Luc Picard::imdb:nm0001772', $cast));
-        $this->assertTrue(in_array('Jonathan Frakes::Cmdr. William Riker::imdb:nm0000408', $cast));
+        $this->assertTrue(in_array('Patrick Stewart::Captain Jean-Luc Picard::imdb:nm0001772', $cast));
+        $this->assertTrue(in_array("Jonathan Frakes::Commander William Thomas 'Will' Riker::imdb:nm0000408", $cast));
         $this->assertTrue(in_array('Marina Sirtis::Counselor Deanna Troi::imdb:nm0000642', $cast));
         $this->assertTrue(in_array('John de Lancie::Q (as John deLancie)::imdb:nm0209496', $cast));
         $this->assertTrue(in_array('Rob Bowman::Borg (voice) (uncredited)::imdb:nm0101385', $cast));
@@ -361,7 +361,7 @@ class TestIMDb extends TestCase
         // get English version.
         Global $config;
         $config['http_header_accept_language'] = 'en-US,en;q=0.9';
-        
+
         $id = '0359476';
         $data = engineGetData($id, 'imdb', false);
 
@@ -476,7 +476,7 @@ class TestIMDb extends TestCase
     {
         $url = engineGetSearchUrl('Clerks 2', 'imdb');
 
-        $this->assertEquals('https://www.imdb.com/find?s=all&q=Clerks+2', $url);
+        $this->assertEquals('https://www.imdb.com/find?s=tt&q=Clerks+2', $url);
     }
 
     function testSearch(): void
@@ -503,7 +503,7 @@ class TestIMDb extends TestCase
 
         Global $config;
         $config['http_header_accept_language'] = 'de-DE,en;q=0.6';
-        
+
         $data = engineSearch('Das Streben nach Glück', 'imdb', false);
         $this->assertNotEmpty($data);
 
@@ -521,7 +521,7 @@ class TestIMDb extends TestCase
     {
         // Serpico
         // https://imdb.com/find?s=all&q=serpico
-        
+
         $data = engineSearch('Serpico', 'imdb');
         // $this->printData($data);
 

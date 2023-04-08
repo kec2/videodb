@@ -19,7 +19,6 @@ class TestIMDbApi extends TestCase
         // use english as default language.
         global $config;
         $config['imdbApiLanguage'] = 'en';
-
     }
 
     public static function setUpBeforeClass(): void
@@ -83,7 +82,7 @@ class TestIMDbApi extends TestCase
         $this->assertTrue(in_array('Kenny Baker::R2-D2::imdbapi:nm0048652', $cast));
         $this->assertTrue(sizeof($cast) > 90);
 
-        $this->assertMatchesRegularExpression('/Rund 30 Jahre vor den Ereignissen des ersten Star Wars-Films nimmt die Legende ihren Anfang/', $data['plot']);
+        $this->assertMatchesRegularExpression('/Two Jedi escape a hostile blockade to find allies and come across a young boy who may bring balance to the Force, but the long dormant Sith resurface to claim their original glory./', $data['plot']);
     }
 
     function testEnglishLanguageWithAmericanMovie(): void
@@ -304,8 +303,8 @@ class TestIMDbApi extends TestCase
 
         $cast = explode("\n", $data['cast']);
 
-        $this->assertTrue(in_array('Patrick Stewart::Capt. Jean-Luc Picard::imdbapi:nm0001772', $cast));
-        $this->assertTrue(in_array('Jonathan Frakes::Cmdr. William Riker::imdbapi:nm0000408', $cast));
+        $this->assertTrue(in_array('Patrick Stewart::Captain Jean-Luc Picard::imdbapi:nm0001772', $cast));
+        $this->assertTrue(in_array("Jonathan Frakes::Commander William Thomas 'Will' Riker::imdbapi:nm0000408", $cast));
         $this->assertTrue(in_array('Marina Sirtis::Counselor Deanna Troi::imdbapi:nm0000642', $cast));
         $this->assertTrue(in_array('John de Lancie::Q::imdbapi:nm0209496', $cast));
         $this->assertTrue(in_array('Rob Bowman::Borg::imdbapi:nm0101385', $cast));
@@ -453,14 +452,20 @@ class TestIMDbApi extends TestCase
 
         $this->assertNotEmpty($data);
 
-        $data = $data[0];
+        $found = false;
+        foreach ($data as $row) {
+            if ($row['id'] == 'imdbapi:tt0454921') {
+                $this->assertEquals('The Pursuit of Happyness', $row['title']);
+                $this->assertEmpty($row['subtitle']);
+                $this->assertEquals('2006 Will Smith, Thandiwe Newton', $row['details']);
+                $this->assertMatchesRegularExpression('#https://m.media-amazon.com/images/M/.+?.jpg#', $row['imgsmall']);
+                $this->assertMatchesRegularExpression('#https://m.media-amazon.com/images/M/.+?.jpg#', $row['coverurl']);
 
-        $this->assertEquals('imdbapi:tt0454921', $data['id']);
-        $this->assertEquals('The Pursuit of Happyness', $data['title']);
-        $this->assertEmpty($data['subtitle']);
-        $this->assertEquals('2006 Will Smith, Thandiwe Newton', $data['details']);
-        $this->assertMatchesRegularExpression('#https://m.media-amazon.com/images/M/.+?.jpg#', $data['imgsmall']);
-        $this->assertMatchesRegularExpression('#https://m.media-amazon.com/images/M/.+?.jpg#', $data['coverurl']);
+                $found = true;
+            }
+        }
+
+        $this->assertTrue($found);
     }
 
     /**

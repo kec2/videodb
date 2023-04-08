@@ -37,7 +37,7 @@ function imdbMeta(): array {
 function imdbSearchUrl($title)
 {
     global $imdbServer;
-    return $imdbServer.'/find?s=all&q='.urlencode($title);
+    return $imdbServer.'/find?s=tt&q='.urlencode($title);
 }
 
 /**
@@ -158,7 +158,7 @@ function imdbSearch($title, $aka=null)
     global $CLIENTERROR;
     global $cache;
 
-    $url = imdbSearchUrl(urlencode($title));
+    $url = imdbSearchUrl($title);
 
     if ($aka) {
         $url .= '&s=tt&site=aka';
@@ -189,15 +189,13 @@ function imdbSearch($title, $aka=null)
     }
 
     // multiple matches
-    elseif (preg_match('/<section data-testid="find-results-section-title".+?>(.+?)<\/section>/i', $resp['data'], $ary)) {
-        if (preg_match_all('/<div class="ipc-metadata-list-summary-item__tc"><a class=".+?".+?href="\/title\/tt(\d+)\/\?ref_=fn_al_tt_\d+">(.+?)<\/a>.+?>(\d+)<\/label>/si', $ary[1], $rows, PREG_SET_ORDER)) {
-            foreach ($rows as $row) {
-                $info = [];
-                $info['id'] = $imdbIdPrefix.$row[1];
-                $info['title'] = $row[2];
-                $info['year'] = $row[3];
-                $data[] = $info;
-            }
+    elseif (preg_match_all('/<a class="ipc-metadata-list-summary-item__t" role="button" tabindex=".+?" aria-disabled="false" href="\/title\/tt(\d+)\/\?.+?">(.+?)<\/a>.+?>(\d+)<\/span>/si', $resp['data'], $rows, PREG_SET_ORDER)) {
+        foreach ($rows as $row) {
+            $info = [];
+            $info['id'] = $imdbIdPrefix.$row[1];
+            $info['title'] = $row[2];
+            $info['year'] = $row[3];
+            $data[] = $info;
         }
     }
 
@@ -287,8 +285,7 @@ function imdbData($imdbID)
     }
 
     # orig. title
-    preg_match('/<div data-testid="hero-title-block__original-title" class=".+?">Originaltitel: (.+?)<\/div>/si', $resp['data'], $ary);
-    if (!empty($ary[1])) {
+    if (preg_match('/<div class="sc-.+?">Originaltitel: (.+?)<\/div>/si', $resp['data'], $ary)) {
         $data['origtitle'] = trim($ary[1]);
     }
 
@@ -301,25 +298,7 @@ function imdbData($imdbID)
     }
 
     // Runtime
-    if (preg_match('/<li role="presentation" class="ipc-inline-list__item">(\d+)(?:<!-- --> ?)+(?:h|s).*?(?:(?:<!-- --> ?)+(\d+)(?:<!-- --> ?)+.+?)?<\/li>/si', $resp['data'], $ary)) {
-        # handles Hours and maybe minutes. Some movies are exactly 1 hours.
-        $minutes = 0;
-        if (!empty($ary[2]) && is_numeric($ary[2])) {
-            $minutes = intval($ary[2]);
-        }
-        if (is_numeric($ary[1])) {
-            $minutes += intval($ary[1]) * 60;
-        }
-
-        $data['runtime'] = $minutes;
-    } else if (preg_match('/<li role="presentation" class="ipc-inline-list__item">(\d+)(?:<!-- --> ?)+m.*?<\/li>/si', $resp['data'], $ary)) {
-        # handle only minutes
-        $data['runtime'] = $ary[1];
-    } else if (preg_match('/<div class="ipc-metadata-list-item__content-container">(\d+)(?:<!-- --> ?)+m.*?<\/div>/si', $resp['data'], $ary)) {
-        # handle only minutes
-        # Handles the case where runtime is only in the technical spec section.
-        $data['runtime'] = $ary[1];
-    }
+    $data['runtime'] = getRuntime($resp['data']);
 
     // Director
     if (preg_match_all('/ref_=tt_cl_dr_\d+">(.+?)<\/a>/i', $resp['data'], $ary, PREG_PATTERN_ORDER)) {
@@ -478,6 +457,48 @@ function imdbGetCoverURL($data) {
     }
 }
 
+function getRuntime($respData) {
+    $minutes = 0;
+
+    if (preg_match('/<li role="presentation" class="ipc-inline-list__item">((\d+) Std.)? ?((\d+) Min.)?<\/li>/si', $respData, $ary)) {
+        if (!empty($ary[4]) && is_numeric($ary[4])) {
+            $minutes = intval($ary[4]);
+        }
+        if (is_numeric($ary[2])) {
+            $minutes += intval($ary[2]) * 60;
+        }
+
+        return $minutes;
+    } elseif (preg_match('/<li role="presentation" class="ipc-inline-list__item">((\d+)h)? ?((\d+)m)?<\/li>/si', $respData, $ary)) {
+        if (!empty($ary[4]) && is_numeric($ary[4])) {
+            $minutes = intval($ary[4]);
+        }
+        if (is_numeric($ary[2])) {
+            $minutes += intval($ary[2]) * 60;
+        }
+
+        return $minutes;
+    } elseif (preg_match('/<li role="presentation" class="ipc-inline-list__item">(\d+)(?:<!-- --> ?)+(?:h|s).*?(?:(?:<!-- --> ?)+(\d+)(?:<!-- --> ?)+.+?)?<\/li>/si', $respData, $ary)) {
+        # handles Hours and maybe minutes. Some movies are exactly 1 hours.
+        if (!empty($ary[2]) && is_numeric($ary[2])) {
+            $minutes = intval($ary[2]);
+        }
+        if (is_numeric($ary[1])) {
+            $minutes += intval($ary[1]) * 60;
+        }
+
+        return $minutes;
+    } elseif (preg_match('/<li role="presentation" class="ipc-inline-list__item">(\d+)(?:<!-- --> ?)+m.*?<\/li>/si', $respData, $ary)) {
+        # handle only minutes
+        return $ary[1];
+    } elseif (preg_match('/<div class="ipc-metadata-list-item__content-container">(\d+)(?:<!-- --> ?)+m.*?<\/div>/si', $respData, $ary)) {
+        # handle only minutes
+        # Handles the case where runtime is only in the technical spec section.
+        return $ary[1];
+    }
+
+    return 0;
+}
 
 /**
  * Get Url to visit IMDB for a specific actor
