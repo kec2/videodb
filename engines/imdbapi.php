@@ -327,7 +327,7 @@ function imdbapiActorUrl($name, $id) {
     if ($id) {
         $path = 'name/'.urlencode($id).'/';
     } else {
-        $path = 'Name?'.urlencode(html_entity_decode_all($name));
+        $path = 'find/?s=nm&q='.urlencode($name);
     }
 
     return $imdbServer.'/'.$path;
@@ -364,9 +364,9 @@ function imdbapiActor($name, $actorid) {
     // now we should have loaded the best match
 
     $ary = [];
-    if (preg_match('/<div class="ipc-poster .+?<img.+?srcset="(https.+?)@@.+?".+?href="(\/name\/nm\d+\/)m/si', $resp['data'], $m)) {
+    if (preg_match('/<div class=".+? ipc-poster--baseAlt .+?<img.+?src="(https.+?)".+?href="(\/name\/nm\d+\/)/si', $resp['data'], $m)) {
         $ary[0][0] = $m[2]; // /name/nm12345678/
-        $ary[0][1] = $m[1].'jpg'; // img url
+        $ary[0][1] = $m[1]; // img url
     }
 
     return $ary;

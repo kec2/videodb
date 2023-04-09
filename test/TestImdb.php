@@ -427,7 +427,7 @@ class TestIMDb extends TestCase
 
     function testGetActorUrlByName(): void {
         $url = engineGetActorUrl('Arnold Schwarzenegger', null, 'imdb');
-        $this->assertEquals('https://www.imdb.com/Name?Arnold+Schwarzenegger', $url);
+        $this->assertEquals('https://www.imdb.com/find/?s=nm&q=Arnold+Schwarzenegger', $url);
     }
 
     function testGetActorUrlById(): void {
