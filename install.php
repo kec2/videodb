@@ -13,7 +13,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 require_once './core/compatibility.php';
 require_once './core/install.core.php';
-require_once './core/constants.php';
+require_once './core/functions.php';
 
 
 // required files
@@ -287,7 +287,7 @@ switch ($step)
 					$sql = file_get_contents($install_sql);
                     if (!$sql) trigger_error('Couldn\'t open SQL file: '.$install_sql, E_USER_ERROR);
 
-                    if (runSQL($sql, $dbh) === false) {
+                    if (runMultipleSQL($sql, $dbh) === false) {
 						error('Error creating tables: '.mysqli_error($dbh));
 						error('<br/><br/><pre>'.$sql.'</pre>');
 						$step--;

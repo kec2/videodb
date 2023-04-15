@@ -229,7 +229,7 @@ function prefix_query($query)
  * @param   ressource   database handle
  * @return  mixed       result array or false
  */
-function runSQL($sql, $dbh, $verify = false)
+function runMultipleSQL($sql, $dbh, $verify = false)
 {
     $result = true;
     foreach (explode(';', $sql) as $query)

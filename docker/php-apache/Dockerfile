@@ -8,6 +8,10 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 
+# Install php xdebug
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
 # install mysql extention
 RUN docker-php-ext-install mysqli
 

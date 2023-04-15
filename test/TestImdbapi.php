@@ -267,7 +267,7 @@ class TestIMDbApi extends TestCase
 
         $this->assertEquals(1, $data['istv']);
         $this->assertEquals('tt0461620', $data['tvseries_id']);
-        $this->assertEmpty($data['plot']);
+        $this->assertEquals('Add a plot in your language', $data['plot']);
         $this->assertEmpty($data['runtime']);
         $this->assertEmpty($data['rating']);
         $this->assertEquals('Bis in die Spitzen', $data['title']);
