@@ -89,7 +89,7 @@ if (basename($_SERVER['PHP_SELF']) != 'login.php') auth_check();
  */
 function exception_handler($exception): void
 {
-    errorpage('An exception occured: ', $exception->getMessage(), true);
+    errorpage('An exception occurred: ', $exception->getMessage(), true);
 }
 
 /**
@@ -123,10 +123,11 @@ function verify_installation($return = false)
         $error .= cache_create_folders($dir, $hierarchical ? (int) $config['hierarchical'] : 0);
     }
 
-    if ($return) return $error;
+    if ($return) {
+        return $error;
+    }
     
-	if ($error)
-	{
+	if ($error) {
         errorpage('Cache directories not writable',
                   '<p>The cache directories have to be writable by the webserver!</p>
                    <p>Please fix the following errors:</p>
@@ -147,15 +148,15 @@ function load_config($force_reload = false): void
 {
 	global $config, $lang, $smarty;
     // configuration cached and not outdated?
-    if (!$force_reload && !$config['recompile'] && session_get('config') &&
-       (session_get('config_userid') === $_COOKIE['VDBuserid']) &&
-       (session_get('config_timestamp') == filemtime(CONFIG_FILE)))
-    {
+    if (!$force_reload && !$config['recompile']
+            && session_get('config')
+            && session_get('config_userid') === $_COOKIE['VDBuserid']
+            && session_get('config_timestamp') == filemtime(CONFIG_FILE)) {
         // load from cache
         $config = session_get('config');
-    }
-    else
-    {
+        dlog("Load config from session");
+    } else {
+        dlog("Verify installation");
         // check MySQL extension and cache directories
         verify_installation();
 
@@ -163,8 +164,7 @@ function load_config($force_reload = false): void
         session_set('config_timestamp', filemtime(CONFIG_FILE));
 
         // get config options from the database
-        $SELECT = 'SELECT opt,value
-                     FROM '.TBL_CONFIG;
+        $SELECT = 'SELECT opt, value FROM '.TBL_CONFIG;
         $result = runSQL($SELECT);
         $config = array_merge($config, array_associate($result, 'opt', 'value'));
 
@@ -308,16 +308,15 @@ function load_config($force_reload = false): void
  *
  * @return never
  */
-function errorpage($title = 'An error occured', $body = '', $stacktrace = false)
+function errorpage($title = 'An error occurred', $body = '', $stacktrace = false)
 {
     global $lang;
 
-    $encoding   = ($lang['encoding']) ? $lang['encoding'] : 'iso-8859-1';
+    $encoding = $lang['encoding'] ? $lang['encoding'] : 'utf-8';
 
     // stacktrace desired and available?
-    if ($stacktrace && function_exists('xdebug_get_function_stack'))
-    {
-        $body .= '<br/>'.dump(xdebug_get_function_stack(), true);
+    if ($stacktrace && function_exists('xdebug_get_function_stack')) {
+        $body .= '<br/><pre>'.dump(xdebug_get_function_stack(), true).'</pre>';
     }
 
     echo '<?xml version="1.0" encoding="en"?>';
@@ -884,11 +883,14 @@ function get_userseen($id): int
  *
  * @param integer $id    video id
  * @param boolean $seen  seen
+ * @param integer $user_id  The id of the user who has seen the video
  */
-function set_userseen($id, $seen): void
+function set_userseen($id, $seen, $user_id = null): void
 {
-    $user_id = get_current_user_id();
-    
+    if (empty($user_id)) {
+        $user_id = get_current_user_id();
+    }
+
     if (empty($user_id)) errorpage('Security Error',  
         "User id cookie was unexpectedly not set. Please report this problem to the developers.");
 

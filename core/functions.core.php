@@ -35,7 +35,7 @@ function dump($var, $ret = false, $plain = false)
     global $argv;
 
     if (is_array($var) || is_object($var)) {
-        $var = print_r($var, 1);
+        $var = print_r($var, true);
     } else {
         if (is_bool($var)) {
             $var = $var ? 'TRUE' : 'FALSE';
@@ -143,7 +143,7 @@ function escapeSQL($sql_string)
 
     if (!is_resource($dbh)) $dbh = getConnection();
 
-    return(mysqli_real_escape_string($dbh, $sql_string));
+    return mysqli_real_escape_string($dbh, $sql_string);
 }
 
 /**
@@ -156,10 +156,12 @@ function runSQL($sql_string, $verify = true)
 {
     global $config, $dbh, $SQLtrace;
 
-	if ($config['debug'])
-    {
+	if ($config['debug']) {
         dlog("\n".$_SERVER['REQUEST_URI']);
-        if (function_exists('xdebug_get_function_stack')) dlog(join(' -> ', array_column(xdebug_get_function_stack(), 'function')));
+        if (function_exists('xdebug_get_function_stack')) {
+//             dlog(join(' -> ', array_column(xdebug_get_function_stack(), 'function')));
+            dlog(xdebug_get_function_stack());
+        }
         dlog($sql_string);
 		$timestamp = getmicrotime();
 	}

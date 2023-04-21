@@ -91,39 +91,39 @@ if ($ajax_check_duplicate)
 }
 
 // XML import
-if ($config['xml'] && ($import == 'xml'))
-{
+if ($config['xml'] && $import == 'xml') {
     require_once './core/xml.php';
 
     // xml file upload
-    if (isset($_FILES['xmlfile']) && is_uploaded_file($_FILES['xmlfile']['tmp_name']))
-    {
-        $file    = $_FILES['xmlfile']['tmp_name'];
+    if (isset($_FILES['xmlfile']) && is_uploaded_file($_FILES['xmlfile']['tmp_name'])) {
+        $file = $_FILES['xmlfile']['tmp_name'];
         $xmldata = file_get_contents($file);
         unlink($file);
-    }
 
-    // uploading XML data directly or loaded from file
-    if (!empty($xmldata))
-    {
-        $error      = '';
-        $item_id    = 0;
+        // uploading XML data directly or loaded from file
+        if (!empty($xmldata)) {
+            $error = '';
+            $item_id = 0;
 
-	    require_once './core/xmlimport.php';
-
-        if (($xmlitems = xmlimport($xmldata, $error)) !== false)
-        {
-            // multiple items imported
-            if ($xmlitems === true)
-            {
-                redirect('index.php?filter=new');
+            if (($xmlitems = xmlimport($xmldata, $error)) !== false) {
+                // multiple items imported
+                if ($xmlitems === true) {
+                    redirect('index.php?filter=new');
+                } else {
+                    // exactly one movie imported?
+                    redirect('show.php?id='.$xmlitems);
+                }
             }
-            // exactly one movie imported?
-            else
-            {
-                redirect('show.php?id='.$xmlitems);
-            }
+            $smarty->assign('xmlerror', $error);
+        } else {
+            $error .= 'There is not xml data';
+            dlog($error);
+            $smarty->assign('xmlerror', $error);
         }
+    } else {
+    //TODO KEC
+        $error .= 'Could not upload file';
+        dlog($error);
         $smarty->assign('xmlerror', $error);
     }
 
