@@ -113,8 +113,6 @@ function xmlimport($xmldata, &$error)
     $xml = new domDocument();
     $xml->preserveWhiteSpace = false;
 
-    dlog("before load of xml");
-
     // parse xml
     if (!$xml->loadXML($xmldata)) {
         $error = 'Error parsing input XML, import cancelled.';
@@ -123,11 +121,9 @@ function xmlimport($xmldata, &$error)
     }
     $xpath = new domXPath($xml);
 
-    dlog("After xPath");
-
     $items = $xpath->query('item');
     dlog("no of videos: ".$items->length);
-    dlog("xml import options: ".dump($xmloptions, true));
+    dlog("xml import options: ".print_r($xmloptions, true));
 
     // loop over items
     foreach ($items as $video) {
@@ -258,6 +254,7 @@ function xmlimport($xmldata, &$error)
             $seen = false;
             if (array_key_exists('seen', $data)) {
                 $seen = true;
+                // Remove the SEEN flag as it does not belong in TBL_DATA
                 $data = array_diff_key($data, ['seen' => 1]);
             }
 
@@ -284,7 +281,7 @@ function xmlimport($xmldata, &$error)
             setItemGenres($video_id, $genre_ids);
 
             if ($seen) {
-                set_userseen($video_id, 1, $data['owner_id']);
+                set_userseen($video_id, true, $data['owner_id']);
             }
 
             $imported++;
@@ -313,8 +310,6 @@ function getMediaTypeId($name)
     $result = runSQL("SELECT id FROM ".TBL_MEDIATYPES." WHERE LCASE(name) = LCASE('".$name."')");
 	return $result[0]['id'];
 }
-
-
 
 /**
  *  Update RSS File

@@ -99,31 +99,22 @@ if ($config['xml'] && $import == 'xml') {
         $file = $_FILES['xmlfile']['tmp_name'];
         $xmldata = file_get_contents($file);
         unlink($file);
+    }
 
-        // uploading XML data directly or loaded from file
-        if (!empty($xmldata)) {
-            $error = '';
-            $item_id = 0;
+    // uploading XML data directly or loaded from file
+    if (!empty($xmldata)) {
+        $error = '';
+        $xmlitems = xmlimport($xmldata, $error);
 
-            if (($xmlitems = xmlimport($xmldata, $error)) !== false) {
+        if ($xmlitems !== false) {
+            if ($xmlitems === true) {
                 // multiple items imported
-                if ($xmlitems === true) {
-                    redirect('index.php?filter=new');
-                } else {
-                    // exactly one movie imported?
-                    redirect('show.php?id='.$xmlitems);
-                }
+                redirect('index.php?filter=new');
+            } else {
+                // exactly one movie imported?
+                redirect('show.php?id='.$xmlitems);
             }
-            $smarty->assign('xmlerror', $error);
-        } else {
-            $error .= 'There is not xml data';
-            dlog($error);
-            $smarty->assign('xmlerror', $error);
         }
-    } else {
-    //TODO KEC
-        $error .= 'Could not upload file';
-        dlog($error);
         $smarty->assign('xmlerror', $error);
     }
 
