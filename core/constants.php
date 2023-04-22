@@ -30,9 +30,9 @@ define('CACHE_HTML',   'imdb');
 define('CACHE_THUMBS', 'thumbs');
 define('CACHE_LOCAL',  'local');   // local images for covers and actors
 
+// this is just to avoid php warnings when loaded from install.php
 if (empty($config)) {
     $config = ['db_prefix' => ''];
-    var_dump($config);
 }
 
 // Table names
