@@ -158,7 +158,6 @@ function runSQL($sql_string, $verify = true)
 	if ($config['debug']) {
         dlog("\n".$_SERVER['REQUEST_URI']);
         if (function_exists('xdebug_get_function_stack')) {
-//             dlog(join(' -> ', array_column(xdebug_get_function_stack(), 'function')));
             dlog(xdebug_get_function_stack());
         }
         dlog($sql_string);
@@ -177,14 +176,14 @@ function runSQL($sql_string, $verify = true)
             // report DB Problem
             errorpage('Database Problem', mysqli_error($dbh)."\n<br />\n".$sql_string, true);
         }
-	} elseif ($res === true) {
+    } elseif ($res === true) {
         // on insert, return id of created record
-		$result = mysqli_insert_id($dbh);
-	} else {
+	    $result = mysqli_insert_id($dbh);
+    } else {
         // return associative result array
         $result = array();
 
-		for ($i = 0; $i < mysqli_num_rows($res); $i++) {
+        for ($i = 0; $i < mysqli_num_rows($res); $i++) {
             $result[] = mysqli_fetch_assoc($res);
 		}
 		mysqli_free_result($res);
