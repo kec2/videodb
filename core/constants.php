@@ -30,25 +30,25 @@ define('CACHE_HTML',   'imdb');
 define('CACHE_THUMBS', 'thumbs');
 define('CACHE_LOCAL',  'local');   // local images for covers and actors
 
+if (empty($config)) {
+    $config = ['db_prefix' => ''];
+    var_dump($config);
+}
+
 // Table names
 define('TBL_DATA',          $config['db_prefix'].'videodata');
-
 define('TBL_CONFIG',        $config['db_prefix'].'config');
 define('TBL_USERCONFIG',    $config['db_prefix'].'userconfig');
-
 define('TBL_USERS',         $config['db_prefix'].'users');
 define('TBL_USERSEEN',      $config['db_prefix'].'userseen');
 define('TBL_PERMISSIONS',   $config['db_prefix'].'permissions');
-
 define('TBL_ACTORS',        $config['db_prefix'].'actors');
 define('TBL_GENRES',        $config['db_prefix'].'genres');
-
 define('TBL_VIDEOGENRE',    $config['db_prefix'].'videogenre');
 define('TBL_MEDIATYPES',    $config['db_prefix'].'mediatypes');
-
 define('TBL_LENT',          $config['db_prefix'].'lent');
-
 define('TBL_CACHE',         $config['db_prefix'].'cache');
+
 
 // Wishlist
 define('MEDIA_WISHLIST', 50);
