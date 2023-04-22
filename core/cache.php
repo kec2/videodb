@@ -113,20 +113,19 @@ function cache_prune_folders($cache_folder, $cache_max_age, $force_prune = false
  */
 function cache_create_folders($dir, $levels = 0)
 {
-    if (!is_dir($dir))
-    {
-        if (!@mkdir($dir, 0700)) $error = 'Directory <code>'.$dir.'</code> does not exist.<br/>';
-    }
-    elseif (!is_writable($dir))
-    {
+    $error = '';
+
+    if (!is_dir($dir) && !@mkdir($dir, 0700)) {
+        $error = 'Directory <code>'.$dir.'</code> does not exist.<br/>';
+    } elseif (!is_writable($dir)) {
         $error = 'Directory <code>'.$dir.'</code> is not writable.<br/>';
     }
 
     // check hierarchical folders
-    if (empty($error) && ($levels > 0))
-    {
-        for ($i=0; $i<16; $i++)
+    if (empty($error) && $levels > 0) {
+        for ($i = 0; $i < 16; $i++) {
             $error .= cache_create_folders($dir.'/'.dechex($i), $levels-1);
+        }
     }
 
     return $error;
