@@ -117,15 +117,14 @@ function getConnection(): mysqli|false
     global $config, $dbh;
 
     $dbh = mysqli_connect('p:'.$config['db_server'], $config['db_user'], $config['db_password'], $config['db_database']);
-    if (mysqli_connect_error())
+    if (mysqli_connect_error()) {
         errorpage('DB Connection Error',
                   "<p>Edit the database settings in <code>".CONFIG_FILE."</code>.</p>
                    <p>Alternatively, consider running the <a href='install.php'>installation script</a>.</p>");
+    }
 
-    if (DB_CHARSET)
-    {
-        if (mysqli_set_charset($dbh, DB_CHARSET) === false)
-             errorpage('DB Link Error', 'Couldn\'t set encoding to '.DB_ENCODING);
+    if (DB_CHARSET && mysqli_set_charset($dbh, DB_CHARSET) === false) {
+         errorpage('DB Link Error', 'Couldn\'t set encoding to '.DB_ENCODING);
     }
 
     return($dbh);
@@ -166,38 +165,32 @@ function runSQL($sql_string, $verify = true)
 		$timestamp = getmicrotime();
 	}
 
-    if (!is_resource($dbh)) $dbh = getConnection();
-    $res  = mysqli_query($dbh, $sql_string);
+    if (!is_resource($dbh)) {
+        $dbh = getConnection();
+    }
+    $res = mysqli_query($dbh, $sql_string);
 
-    // mysqli_db_query returns either positive result ressource or true/false for an insert/update statement
-    if ($res === false)
-    {
+    // mysqli_db_query returns either positive result resource or true/false for an insert/update statement
+    if ($res === false) {
         $result = false;
-        if ($verify)
-        {
+        if ($verify) {
             // report DB Problem
             errorpage('Database Problem', mysqli_error($dbh)."\n<br />\n".$sql_string, true);
         }
-	}
-	elseif ($res === true)
-	{
+	} elseif ($res === true) {
         // on insert, return id of created record
 		$result = mysqli_insert_id($dbh);
-	}
-	else
-	{
+	} else {
         // return associative result array
         $result = array();
 
-		for ($i=0; $i<mysqli_num_rows($res); $i++)
-		{
+		for ($i = 0; $i < mysqli_num_rows($res); $i++) {
             $result[] = mysqli_fetch_assoc($res);
 		}
 		mysqli_free_result($res);
 	}
 	
-	if ($config['debug'])
-    {
+	if ($config['debug']) {
 		$timestamp = getmicrotime() - $timestamp;
         dlog('Time: '.$timestamp);
         // collect all SQL info for debugging
