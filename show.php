@@ -169,17 +169,20 @@ if (empty($id))
 if (!empty($id))
 {
     // no adult permissions? -> back to index
-    if (!adultcheck($id) || !check_videopermission(PERM_READ, $id)) redirect('index.php');
+    if (!adultcheck($id) || !check_videopermission(PERM_READ, $id)) {
+        redirect('index.php');
+    }
 
     // XML / RSS / PDF export
-    if ($export && $config[$export])
-    {
+    if ($export && $config[$export]) {
         // either (xml|rss|pdf)export
         $func = $export.'export';
         if ($export == 'rss') $export = 'xml';
         require_once './core/'.$export.'.php';
 
-        if (function_exists($func)) $func('WHERE '.TBL_DATA.'.id = '.$id);
+        if (function_exists($func)) {
+            $func('WHERE '.TBL_DATA.'.id = '.$id);
+        }
         exit;
     }
 
@@ -209,15 +212,13 @@ if (!empty($id))
     $video['copyable'] = localnet();
     
     // multi-user permissions
-    if ($config['multiuser'])
-    {
+    if ($config['multiuser']) {
         $video['editable'] = $video['editable'] && check_permission(PERM_WRITE, get_userid($video['owner']));
         $video['copyable'] = $video['copyable'] && check_permission(PERM_WRITE, PERM_ANY);
     }
 
     // save seen state
-    if ($save)
-    {
+    if ($save) {
         set_userseen($id, $seen);
         $video['seen'] = $seen;     // store in video for display
     }
@@ -226,15 +227,13 @@ if (!empty($id))
     $diskid = $video['diskid'];
 
     // check if it is lent and to whom- save query if id not set
-    if ($diskid)
-	{
+    if ($diskid) {
         $SELECT = 'SELECT who
                      FROM '.TBL_LENT."
                     WHERE diskid = '".escapeSQL($diskid)."'";
         $result = runSQL($SELECT);
 
-        if (isset($result[0]['who']))
-        {
+        if (isset($result[0]['who'])) {
             $video['who'] = $result[0]['who'];
         }
     }
@@ -250,10 +249,8 @@ if (!empty($id))
 */
 
     // previous/next buttons
-    if (is_array($ids = session_get('query_result')))
-    {
-        if (($key = array_search($id, $ids)) !== false)
-        {
+    if (is_array($ids = session_get('query_result'))) {
+        if (($key = array_search($id, $ids)) !== false) {
             $video['prev_id'] = ($key > 0) ? $ids[$key-1] : 0;
             $video['next_id'] = ($key < count($ids)-1) ? $ids[$key+1] : 0;
         }
@@ -264,9 +261,7 @@ if (!empty($id))
 	if (sizeof($breadcrumbs['crumbs']) > 10) 
 		$breadcrumbs['crumbs'] = array_slice($breadcrumbs['crumbs'], 0, -10);
 	$breadcrumbs['current']  = $id;
-	$breadcrumbs['crumbs'][] = array(
-		'id' => $id,
-		'title' => $video['title']);
+	$breadcrumbs['crumbs'][] = array('id' => $id, 'title' => $video['title']);
 	$size = sizeof($breadcrumbs['crumbs']);
 	for ($i; $i < $size-1; $i++) {
 		if ($breadcrumbs['crumbs'][$i]['id'] == $id) {
@@ -286,8 +281,7 @@ tpl_page('detailview', $video['title']);
 if (!empty($id)) tpl_show($video);
 
 // caching enabled?
-if ($config['http_caching'])
-{
+if ($config['http_caching']) {
     require_once('./core/httpcache.php');
     httpCacheCaptureStart();
 }
@@ -301,8 +295,7 @@ if (!empty($id)) smarty_display('show.tpl', $id);
 smarty_display('footer.tpl');
 
 // caching enabled?
-if ($config['http_caching'])
-{
+if ($config['http_caching']) {
     httpCacheOutput('show'.$id, httpCacheCaptureEnd());
 }
 

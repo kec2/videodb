@@ -20,13 +20,13 @@ $SETUP_GLOBAL = array('language', 'autoid', 'mediadefault', 'langdefault',
                       'custom2type', 'custom3type', 'custom4type', 'enginedefault', 
                       'proxy_host', 'proxy_port', 'actorpics', 'thumbAge', 'listcolumns', 
                       'shownew', 'imdbBrowser', 'multiuser', 'denyguest', 'adultgenres',
-                      'pageno', 'showtools', 'http_header_accept_language');
+                      'pageno', 'showtools', 'http_header_accept_language', 'diskid_digits');
 
 $SETUP_QUICK  = array('template');
 
 $SETUP_USER   = array('language', 'mediadefault', 'langdefault', 'filterdefault', 
                       'showtv', 'orderallbydisk', 'template', 'languageflags', 
-                      'listcolumns', 'castcolumns', 'shownew', 'pageno', 'removearticles');
+                      'listcolumns', 'castcolumns', 'shownew', 'pageno', 'removearticles', 'diskid_digits');
 
 /**
  * Build config options array
@@ -54,6 +54,7 @@ function setup_mkOptions($isprofile = false)
 
     $setup[] = setup_addOption($isprofile, 'autoid', 'boolean');
     $setup[] = setup_addOption($isprofile, 'orderallbydisk', 'boolean');
+    $setup[] = setup_addOption($isprofile, 'diskid_digits', 'text');
     
     $setup[] = setup_addOption($isprofile, 'mediadefault', 'dropdown', setup_getMediatypes());
     $setup[] = setup_addOption($isprofile, 'langdefault', 'text');

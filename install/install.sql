@@ -200,6 +200,7 @@ REPLACE INTO `config` (opt, value) VALUES ('imdbBrowser', 1);
 REPLACE INTO `config` (opt, value) VALUES ('actorpics', 1);
 REPLACE INTO `config` (opt, value) VALUES ('listcolumns', 6);
 REPLACE INTO `config` (opt, value) VALUES ('castcolumns', 4);
+REPLACE INTO `config` (opt, value) VALUES ('diskid_digits', 4);
 
 REPLACE INTO `config` (opt, value) VALUES ('enginedefault', 'imdb');
 REPLACE INTO `config` (opt, value) VALUES ('engineimdb', 1);

@@ -36,12 +36,6 @@ $config['cache_pruning']        = 1;    // Set to 1 to enable automatically clea
 $config['lookupdefault_edit']   = 0;    // 0=ignore, 1=lookup, 2=overwrite
 $config['lookupdefault_new']    = 2;    // 0=ignore, 1=lookup, 2=overwrite
 
-/* 
- * Amount of digits which are automatically generated as DiskID
- * if "Automatic DiskID" is enabled in the configuration tab
- */
-$config['diskid_digits']    = 4;
-
 /* XML Import/Export */
 $config['xml']              = 1;        // Set to 1 to enable XML data im/export - import requires php5
 
