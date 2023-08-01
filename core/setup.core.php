@@ -3,9 +3,6 @@
  * Functions for config options
  *
  * @package Core
- * @author  Andreas Gohr    <a.gohr@web.de>
- * @author  Andreas G�tz    <cpuidle@gmx.de>
- * @version $Id: setup.core.php,v 1.12 2013/03/16 10:10:07 andig2 Exp $
  */
 
 require_once './core/functions.php';
@@ -20,13 +17,18 @@ $SETUP_GLOBAL = array('language', 'autoid', 'mediadefault', 'langdefault',
                       'custom2type', 'custom3type', 'custom4type', 'enginedefault', 
                       'proxy_host', 'proxy_port', 'actorpics', 'thumbAge', 'listcolumns', 
                       'shownew', 'imdbBrowser', 'multiuser', 'denyguest', 'adultgenres',
-                      'pageno', 'showtools', 'http_header_accept_language', 'diskid_digits');
+                      'pageno', 'showtools', 'http_header_accept_language', 'diskid_digits',
+                      'hierarchical', 'cache_pruning', 'xml', 'xls', 'pdf', 'rss', 'boxeeHost', 'boxeePort',
+                      'lookupdefault_edit', 'lookupdefault_new', 'thumbnail_level', 'thumbnail_quality', 'offline',
+                      'debug', 'httpclientlog');
 
 $SETUP_QUICK  = array('template');
 
 $SETUP_USER   = array('language', 'mediadefault', 'langdefault', 'filterdefault', 
                       'showtv', 'orderallbydisk', 'template', 'languageflags', 
-                      'listcolumns', 'castcolumns', 'shownew', 'pageno', 'removearticles', 'diskid_digits');
+                      'listcolumns', 'castcolumns', 'shownew', 'pageno', 'removearticles', 'diskid_digits',
+                      'boxeeHost', 'boxeePort', 'lookupdefault_edit', 'lookupdefault_new',
+                      'thumbnail_level', 'thumbnail_quality');
 
 /**
  * Build config options array
@@ -44,18 +46,20 @@ function setup_mkOptions($isprofile = false)
     
     // isprofile, name, type (text|boolean|dropdown|special|link), data, set, helphl, helptxt
     $setup[] = setup_addSection('opt_general');
+    $setup[] = setup_addOption($isprofile, 'offline', 'boolean');
+
 	$setup[] = setup_addOption($isprofile, 'language', 'dropdown', setup_getLanguages(), null, $lang['help_langn'], $lang['help_lang']);
     $option  = setup_addOption($isprofile, 'template', 'dropdown', setup_getTemplates($thumbs));
     $option['thumbs'] = $thumbs;
     $setup[] = $option;
-    
+
     $setup[] = setup_addOption($isprofile, 'listcolumns', 'text');
     $setup[] = setup_addOption($isprofile, 'castcolumns', 'text');
 
     $setup[] = setup_addOption($isprofile, 'autoid', 'boolean');
     $setup[] = setup_addOption($isprofile, 'orderallbydisk', 'boolean');
     $setup[] = setup_addOption($isprofile, 'diskid_digits', 'text');
-    
+
     $setup[] = setup_addOption($isprofile, 'mediadefault', 'dropdown', setup_getMediatypes());
     $setup[] = setup_addOption($isprofile, 'langdefault', 'text');
     $setup[] = setup_addOption($isprofile, 'filterdefault', 'dropdown', array('all'=>$lang['radio_all'], 'unseen'=>$lang['radio_unseen'], 'new'=>$lang['radio_new'], 'wanted'=>$lang['radio_wanted']));
@@ -66,6 +70,8 @@ function setup_mkOptions($isprofile = false)
     $setup[] = setup_addOption($isprofile, 'removearticles', 'boolean');
     $setup[] = setup_addOption($isprofile, 'adultgenres', 'multi', setup_getGenres(), @explode('::', $config['adultgenres']));
     $setup[] = setup_addOption($isprofile, 'showtools', 'boolean');
+    $setup[] = setup_addOption($isprofile, 'lookupdefault_edit', 'text');
+    $setup[] = setup_addOption($isprofile, 'lookupdefault_new', 'text');
 
     if (!$isprofile) $setup[] = setup_addSection('opt_custom');
     $setup[] = setup_addOption($isprofile, 'custom', 'special', setup_mkCustoms());
@@ -73,8 +79,7 @@ function setup_mkOptions($isprofile = false)
     if (!$isprofile) $setup[] = setup_addSection('opt_engines');
     $setup[] = setup_addOption($isprofile, 'enginedefault', 'dropdown', setup_getEngines($config['engines']), null , $lang['help_defaultenginen'], $lang['help_defaultengine']);
 
-    foreach ($config['engines'] as $engine => $meta)
-    {
+    foreach ($config['engines'] as $engine => $meta) {
         $title      = $meta['name'];
         $enabled    = $config['engine'][$engine];        
         $helptext   = sprintf($lang['help_engine'], $title);
@@ -84,18 +89,17 @@ function setup_mkOptions($isprofile = false)
         $setup[] = setup_addOption($isprofile, 'engine'.$engine, 'boolean', null, $enabled, $title, $helptext);
 
         // add engine-specific options
-        if (is_array($meta['config']))
-        {
-            foreach ($meta['config'] as $setting)
-            {
+        if (is_array($meta['config'])) {
+            foreach ($meta['config'] as $setting) {
                 // NOTE: check setup_additionalSettings if you change the option naming
-                if (is_array($setting['values']))
-                    $setup[] = setup_addOption($isprofile, $engine.$setting['opt'], 
+                if (is_array($setting['values'])) {
+                    $setup[] = setup_addOption($isprofile, $engine.$setting['opt'],
                         'dropdown', $setting['values'], null, $setting['name'], $setting['desc']);
-                else
+                } else {
                     $setup[] = setup_addOption($isprofile, $engine.$setting['opt'], 
                         'text', null, null, $setting['name'], $setting['desc']);
                 }
+            }
         }
     }
 
@@ -110,15 +114,34 @@ function setup_mkOptions($isprofile = false)
 
     if (!$isprofile) $setup[] = setup_addSection('opt_caching');
     $setup[] = setup_addOption($isprofile, 'thumbnail', 'boolean');
-    $setup[] = setup_addOption($isprofile, 'imdbBrowser', 'boolean');
-    $setup[] = setup_addOption($isprofile, 'IMDBage', 'text');
     $setup[] = setup_addOption($isprofile, 'actorpics', 'boolean');
+    $setup[] = setup_addOption($isprofile, 'imdbBrowser', 'boolean');
+    $setup[] = setup_addOption($isprofile, 'cache_pruning', 'boolean');
+    $setup[] = setup_addOption($isprofile, 'hierarchical', 'boolean');
+    $setup[] = setup_addOption($isprofile, 'IMDBage', 'text');
     $setup[] = setup_addOption($isprofile, 'thumbAge', 'text');
+    $setup[] = setup_addOption($isprofile, 'thumbnail_level', 'text');
+    $setup[] = setup_addOption($isprofile, 'thumbnail_quality', 'text');
+
+    if (!$isprofile) $setup[] = setup_addSection('opt_export');
+    $setup[] = setup_addOption($isprofile, 'xml', 'boolean');
+    $setup[] = setup_addOption($isprofile, 'rss', 'boolean');
+    $setup[] = setup_addOption($isprofile, 'xls', 'boolean');
+    $setup[] = setup_addOption($isprofile, 'pdf', 'boolean');
+
+    if (!$isprofile) $setup[] = setup_addSection('opt_boxee');
+    $setup[] = setup_addOption($isprofile, 'boxeeHost', 'text');
+    $setup[] = setup_addOption($isprofile, 'boxeePort', 'text');
+
+    if (!$isprofile) $setup[] = setup_addSection('opt_debug');
+    $setup[] = setup_addOption($isprofile, 'debug', 'boolean');
+    $setup[] = setup_addOption($isprofile, 'httpclientlog', 'boolean');
 
     // clean empty entries
-    for ($i = count($setup); $i > 0; $i--)
-    {
-        if (empty($setup[$i]['name']) && empty($setup[$i]['group'])) unset($setup[$i]);
+    for ($i = count($setup); $i > 0; $i--) {
+        if (empty($setup[$i]['name']) && empty($setup[$i]['group'])) {
+            unset($setup[$i]);
+        }
     }
 
 	return $setup;
@@ -131,13 +154,10 @@ function setup_additionalSettings(): void
 {
     global $config, $SETUP_GLOBAL;
 
-    foreach ($config['engines'] as $engine => $meta)
-    {
+    foreach ($config['engines'] as $engine => $meta) {
         // add engine-specific options
-        if (is_array($meta['config']))
-        {
-            foreach ($meta['config'] as $setting)
-            {
+        if (is_array($meta['config'])) {
+            foreach ($meta['config'] as $setting) {
                 $SETUP_GLOBAL[] = $engine.$setting['opt'];
             }
         }
@@ -201,12 +221,9 @@ function setup_addOption($isprofile, $name, $type,
  */
 function setup_getLanguages()
 {
-    if ($dh = opendir('language')) 
-    {
-        while (($file = readdir($dh)) !== false) 
-        {
-            if (preg_match("/(.*)\.php$/", $file, $matches))
-            {
+    if ($dh = opendir('language')) {
+        while (($file = readdir($dh)) !== false)  {
+            if (preg_match("/(.*)\.php$/", $file, $matches)) {
                 $languages[$matches[1]] = $matches[1];
             }
         }
@@ -225,29 +242,21 @@ function setup_getTemplates(&$screenshots)
 {
     $screenshots = array();
     
-	if ($dh = @opendir('templates'))
-	{
-		while (($file = readdir($dh)) !== false)
-		{
+	if ($dh = @opendir('templates')) {
+		while (($file = readdir($dh)) !== false) {
 			if (preg_match("/^\./", $file)) continue;
-			if (is_dir('templates/'.$file))
-			{
+
+			if (is_dir('templates/'.$file)) {
                 $template = 'templates/'.$file;
-				if ($dh2 = opendir($template))
-				{
+				if ($dh2 = opendir($template)) {
                     $style_name = '';
 
-					while (($style = readdir($dh2)) !== false)
-					{
-						if (preg_match("/(.*)\.css$/", $style, $matches)) 
-                        {
+					while (($style = readdir($dh2)) !== false) {
+						if (preg_match("/(.*)\.css$/", $style, $matches)) {
                             $thumb = $template.'/screenshot_'.$matches[1].'.jpg';
-                            if (file_exists($thumb))
-                            {
+                            if (file_exists($thumb)) {
                                 $screenshots[] = array('name' => "$file::".$matches[1], 'img' => $thumb);
-                            }
-                            elseif (empty($style_name))
-                            {
+                            } elseif (empty($style_name)) {
                                 // remember first style found
                                 $style_name = $matches[1];
                             }
@@ -256,11 +265,9 @@ function setup_getTemplates(&$screenshots)
 					}
 	    			closedir($dh2);
                     
-                    if ($style_name)
-                    {
+                    if ($style_name) {
                         $thumb = $template.'/screenshot.jpg';
-                        if (file_exists($thumb))
-                        {
+                        if (file_exists($thumb)) {
                             $screenshots[] = array('name' => "$file::$style_name", 'img' => $thumb);
                         }
                     }
@@ -278,9 +285,7 @@ function setup_getTemplates(&$screenshots)
  */
 function setup_getMediatypes(): array
 {
-    $SELECT = 'SELECT id, name
-               FROM '.TBL_MEDIATYPES.'
-           ORDER BY name';
+    $SELECT = 'SELECT id, name FROM '.TBL_MEDIATYPES.' ORDER BY name';
     $result = runSQL($SELECT);
         
     return array_associate($result, 'id', 'name');
@@ -291,9 +296,7 @@ function setup_getMediatypes(): array
  */
 function setup_getGenres(): array
 {
-    $SELECT = 'SELECT id, name
-                 FROM '.TBL_GENRES.'
-             ORDER BY name';
+    $SELECT = 'SELECT id, name FROM '.TBL_GENRES.' ORDER BY name';
     $result = runSQL($SELECT);
     
     return array_associate($result, 'id', 'name');
@@ -306,9 +309,10 @@ function setup_getEngines($engines_ary): array
 {
 	$engines = array();
 	
-	foreach ($engines_ary as $engine => $meta)
-    {
-        if (engine_get_capability($engine, 'movie')) $engines[$engine] = $meta['name'];
+	foreach ($engines_ary as $engine => $meta) {
+        if (engine_get_capability($engine, 'movie')) {
+            $engines[$engine] = $meta['name'];
+        }
     }
     
     return $engines;
@@ -324,13 +328,11 @@ function setup_mkCustoms(): string
     
     $setup_custom = '';
     
-    for ($i=1; $i<5; $i++)
-    {
+    for ($i=1; $i<5; $i++) {
         $setup_custom .= $i.'. <input type="text" size="20" name="custom'.$i.'" id="custom'.$i.'" value="'.htmlspecialchars($config['custom'.$i]).'"/>';
         $setup_custom .= '<select name="custom'.$i.'type">';
     
-        foreach($allcustomtypes as $ctype)
-        {
+        foreach($allcustomtypes as $ctype) {
             $selected       = ($ctype == $config['custom'.$i.'type']) ? ' selected="selected"' : '';
             $setup_custom  .= '<option value="'.$ctype.'"'.$selected.'>'.$ctype.'</option>';
         }
@@ -350,8 +352,12 @@ function update_session(): void
 {
     global $listcolumns, $showtv;
     
-    if ($listcolumns) $_SESSION['vdb']['listcolumns'] = $listcolumns;
-    if ($showtv) $_SESSION['vdb']['showtv'] = $showtv;
+    if ($listcolumns) {
+        $_SESSION['vdb']['listcolumns'] = $listcolumns;
+    }
+    if ($showtv) {
+        $_SESSION['vdb']['showtv'] = $showtv;
+    }
 }
 
 ?>

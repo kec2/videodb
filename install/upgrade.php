@@ -3,46 +3,43 @@
  * Database encoding conversion for unicode
  *
  * @package Setup
- * @author  Andreas Goetz <cpuidle@gmx.net>
- * @version $Id: upgrade.php,v 1.9 2013/03/13 15:54:24 andig2 Exp $
  */
+GLOBAL $db_prefix;
 
 // clear cache table
-$res    = runSQL("SELECT value FROM config WHERE opt='dbversion'", $dbh, true);
-if (count($res) && ($res[0]['value'] >= 30))
-{
-    runSQL("DELETE FROM cache", $dbh, true);
+$res = runSQL("SELECT value FROM ".TBL_CONFIG." WHERE opt='dbversion'", $dbh, true);
+if (count($res) && ($res[0]['value'] >= 30)) {
+    runSQL("DELETE FROM ".TBL_CACHE, $dbh, true);
 }
 
-$sql    = '';
+$sql = '';
 
 // check db  encoding
-$res    = runSQL("SHOW VARIABLES LIKE 'character_set_database'", $dbh, true);
-$enc    = strtoupper($res[0]['Value']);
+$res = runSQL("SHOW VARIABLES LIKE 'character_set_database'", $dbh, true);
+$enc = strtoupper($res[0]['Value']);
 
-if ($enc !== 'UTF8')
-{
-    $sql    = "ALTER DATABASE CHARACTER SET UTF8;";
+if (!preg_match('/UTF8.+?/i', $enc)) {
+    $sql = "ALTER DATABASE CHARACTER SET UTF8;";
 }
 
 $tables = array('actors', 'cache', 'config', 'genres', 'lent', 'mediatypes', 'permissions', 
                 'userconfig', 'users', 'userseen', 'videodata', 'videogenre');
 
-foreach ($tables as $table)
-{
+foreach ($tables as $table) {
     #!! note:   new code- checking table encoding on table level, too
-    #           this is for the case that the DB ist alreaady utf8 but the tables are not
+    #           this is for the case that the DB ist already utf8 but the tables are not
     #
     #           alternative approach:
     #           SELECT TABLE_COLLATION FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'videodb'
-    $res    = runSQL("SHOW TABLE STATUS WHERE name = '".$table."'", $dbh, true);
-    $enc    = $res[0]['Collation'];
+    $res = runSQL("SHOW TABLE STATUS WHERE name = '".$db_prefix.$table."'", $dbh, true);
+    $enc = $res[0]['Collation'];
 
-    if (!preg_match('/UTF8/i', $enc)) $sql .= "\nALTER TABLE ".$table." CONVERT TO CHARACTER SET UTF8;";
+    if (!preg_match('/UTF8.+?/i', $enc)) {
+        $sql .= "\nALTER TABLE ".{$db_prefix}{$table}." CONVERT TO CHARACTER SET UTF8;";
+    }
 }
 
-if ($sql)
-{
+if ($sql) {
     // add DB prefix
     $sql = prefix_query($sql);
 

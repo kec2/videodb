@@ -147,7 +147,7 @@ $lang['listallfiles']        = "List all files";
 $lang['look_imdb']           = "Try lookup missing data at IMDB";
 $lang['really_del']          = "Really delete";
 $lang['returned']            = "It was returned";
-$lang['notavail']            = "<span class=\"notavail\">NOT AVAILABLE</span><br />lent to";
+$lang['notavail']            = "<span class=\"notavail\">NOT AVAILABLE</span><br>lent to";
 $lang['curlent']             = "Currently lent:";
 $lang['curlentfrom']         = "Currently lent from owner";
 $lang['fieldselect']         = "Fields";
@@ -223,7 +223,7 @@ $lang['trailer_show']  	   = "Show trailers";
 $lang['averagefilesize']     = "Average file size";
 $lang['averageruntime']      = "Average runtime";
 $lang['languages']           = "Languages";
-$lang['multiple']            = "<small>(multiple genres<br />per video possible)</small>";
+$lang['multiple']            = "<small>(multiple genres<br>per video possible)</small>";
 $lang['numberdisks']         = "Number of disks";
 $lang['totalfiles']          = "Total entries";
 $lang['totalruntime']        = "Total runtime";
@@ -256,6 +256,9 @@ $lang['opt_engines']          = 'Data Providers';
 $lang['opt_security']         = 'Network and Security';
 $lang['opt_caching']          = 'Caching';
 $lang['opt_apikeys']          = 'API Keys';
+$lang['opt_export']           = 'Import and export';
+$lang['opt_boxee']            = 'Boxee';
+$lang['opt_debug']            = 'Debug';
 
 $lang['enable']              = "enable";
 
@@ -265,8 +268,10 @@ $lang['help_actorpics']      = "This tries to find a tiny image for each actor f
 $lang['help_actorpicsn']     = "Actor thumbnails";
 $lang['help_adultgenres']    = "Movies in the genres you select here will only be visible to users with 'adult' permissions. Hold down the CTRL-key to select multiple genres. (Only applies when multiuser support is enabled)";
 $lang['help_adultgenresn']   = "Adult Genres";
-$lang['help_autoid']         = "VideoDB uses a DiskID to identify disks. This ID is different from the VideoID which is assigned to every video automagically. This allows you to have multiple videos on a single disk and let them become all unavailable when you lend the disk to someone.<br />However if you don't have a fancy namingscheme for your disks and just want to number them, VideoDB can suggest an ID when adding a new video by increasing a number. If you want this enable this option.";
+$lang['help_autoid']         = "VideoDB uses a DiskID to identify disks. This ID is different from the VideoID which is assigned to every video automagically. This allows you to have multiple videos on a single disk and let them become all unavailable when you lend the disk to someone.<br>However if you don't have a fancy namingscheme for your disks and just want to number them, VideoDB can suggest an ID when adding a new video by increasing a number. If you want this enable this option.";
 $lang['help_autoidn']        = "Automatic DiskID";
+$lang['help_cache_pruning']  = "Set to enable automatically cleanup of cache folders";
+$lang['help_cache_pruningn'] = "Automatic cache pruning";
 $lang['help_castcolumns']    = "This defines how many columns are used to display the cast list in a movies detail view. It depends on your screen resolution and the chosen template how much space you have.";
 $lang['help_castcolumnsn']   = "Cast columns";
 $lang['help_custom']         = "You may define up to four custom fields for your videos. Each can store up to 255 characters. Here you can give them names and select the pluginhandlers which should be used to display the fields. Leave the name blank to disable them.";
@@ -277,11 +282,13 @@ $lang['help_denyguest']      = "Enabling this denies access for everyone except 
 $lang['help_denyguestn']     = "No public access";
 $lang['help_diskid_digits']  = "Amount of digits which are automatically generated as DiskID if \"Automatic DiskID\" is enabled in the configuration tab.";
 $lang['help_diskid_digitsn'] = "Number of DiskID digits";
-$lang['help_engexperimental']= "<br/>Note that this data provider is still in experimental stage and might not work as expected.";
+$lang['help_engexperimental']= "<br>Note that this data provider is still in experimental stage and might not work as expected.";
 $lang['help_engine']         = "Enabling this option will allow videoDB to retrieve data from %s.";
 $lang['help_enginegoogle']   = "Google supports image searches only.";
 $lang['help_filterdefault']  = "This is the page that will be opened when you start VideoDB.";
 $lang['help_filterdefaultn'] = "Default filter";
+$lang['help_hierarchical']   = "Set to enable hierarchical cache folders.";
+$lang['help_hierarchicaln']  = "Hierarchical cache folders";
 $lang['help_http_header_accept_language']    = "Add extra data to HTTP Header. fx \"fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5\"";
 $lang['help_http_header_accept_languagen']   = "HTTP Header Accept-Language";
 $lang['help_imdbBrowser']    = "This allows you to browse the IMDB through VideoDB and add movies directly from within their site.";
@@ -292,11 +299,11 @@ $lang['help_lang']           = "Select your countrycode here. If your language i
 $lang['help_langdefault']    = "This is different from the language setting above. This is the language that will be filled in on default when you add a new video. Leave it blank if you don't like this.";
 $lang['help_langdefaultn']   = "Default language";
 $lang['help_langn']          = "Language";
-$lang['help_languageflags']  = "Here you can select the flags which should be available as JavaScript buttons in the edit form for quick language selection.<br />No more than five should be selected.";
+$lang['help_languageflags']  = "Here you can select the flags which should be available as JavaScript buttons in the edit form for quick language selection.<br>No more than five should be selected.";
 $lang['help_languageflagsn'] = "Language flags";
 $lang['help_listcolumns']    = "This is currently only used in the 'modern' template. It defines how many columns are used to show the browsing list. If set to 1 it shows a list like the default template.";
 $lang['help_listcolumnsn']   = "List columns";
-$lang['help_localnet']       = "Here you can define your local network. Users who access VideoDB from somewhere else can not edit the data anymore. This is a <a href=\"http://www.php.net/manual/en/pcre.pattern.syntax.php\" target=\"_blank\">regular expression</a> so you may even give some complicated term here.<p>Examples:<br /><span class=\"example\">^192\.168\.1\.</span> allows 192.168.1.1 - 192.168.1.254<br /><span class=\"example\">^(192\.168\.1\.|127\.0\.0\.1$)</span> the same as above plus localhost<br /><span class=\"example\">^192\.168\.1\.22$</span> allows IP 192.168.1.22 only<br /><span class=\"example\">^(192\.168\.1\.22|127\.0\.0\.1)$</span> the same as above plus localhost<br /> leaving it blank allows everyone<br /></p> Attention: If you make a mistake here you will lock out your self from the config page!";
+$lang['help_localnet']       = "Here you can define your local network. Users who access VideoDB from somewhere else can not edit the data anymore. This is a <a href=\"http://www.php.net/manual/en/pcre.pattern.syntax.php\" target=\"_blank\">regular expression</a> so you may even give some complicated term here.<p>Examples:<br><span class=\"example\">^192\.168\.1\.</span> allows 192.168.1.1 - 192.168.1.254<br><span class=\"example\">^(192\.168\.1\.|127\.0\.0\.1$)</span> the same as above plus localhost<br><span class=\"example\">^192\.168\.1\.22$</span> allows IP 192.168.1.22 only<br><span class=\"example\">^(192\.168\.1\.22|127\.0\.0\.1)$</span> the same as above plus localhost<br> leaving it blank allows everyone<br></p> Attention: If you make a mistake here you will lock out your self from the config page!";
 $lang['help_localnetn']      = "Local network";
 $lang['help_mediadefault']   = "Select which mediatype should be suggested when adding a new video";
 $lang['help_mediadefaultn']  = "Default mediatype";
@@ -324,12 +331,43 @@ $lang['help_template']       = "This sets the design to use. Each template can h
 $lang['help_templaten']      = "Template";
 $lang['help_thumbAge']       = "This defines when to retry to load actor thumbnails that weren't found last time (in seconds). Defaults to 3 weeks.";
 $lang['help_thumbAgen']      = "Actor thumbnail retry";
-$lang['help_thumbnail']      = "Enabling this shows a tiny version of the coverimage in the browsinglist. If it is to slow or distracts your eyes disable it.";
+$lang['help_thumbnail']      = "Enabling this shows a tiny version of the cover image in the browsinglist. If it is to slow or distracts your eyes disable it.";
 $lang['help_thumbnailn']     = "Thumbnails";
 $lang['help_usermanager']    = "Follow this link to add, modify and delete users and their permissions for the multiuser mode.";
 $lang['help_usermanagern']   = "User Management";
-$lang['help_youtubekey']     = "Optain a YouTube developer API key from <a href='http://www.youtube.com/my_profile_dev'>http://www.youtube.com/my_profile_dev</a> to enable YouTube support.";
+$lang['help_youtubekey']     = "Obtain a YouTube developer API key from <a href='http://www.youtube.com/my_profile_dev'>http://www.youtube.com/my_profile_dev</a> to enable YouTube support.";
 $lang['help_youtubekeyn']    = "YouTube API Key";
+
+$lang['help_xml']     = "Export you movie collection to XML. Filter options applies. This also enables import of movies (host/edit.php&import=xml).";
+$lang['help_xmln']    = "XML";
+$lang['help_xls']     = "Export you movie collection to XLS (Excel). Filter options applies.";
+$lang['help_xlsn']    = "XLS";
+$lang['help_rss']     = "Export you movie collection to RSS. Filter options applies.";
+$lang['help_rssn']    = "RSS";
+$lang['help_pdf']     = "Export you movie collection to PDF. Filter options applies.";
+$lang['help_pdfn']    = "PDF";
+
+$lang['help_boxeeHost']     = "Host address of Boxee.";
+$lang['help_boxeeHostn']    = "Host";
+$lang['help_boxeePort']     = "Port for Boxee.";
+$lang['help_boxeePortn']    = "Port";
+
+$lang['help_lookupdefault_edit']  = "Lookup data behavior for existing movies. Possible values: 0 = ignore missing data, 1 = lookup missing data, 2 = overwrite existing data.";
+$lang['help_lookupdefault_editn'] = "Existing movies";
+$lang['help_lookupdefault_new']   = "Lookup data behavior for existing movies. Possible values: 0 = ignore missing data, 1 = lookup missing data, 2 = overwrite existing data.";
+$lang['help_lookupdefault_newn']  = "New movies";
+
+$lang['help_thumbnail_level']    = "Thumbnail scaling: -1 = no scaling  - use of thumbnails is disabled.<br>0 = reduce only  - create thumbnails when requested image dimensions are smaller than original image.<br>1 = always scale - create thumbnails for all images (applies aliasing when scaling).";
+$lang['help_thumbnail_leveln']   = "Thumbnail scaling";
+$lang['help_thumbnail_quality']  = "Possible value ranges from [1..100]";
+$lang['help_thumbnail_qualityn'] = "Thumbnail quality";
+
+$lang['help_offline']   = "Used to take VideoDB offline.";
+$lang['help_offlinen']  = "Offline";
+$lang['help_debug']     = "Enable debug logging.";
+$lang['help_debugn']    = "Debug";
+$lang['help_httpclientlog']  = "Enable HttpClient logging (debug only).";
+$lang['help_httpclientlogn'] = "HttpClient logging";
 
 $lang['page']                = "Page";
 $lang['of']                  = "of";
@@ -338,5 +376,4 @@ $lang['records']             = "records";
 $lang['warn_noOwner']        = "Data not saved - you have to select an owner first!";
 
 $lang['order']				 = "Sort by";
-
 ?>

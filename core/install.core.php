@@ -282,7 +282,9 @@ function runMultipleSQL($sql, $dbh, $verify = false)
  */
 function db_upgrade($upgrade_steps)
 {
-    global $dbh, $version;
+    global $dbh;
+    global $db_prefix;
+    global $version;
     global $step;
 
     foreach ($upgrade_steps as $ver => $sql)
@@ -290,7 +292,7 @@ function db_upgrade($upgrade_steps)
         #info("Upgrading to database version: $ver");
         $sql = preg_replace('/#.*\n/m','',$sql);
 
-        if (runSQL($sql, $dbh) === false)
+        if (runMultipleSQL($sql, $dbh, true) === false)
         {
             error('Error upgrading database, try full install instead of upgrade:<br/>'.mysqli_error($dbh).
                   '<br/><br/><pre>'.$sql.'</pre>');
@@ -306,8 +308,7 @@ function db_upgrade($upgrade_steps)
         }
 
         // add DB version information- this will make the separate update statement in upgrade.sql obsolete
-        runSQL("REPLACE INTO config (opt,value) VALUES ('dbversion', ".$ver.");", $dbh);
-#       runSQL("update config set value=25 where  opt='dbversion'");
+        runSQL("REPLACE INTO {$db_prefix}config (opt, value) VALUES ('dbversion', '$ver');");
 
         $version = $ver;
     }

@@ -38,6 +38,20 @@ require_once './core/cache.php';
 require_once './core/compatibility.php';
 require_once './vendor/smarty/smarty/libs/Smarty.class.php';
 
+/*
+ * To enable PDF export you can uncomment the following line and edit
+ * the settings in pdf.inc.php.
+ * The required FPDF library is bundled in the lib/fpdf folder.
+ */
+require_once './pdf.inc.php';
+
+/*
+ * To enable XLS export you can uncomment the following line.
+ * The required libraries are now included via composer in folders
+ * vendor/pear/ole and Vendor/pear/spreadsheet_excel_writer
+ */
+require_once './xls.inc.php';
+
 /* --------------------------------------------------------------------*/
 // exception handling beyond this point
 set_exception_handler('exception_handler');
@@ -190,15 +204,15 @@ function load_config($force_reload = false): void
         }
 
         // set some defaults
-        if (empty($config['language'])) $config['language'] = 'en';
-        if (empty($config['template'])) $config['template'] = 'modern::compact';
-        if (empty($config['filterdefault'])) $config['filterdefault'] = 'unseen';
+//         if (empty($config['language'])) $config['language'] = 'en';
+//         if (empty($config['template'])) $config['template'] = 'modern::compact';
+//         if (empty($config['filterdefault'])) $config['filterdefault'] = 'unseen';
 
 //      if ($config['IMDBage'] < 1) $config['IMDBage']          = 60*60*24*5;
-        if ($config['castcolumns'] < 1) $config['castcolumns']  = 4;
-        if ($config['listcolumns'] < 1) $config['listcolumns']  = 1;
-        if ($config['thumbAge'] < 1) $config['thumbAge']        = 60*60*24*7*3;
-        if ($config['shownew'] < 1) $config['shownew']          = 12;
+//         if ($config['castcolumns'] < 1) $config['castcolumns']  = 4;
+//         if ($config['listcolumns'] < 1) $config['listcolumns']  = 1;
+//         if ($config['thumbAge'] < 1) $config['thumbAge']        = 60*60*24*7*3;
+//         if ($config['shownew'] < 1) $config['shownew']          = 12;
 
         // prepare som options for later use
         $config['languages']    = explode('::', $config['languageflags']);

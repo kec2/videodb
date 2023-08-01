@@ -191,6 +191,9 @@ REPLACE INTO `config` (opt, value) VALUES ('mediadefault', '4');
 REPLACE INTO `config` (opt, value) VALUES ('langdefault', 'english');
 REPLACE INTO `config` (opt, value) VALUES ('filterdefault', 'unseen');
 REPLACE INTO `config` (opt, value) VALUES ('IMDBage', '432000');
+REPLACE INTO `config` (opt, value) VALUES ('thumbAge', '1814400');
+REPLACE INTO `config` (opt, value) VALUES ('hierarchical', '1');
+REPLACE INTO `config` (opt, value) VALUES ('cache_pruning', '1');
 REPLACE INTO `config` (opt, value) VALUES ('thumbnail', '1');
 REPLACE INTO `config` (opt, value) VALUES ('template', 'nexgen::nexgen');
 REPLACE INTO `config` (opt, value) VALUES ('languageflags', 'german::spanish::english::french');
@@ -201,6 +204,7 @@ REPLACE INTO `config` (opt, value) VALUES ('actorpics', 1);
 REPLACE INTO `config` (opt, value) VALUES ('listcolumns', 6);
 REPLACE INTO `config` (opt, value) VALUES ('castcolumns', 4);
 REPLACE INTO `config` (opt, value) VALUES ('diskid_digits', 4);
+REPLACE INTO `config` (opt, value) VALUES ('shownew', 12);
 
 REPLACE INTO `config` (opt, value) VALUES ('enginedefault', 'imdb');
 REPLACE INTO `config` (opt, value) VALUES ('engineimdb', 1);
@@ -208,6 +212,15 @@ REPLACE INTO `config` (opt, value) VALUES ('engineamazon', 1);
 REPLACE INTO `config` (opt, value) VALUES ('engineamazonaws', 1);
 REPLACE INTO `config` (opt, value) VALUES ('enginegoogle', 1);
 REPLACE INTO `config` (opt, value) VALUES ('engineyoutube', 1);
+REPLACE INTO `config` (opt, value) VALUES ('xml', 1);
+REPLACE INTO `config` (opt, value) VALUES ('pdf', 1);
+REPLACE INTO `config` (opt, value) VALUES ('rss', 1);
+REPLACE INTO `config` (opt, value) VALUES ('xls', 1);
+REPLACE INTO `config` (opt, value) VALUES ('lookupdefault_edit', 0);
+REPLACE INTO `config` (opt, value) VALUES ('lookupdefault_new', 2);
+REPLACE INTO `config` (opt, value) VALUES ('thumbnail_level', 1);
+REPLACE INTO `config` (opt, value) VALUES ('thumbnail_quality', 95);
+
 
 # user permissions
 CREATE TABLE permissions (
@@ -231,4 +244,4 @@ INSERT IGNORE INTO users (id, name, passwd, permissions) VALUES (10000 ,'Guest',
 # core/constants.php when changing the database structure!
 #
 
-REPLACE INTO config (opt,value) VALUES ('dbversion', 42);
+REPLACE INTO config (opt,value) VALUES ('dbversion', 43);

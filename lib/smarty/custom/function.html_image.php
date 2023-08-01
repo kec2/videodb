@@ -11,6 +11,9 @@ require_once('./lib/phpthumb/phpthumb.class.php');
 
 define('THUMB_CACHE_SOURCE', true);
 define('THUMB_CACHE_TARGET', true);
+define('TUMB_NO_SCALE',   -1);  // no scaling     - use of thumbnails is disabled
+define('TUMB_REDUCE_ONLY', 0);  // reduce only    - create thumbnails when requested image dimensions are smaller than original image
+define('TUMB_SCALE',       1);  // always scale   - create thumbnails for all images (applies aliasing when scaling)
 
 /** 
  * This function is to replace PHP's extremely buggy realpath(). 

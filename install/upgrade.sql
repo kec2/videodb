@@ -407,6 +407,26 @@ ALTER TABLE videodata MODIFY actors MEDIUMTEXT;
 
 ALTER TABLE actors MODIFY actorid VARCHAR(20) NOT NULL DEFAULT '';
 
+#
+# changes in DB version 43
+#
+
+INSERT IGNORE INTO config (opt, value) VALUES ('diskid_digits', '4');
+INSERT IGNORE INTO config (opt, value) VALUES ('hierarchical', '1');
+INSERT IGNORE INTO config (opt, value) VALUES ('cache_pruning', '1');
+INSERT IGNORE INTO config (opt, value) VALUES ('thumbAge', '1814400');
+INSERT IGNORE INTO config (opt, value) VALUES ('castcolumns', '4');
+INSERT IGNORE INTO config (opt, value) VALUES ('listcolumns', '6');
+INSERT IGNORE INTO config (opt, value) VALUES ('xml', '1');
+INSERT IGNORE INTO config (opt, value) VALUES ('pdf', '1');
+INSERT IGNORE INTO config (opt, value) VALUES ('rss', '1');
+INSERT IGNORE INTO config (opt, value) VALUES ('xls', '1');
+INSERT IGNORE INTO config (opt, value) VALUES ('lookupdefault_edit', '0');
+INSERT IGNORE INTO config (opt, value) VALUES ('lookupdefault_new', '2');
+INSERT IGNORE INTO config (opt, value) VALUES ('thumbnail_level', '1');
+INSERT IGNORE INTO config (opt, value) VALUES ('thumbnail_quality', '95');
+INSERT IGNORE INTO config (opt, value) VALUES ('shownew', '12');
+
 # 
 # IMPORTANT
 # 
@@ -414,4 +434,4 @@ ALTER TABLE actors MODIFY actorid VARCHAR(20) NOT NULL DEFAULT '';
 # core/constants.php when changing the database structure!
 # 
 
-REPLACE INTO config (opt,value) VALUES ('dbversion', 42);
+REPLACE INTO config (opt,value) VALUES ('dbversion', 43);

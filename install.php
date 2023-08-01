@@ -13,6 +13,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 require_once './core/compatibility.php';
 require_once './core/install.core.php';
+require_once './core/functions.core.php';
 require_once './core/constants.php';
 
 
