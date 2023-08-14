@@ -1,0 +1,15 @@
+.idea/
+cache/
+db/
+doc/
+vendor/
+
+.gitignore
+config.inc.php
+debug.log
+docker-compose.yml
+error.log
+makeAPIdoc.sh
+php-apache.Dockerfile
+psalm.xml
+README.md

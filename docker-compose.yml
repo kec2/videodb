@@ -2,12 +2,15 @@ version: "3.7"
 
 services:
   php-apache:
-    build: './php-apache'
+    build:
+      context: '.'
+      dockerfile: 'php-apache.Dockerfile'
     depends_on:
       - mariadb
     user: 1000:1000
     volumes:
-      - ../:/var/www/html
+      - ../cache/:/var/www/html/cache
+      - ./:/var/www/html
     ports:
       - '8000:80'
 
@@ -20,7 +23,9 @@ services:
       MYSQL_USER: videodb
       MYSQL_PASSWORD: videodb
     volumes:
-      - ../db:/var/lib/mysql
+      - ./db:/var/lib/mysql
+    ports:
+      - '3306:3306'
 
   adminer:
     image: adminer:latest

@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libpng-dev \
+        nano \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 
@@ -16,7 +17,8 @@ RUN pecl install xdebug \
 RUN docker-php-ext-install mysqli
 
 # copy php config to installation.
-COPY php-dev.ini /usr/local/etc/php/conf.d/
+COPY php-apache/php-dev.ini /usr/local/etc/php/conf.d/
+COPY ./ /var/www/html/
 
 # install Composer 2
 RUN curl -sS https://getcomposer.org/installer -o composer-setup.php \
@@ -30,3 +32,5 @@ RUN mkdir /.composer \
     && mkdir -p /.cache/psalm \
     && chmod -R 777 /.composer \
     && chmod -R 777 /.cache/psalm
+
+RUN composer install
