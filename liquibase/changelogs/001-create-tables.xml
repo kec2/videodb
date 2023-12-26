@@ -1,0 +1,220 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="liquibase (generated)" id="1703576843189-1">
+        <createTable tableName="videodb_actors">
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column defaultValue="" name="actorid" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="imgurl" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="current_timestamp() on update current_timestamp()" name="checked" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-2">
+        <createTable tableName="videodb_cache">
+            <column name="tag" type="VARCHAR(45)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="value" type="VARCHAR(32)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-3">
+        <createTable tableName="videodb_config">
+            <column name="opt" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column defaultValue="" name="value" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-4">
+        <createTable tableName="videodb_genres">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-5">
+        <createTable tableName="videodb_lent">
+            <column name="diskid" type="VARCHAR(15)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="who" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="current_timestamp() on update current_timestamp()" name="dt" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-6">
+        <createTable tableName="videodb_mediatypes">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(15)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-7">
+        <createTable tableName="videodb_permissions">
+            <column name="from_uid" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="to_uid" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column defaultValueComputed="NULL" name="permissions" type="INT UNSIGNED"/>
+            <column defaultValueComputed="current_timestamp() on update current_timestamp()" name="timestamp" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-8">
+        <createTable tableName="videodb_userconfig">
+            <column defaultValueNumeric="0" name="user_id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column defaultValue="" name="opt" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column defaultValue="" name="value" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-9">
+        <createTable tableName="videodb_users">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column defaultValue="" name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column defaultValue="" name="passwd" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cookiecode" type="VARCHAR(100)"/>
+            <column defaultValueComputed="NULL" name="permissions" type="INT UNSIGNED"/>
+            <column defaultValueComputed="current_timestamp() on update current_timestamp()" name="timestamp" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-10">
+        <createTable tableName="videodb_userseen">
+            <column defaultValueNumeric="0" name="video_id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column defaultValueNumeric="0" name="user_id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-11">
+        <createTable tableName="videodb_videodata">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="md5" type="VARCHAR(32)"/>
+            <column name="title" type="VARCHAR(255)"/>
+            <column name="subtitle" type="VARCHAR(255)"/>
+            <column name="language" type="VARCHAR(255)"/>
+            <column name="diskid" type="VARCHAR(15)"/>
+            <column name="comment" type="VARCHAR(255)"/>
+            <column name="disklabel" type="VARCHAR(32)"/>
+            <column name="imdbID" type="VARCHAR(30)"/>
+            <column defaultValueNumeric="0" name="year" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="imgurl" type="VARCHAR(255)"/>
+            <column name="director" type="VARCHAR(255)"/>
+            <column name="actors" type="MEDIUMTEXT"/>
+            <column defaultValueComputed="NULL" name="runtime" type="INT UNSIGNED"/>
+            <column name="country" type="VARCHAR(255)"/>
+            <column name="plot" type="TEXT"/>
+            <column name="rating" type="VARCHAR(15)"/>
+            <column name="filename" type="VARCHAR(255)"/>
+            <column defaultValueComputed="NULL" name="filesize" type="BIGINT UNSIGNED"/>
+            <column defaultValueComputed="NULL" name="filedate" type="datetime"/>
+            <column name="audio_codec" type="VARCHAR(255)"/>
+            <column name="video_codec" type="VARCHAR(255)"/>
+            <column defaultValueComputed="NULL" name="video_width" type="INT UNSIGNED"/>
+            <column defaultValueComputed="NULL" name="video_height" type="INT UNSIGNED"/>
+            <column defaultValueComputed="0" name="istv" type="TINYINT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="current_timestamp() on update current_timestamp()" name="lastupdate" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="mediatype" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="custom1" type="VARCHAR(255)"/>
+            <column name="custom2" type="VARCHAR(255)"/>
+            <column name="custom3" type="VARCHAR(255)"/>
+            <column name="custom4" type="VARCHAR(255)"/>
+            <column defaultValueComputed="NULL" name="created" type="datetime"/>
+            <column defaultValueNumeric="1" name="owner_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-12">
+        <createTable tableName="videodb_videogenre">
+            <column name="video_id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="genre_id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="liquibase (generated)" id="1703576843189-17">
+        <createIndex associatedWith="" indexName="actorid" tableName="videodb_actors">
+            <column name="actorid"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-18">
+        <createIndex associatedWith="" indexName="actors_idx" tableName="videodb_videodata">
+            <column name="actors"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-19">
+        <createIndex associatedWith="" indexName="comment" tableName="videodb_videodata">
+            <column name="comment"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-20">
+        <createIndex associatedWith="" indexName="diskid_idx" tableName="videodb_videodata">
+            <column name="diskid"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-21">
+        <createIndex associatedWith="" indexName="mediatype" tableName="videodb_videodata">
+            <column defaultValueNumeric="0" name="mediatype"/>
+            <column defaultValueComputed="0" name="istv"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-22">
+        <createIndex associatedWith="" indexName="plot_idx" tableName="videodb_videodata">
+            <column name="plot"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-23">
+        <createIndex associatedWith="" indexName="title_idx" tableName="videodb_videodata">
+            <column name="title"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

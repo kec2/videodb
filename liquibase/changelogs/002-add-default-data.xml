@@ -1,0 +1,353 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="liquibase (generated)" id="1703576843189-13">
+        <insert tableName="videodb_config">
+            <column name="opt" value="actorpics"/>
+            <column name="value" value="1"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="adminid"/>
+            <column name="value" value="1"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="adultgenres"/>
+            <column name="value" value="20"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="cache_pruning"/>
+            <column name="value" value="1"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="castcolumns"/>
+            <column name="value" value="4"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="dbversion"/>
+            <column name="value" value="43"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="denyguest"/>
+            <column name="value" value="1"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="diskid_digits"/>
+            <column name="value" value="4"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="engineamazon"/>
+            <column name="value" value="1"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="engineamazonaws"/>
+            <column name="value" value="1"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="enginedefault"/>
+            <column name="value" value="imdb"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="enginegoogle"/>
+            <column name="value" value="1"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="engineimdb"/>
+            <column name="value" value="1"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="engineyoutube"/>
+            <column name="value" value="1"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="filterdefault"/>
+            <column name="value" value="unseen"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="guestid"/>
+            <column name="value" value="10000"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="hierarchical"/>
+            <column name="value" value="1"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="IMDBage"/>
+            <column name="value" value="432000"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="imdbBrowser"/>
+            <column name="value" value="1"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="langdefault"/>
+            <column name="value" value="english"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="language"/>
+            <column name="value" value="en"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="languageflags"/>
+            <column name="value" value="german::spanish::english::french"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="listcolumns"/>
+            <column name="value" value="6"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="lookupdefault_edit"/>
+            <column name="value" value="0"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="lookupdefault_new"/>
+            <column name="value" value="2"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="mediadefault"/>
+            <column name="value" value="16"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="pdf"/>
+            <column name="value" value="1"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="rss"/>
+            <column name="value" value="1"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="shownew"/>
+            <column name="value" value="12"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="template"/>
+            <column name="value" value="nexgen::nexgen"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="thumbAge"/>
+            <column name="value" value="1814400"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="thumbnail"/>
+            <column name="value" value="1"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="thumbnail_level"/>
+            <column name="value" value="1"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="thumbnail_quality"/>
+            <column name="value" value="95"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="xls"/>
+            <column name="value" value="1"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="xml"/>
+            <column name="value" value="1"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="pageno"/>
+            <column name="value" value="54"/>
+        </insert>
+        <insert tableName="videodb_config">
+            <column name="opt" value="autoid"/>
+            <column name="value" value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-14">
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Action"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="Adventure"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="Animation"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="4"/>
+            <column name="name" value="Comedy"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="5"/>
+            <column name="name" value="Crime"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="6"/>
+            <column name="name" value="Documentary"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="7"/>
+            <column name="name" value="Drama"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="8"/>
+            <column name="name" value="Family"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="9"/>
+            <column name="name" value="Fantasy"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="10"/>
+            <column name="name" value="Film-Noir"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="11"/>
+            <column name="name" value="Horror"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="12"/>
+            <column name="name" value="Musical"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="13"/>
+            <column name="name" value="Mystery"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="14"/>
+            <column name="name" value="Romance"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="15"/>
+            <column name="name" value="Sci-Fi"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="16"/>
+            <column name="name" value="Short"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="17"/>
+            <column name="name" value="Thriller"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="18"/>
+            <column name="name" value="War"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="19"/>
+            <column name="name" value="Western"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="20"/>
+            <column name="name" value="Adult"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="21"/>
+            <column name="name" value="Music"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="22"/>
+            <column name="name" value="Biography"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="23"/>
+            <column name="name" value="History"/>
+        </insert>
+        <insert tableName="videodb_genres">
+            <column name="id" valueNumeric="24"/>
+            <column name="name" value="Sport"/>
+        </insert>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-15">
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="DVD"/>
+        </insert>
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="SVCD"/>
+        </insert>
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="VCD"/>
+        </insert>
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="4"/>
+            <column name="name" value="CD-R"/>
+        </insert>
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="5"/>
+            <column name="name" value="CD-RW"/>
+        </insert>
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="6"/>
+            <column name="name" value="VHS"/>
+        </insert>
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="7"/>
+            <column name="name" value="DVD-R"/>
+        </insert>
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="8"/>
+            <column name="name" value="DVD-RW"/>
+        </insert>
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="9"/>
+            <column name="name" value="DVD+R"/>
+        </insert>
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="10"/>
+            <column name="name" value="DVD+RW"/>
+        </insert>
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="11"/>
+            <column name="name" value="DVD-DL"/>
+        </insert>
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="12"/>
+            <column name="name" value="DVD+DL"/>
+        </insert>
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="13"/>
+            <column name="name" value="LaserDisc"/>
+        </insert>
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="14"/>
+            <column name="name" value="HDD"/>
+        </insert>
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="15"/>
+            <column name="name" value="HD-DVD"/>
+        </insert>
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="16"/>
+            <column name="name" value="Blu-ray"/>
+        </insert>
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="17"/>
+            <column name="name" value="AVCHD"/>
+        </insert>
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="18"/>
+            <column name="name" value="CD"/>
+        </insert>
+        <insert tableName="videodb_mediatypes">
+            <column name="id" valueNumeric="50"/>
+            <column name="name" value="wanted"/>
+        </insert>
+    </changeSet>
+    <changeSet author="liquibase (generated)" id="1703576843189-16">
+        <insert tableName="videodb_users">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="admin"/>
+            <column name="passwd" value="21232f297a57a5a743894a0e4a801fc3"/>
+            <column name="cookiecode"/>
+            <column name="permissions" valueNumeric="7"/>
+            <column name="timestamp" valueDate="2023-12-26T07:46:52"/>
+            <column name="email"/>
+        </insert>
+        <insert tableName="videodb_users">
+            <column name="id" valueNumeric="10000"/>
+            <column name="name" value="Guest"/>
+            <column name="passwd" value="---"/>
+            <column name="cookiecode"/>
+            <column name="permissions" valueNumeric="2"/>
+            <column name="timestamp" valueDate="2023-12-26T07:46:52"/>
+            <column name="email"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

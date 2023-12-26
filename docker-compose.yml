@@ -2,6 +2,7 @@ version: "3.7"
 
 services:
   php-apache:
+    restart: always
     build:
       context: '.'
       dockerfile: 'php-apache.Dockerfile'
@@ -35,3 +36,21 @@ services:
     restart: always
     ports:
       - '7777:8080'
+
+  liquibase:
+    image: liquibase/liquibase
+    container_name: liquibase
+    depends_on:
+      - mariadb
+    volumes:
+      - ./liquibase:/liquibase/changelog
+    command: 'update --defaults-file=/liquibase/changelog/liquibase.properties'
+
+#    command: ['--defaults-file=/liquibase/changelog/liquibase.properties',
+#              '--changelog-file=/liquibase/changelog/root-changelog2.xml',
+#               '--exclude-objects="videodb_cache',
+#               '--diff-types=catalogs,checkconstraints,columns,data,databasepackage,databasepackagebody,foreignkeys,
+#                  indexes,primarykeys,schema,sequences,storedprocedures,tables,uniqueconstraints,views',
+#              'generate-changelog']
+
+#    command: 'drop-all --defaults-file=/liquibase/changelog/liquibase.properties'
