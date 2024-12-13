@@ -7,13 +7,10 @@
  * @package Engines
  * @author  Andreas Gohr    <a.gohr@web.de>
  * @link    http://www.imdb.com  Internet Movie Database
- * @version $Id: imdb.php,v 1.76 2013/04/10 18:11:43 andig2 Exp $
  */
 
 $GLOBALS['imdbServer'] = 'https://www.imdb.com';
 $GLOBALS['imdbIdPrefix'] = 'imdb:';
-$GLOBALS['imdbActorUrl'] = [];
-$GLOBALS['imdbActorImageUrl'] = [];
 
 /**
  *  Get meta information about the engine
@@ -225,11 +222,11 @@ function imdbData($imdbID)
     global $cache;
 
     $imdbID = preg_replace('/^'.$imdbIdPrefix.'/', '', $imdbID);
-    $data= array(); // result
-    $ary = array(); // temp
+    $data = []; // result
+    $ary = []; // temp
 
     // fetch mainpage
-    $resp = httpClient($imdbServer.'/title/tt'.$imdbID.'/', $cache);     // added trailing / to avoid redirect
+    $resp = httpClient($imdbServer.'/title/tt'.$imdbID.'/', $cache); // added trailing / to avoid redirect
     if (!$resp['success']) {
         $CLIENTERROR .= $resp['error']."\n";
     }
@@ -238,13 +235,8 @@ function imdbData($imdbID)
     $data['encoding'] = $resp['encoding'];
 
     $json = getPagePropsJson($resp['data']);
-//     if ($imdbID=='0944947') {
-//         dlog("cast edges: ".print_r(sizeof($json->mainColumnData->cast->edges), true));
-//     }
 
-//     dlog("imdb id: $imdbID");
-
-    $data['istv'] = imdbIsTVV2($json);
+    $data['istv'] = imdbIsTV($json);
     if ($data['istv']) {
         // get the id from the main tv show. Not the episode
         $data['tvseries_id'] = imdbGetSeriesId($resp['data'], $json);
@@ -307,9 +299,11 @@ function imdbGetOriginalTitleV2($json) {
     return null;
 }
 
-function imdbIsTVV2($json) {
-    if (isset($json->aboveTheFoldData->titleType)
-            && $json->aboveTheFoldData->titleType->isSeries || $json->aboveTheFoldData->titleType->isEpisode) {
+function imdbIsTV($json) {
+    if (isset($json)
+            && isset($json->aboveTheFoldData->titleType)
+            && ($json->aboveTheFoldData->titleType->isSeries
+                || $json->aboveTheFoldData->titleType->isEpisode)) {
         return 1;
     }
     return 0;
@@ -317,7 +311,7 @@ function imdbIsTVV2($json) {
 
 function imdbGetSeriesId($data, $json) {
     if (isset($json)) {
-        dlog('got series id from json');
+//         dlog('got series id from json');
         if ($json->aboveTheFoldData->series) {
             // get the id from the main tv show. Not the episode
             return str_replace('tt', '', $json->aboveTheFoldData->series->series->id);
@@ -326,7 +320,7 @@ function imdbGetSeriesId($data, $json) {
         // Id for the episode
         return str_replace('tt', '', $json->aboveTheFoldData->id);
     } else {
-        dlog('got series id from html');
+//         dlog('got series id from html');
         if (preg_match('/<meta property="imdb\:pageConst" content="tt(\d+)">/', $data, $ary)) {
             // Get id for the series.
             return $ary[1];
@@ -345,7 +339,7 @@ function imdbGetSeriesId($data, $json) {
 
 function imdbGetGenres($data, $json) {
     if (isset($json) && isset($json->aboveTheFoldData->genres->genres)) {
-        dlog('get genres from json');
+//         dlog('get genres from json');
         $genres = [];
         foreach($json->aboveTheFoldData->genres->genres as $genre) {
             $genres[] = $genre->text;
@@ -353,13 +347,8 @@ function imdbGetGenres($data, $json) {
         // this is so test dont break
         return array_slice($genres, 0, 3);
     }
-    dlog('get genres from html');
+//     dlog('get genres from html');
 
-/*
-<a href="show.php?id=1048" class="th radius">
-					<!-- Uncomment this if you want to use lazy-load together with image thumbnails - suited for mobile access -->
-					</a>
-*/
     if (preg_match_all('/<a class=".+?" href="\/search\/title\?genres=.+?"><span class="i.+?">(.+?)<\/span><\/a>/si', $data, $ary, PREG_PATTERN_ORDER)) {
         $genres = [];
         foreach($ary[1] as $genre) {
@@ -381,10 +370,10 @@ function imdbGetGenres($data, $json) {
  */
 function imdbGetParentalGuide($data, $json) {
     if (isset($json) && isset($json->aboveTheFoldData->certificate)) {
-        dlog('get certification from json');
+//         dlog('get certification from json');
         return $json->aboveTheFoldData->certificate->rating;
     } elseif (preg_match('#<a .+? href="/title/tt\d+/parentalguide/certificates\?ref_=tt_ov_pg">(.+?)</a>#is', $data, $ary)) {
-        dlog('get certification from html');
+//         dlog('get certification from html');
         return trim($ary[1]);
     }
 
@@ -393,14 +382,14 @@ function imdbGetParentalGuide($data, $json) {
 
 function imdbGetCountries($data, $json) {
     if (isset($json)) {
-        dlog('got countries from json');
+//         dlog('got countries from json');
         $countries = [];
         foreach($json->mainColumnData->countriesOfOrigin->countries as $country) {
             $countries[] = $country->text;
         }
         return join(', ', $countries);
     } elseif (preg_match_all('/href="\/search\/title\/\?country_of_origin.+?>(.+?)<\/a>/si', $data, $ary, PREG_PATTERN_ORDER)) {
-        dlog('got countries from html');
+//         dlog('got countries from html');
         return trim(join(', ', $ary[1]));
     }
     return null;
@@ -471,6 +460,7 @@ function imdbGetPlot($data, $json) {
 }
 
 function imdbGetLanguages($data, $json) {
+//     dlog("imdbId: " .$json->aboveTheFoldData->id);
     if (isset($json)) {
         // might not be there for an serie episode
         $languages = [];
@@ -519,62 +509,6 @@ function imdbGetDirectors($data, $json) {
 //     dlog('got directors from html');
     // Director
     if (preg_match_all('/ref_=tt_cl_dr_\d+">(.+?)<\/a>/i', $data, $ary, PREG_PATTERN_ORDER)) {
-        return trim(join(', ', $ary[1]));
-    }
-    return null;
-}
-
-function imdbGetCreators($data, $json) {
-    if (isset($json)) {
-//         dlog('got creators from json');
-        $cast = [];
-
-        foreach($json->mainColumnData->writers as $writer) {
-            foreach($writer->credits as $credit) {
-                $cast[] = $credit->name->nameText->text;
-            }
-        }
-        return join(', ', $cast);
-    }
-
-//     dlog('got creators from html');
-    // <a class="ipc-metadata-list-item__list-content-item ipc-metadata-list-item__list-content-item--link" tabindex="0" aria-disabled="false" href="/name/nm1125275/?ref_=tt_cl_scc_1">David Benioff</a>
-    if (preg_match_all('/ref_=tt_cl_scc_\d+">(.+?)<\/a>/i', $data, $ary, PREG_PATTERN_ORDER)) {
-        return trim(join(', ', $ary[1]));
-    }
-    return null;
-}
-
-// KEC
-// on fullcredits directors, creators, writers and cast can be found.
-// not sure that directors, creators and writers makes sense for a series.
-// but then again if a full cast does then why not the others???
-
-
-// I would like a founction that returns a array with
-// $fullCast['directors'] // might be empty for series
-// $fullCast['writers'] // (written for television by)
-// $fullCast['creators'] // my be empty for episode
-// $fullCast['cast']
-
-
-
-function imdbGetWriters($data, $json) {
-    if (isset($json)) {
-//         dlog('got writers from json');
-        $cast = [];
-
-        foreach($json->mainColumnData->writers as $writer) {
-            foreach($writer->credits as $credit) {
-                $cast[] = $credit->name->nameText->text;
-            }
-        }
-        return join(', ', $cast);
-    }
-
-//     dlog('got writers from html');
-    // <a class="ipc-metadata-list-item__list-content-item ipc-metadata-list-item__list-content-item--link" tabindex="0" aria-disabled="false" href="/name/nm1888967/?ref_=tt_cl_wr_3">D.B. Weiss</a>
-    if (preg_match_all('/ref_=tt_cl_wr_\d+">(.+?)<\/a>/i', $data, $ary, PREG_PATTERN_ORDER)) {
         return trim(join(', ', $ary[1]));
     }
     return null;
@@ -696,7 +630,7 @@ function imdbGetCoverURL($data, $json) {
         dlog('no cover url');
         return '';
     }
-    // src look somthing like: src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_UX214_CR0,0,214,317_AL_.jpg"
+    // src look something like: src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTc0MDMyMzI2OF5BMl5BanBnXkFtZTcwMzM2OTk1MQ@@._V1_UX214_CR0,0,214,317_AL_.jpg"
     // The last part ._V1_UX214.....jpg seams to be an function that scales the image. Just remove that we want the full size.
     else if (preg_match('/<div.*?class="poster".*?<img.*?src="(.*?\.)_v.*?"/si', $data, $ary)) {
         dlog('get cover image url from html');
@@ -731,7 +665,6 @@ function getRuntime($data, $json) {
 function imdbActorUrl($name, $id)
 {
     global $imdbServer;
-//     global $imdbActorUrl;
 
     if ($id) {
         $path = 'name/'.urlencode($id).'/';
@@ -771,9 +704,8 @@ function imdbActor($name, $actorid)
         $resp = httpClient($m[1], true);
     }
 
-    // now we should have loaded the best match
-
     $ary = [];
+    // now we should have loaded the best match
     if (preg_match('/<div class=".+? ipc-poster--baseAlt .+?<img.+?src="(https.+?)".+?href="(\/name\/nm\d+\/)/si', $resp['data'], $m)) {
         $ary[0][0] = $m[2]; // /name/nm12345678/
         $ary[0][1] = $m[1]; // img url
