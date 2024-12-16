@@ -5,9 +5,6 @@
 
 <form method="post" action="profile.php">
 <input type="hidden" name="save" value="1" />
-<table width="100%" class="tableborder">
-  {include file="options.tpl"}
-</table>
 
 <br />
 <div align="center">

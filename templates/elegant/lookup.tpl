@@ -22,7 +22,6 @@
 <div id="actions">
     <form action="lookup.php" id="formlookup" name="formlookup" method="post">
         <input type="text" name="find" id="find" value="{$q_find}" size="31" style="width:200px" />
-        {include file="lookup_engines.tpl"}
         <input type="submit" class="button" value="{$lang.l_search}" />
 
         <script language="JavaScript" type="text/javascript">

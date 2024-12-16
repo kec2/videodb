@@ -22,7 +22,7 @@
 
 	{if $header.new}<span class="{if $header.active == 'new'}tabActive{else}tabInactive{/if}"><a href="{$header.new}" accesskey="n">{$lang.n_e_w}</a></span>{/if}
 
-	{if $header.active == 'show'}<span class="tabActive"><a href="{php}echo $_SERVER['REQUEST_URI'];{/php}">{$lang.view}</a></span> {/if}
+	{if $header.active == 'show'}<span class="tabActive"><a href="{$header.show}">{$lang.view}</a></span> {/if}
 
 	{if $header.active == 'edit'}<span class="tabActive"><a href="{$header.edit}">{$lang.edit}</a></span> {/if}
 

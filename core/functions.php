@@ -76,16 +76,25 @@ if ($id) validate_input($id);
 if ($ajax_update) validate_input($ajax_update);
 
 // Smarty setup
-$smarty = new Smarty();
-$smarty->compile_dir     = './cache/smarty';            // path to compiled templates
-$smarty->cache_dir       = './cache/smarty';            // path to cached html
-$smarty->plugins_dir     = array('./lib/smarty/custom', './vendor/smarty/smarty/libs/plugins');
-$smarty->use_sub_dirs    = 0;                           // restrict caching to one folder
-$smarty->loadFilter('output', 'trimwhitespace');        // remove whitespace from output
-#$smarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
+$smarty = new Smarty\Smarty;
+$smarty->setCompileDir('./cache/smarty');            // path to compiled templates
+$smarty->loadFilter('output', 'trimwhitespace');     // remove whitespace from output
+
+//$smarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
+$smarty->use_sub_dirs = false;                       // restrict caching to one folder
+$smarty->setCacheDir('./cache/smarty');              // path to cached html
+// set the cache_lifetime to 5 minutes
+$smarty->setCacheLifetime(5 * 60);
+
 #$smarty->force_compile  = true;
 #$smarty->debugging      = true;
-$smarty->error_reporting = E_ERROR;           // added for Smarty 3
+$smarty->error_reporting = E_ERROR;
+
+$smarty->addPluginsDir(['./lib/smarty/custom', './vendor/smarty/smarty/libs/plugins']);
+$smarty->registerPlugin("modifier", "floor", "floor");
+$smarty->registerPlugin("modifier", "max", "max");
+$smarty->registerPlugin("modifier", "min", "min");
+$smarty->registerPlugin("modifier", "preg_split", "preg_split");
 
 // load config
 load_config();
@@ -281,11 +290,11 @@ function load_config($force_reload = false): void
 	}
 
     // setup smarty
-    $smarty->template_dir = array($config['templatedir'], 'templates/modern');
+    $smarty->setTemplateDir([$config['templatedir'], 'templates/modern']);
     $smarty->assign('template', $config['templatedir']);
 
     // initialize languages
-    $lang = array();
+    $lang = [];
 
     // load english language as default
     require './language/en.php';

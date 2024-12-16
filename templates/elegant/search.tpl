@@ -9,8 +9,6 @@
 <script language="JavaScript" type="text/javascript" src="{$template}js/search.js"></script>
 
 <div id="actions">
-    {include file="searchengines.tpl"}
-
     <form action="search.php" id="search" name="search" method="get">
 
     {if $imgurl}
@@ -33,7 +31,6 @@
 		<span id="indicator1" style="display: none"><img src="{$template}images/spinner.gif" alt="{$lang.working}" /></span>
 
         <br/>
-        {include file="searchradios.tpl"}
 
         {if $owners}
             <p>

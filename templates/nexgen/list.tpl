@@ -11,7 +11,9 @@
 	<a href="#" class="close">&times;</a>
 </div>
 {/if}
+17*10 b*h
 
+10cm*10cm
 <div class="row">
 	<div class="small-12 columns small-centered">
 
@@ -31,7 +33,9 @@
 					{if $video.imgurl}<img class="lazy" src="{$video.imgurl}"/>{/if}
 *}
 					<!-- Uncomment this if you want to use lazy-load together with image thumbnails - suited for mobile access -->
-					{if $video.imgurl}<img class="lazy" src="templates/nexgen/images/nocover.png" data-original="{html_image file=$video.imgurl max_width=$max_width max_height=$max_height path_only=1}"/>{/if}
+					{if $video.imgurl}
+					<img class="lazy" src="templates/nexgen/images/nocover.png" data-original='{html_image file=$video.imgurl max_width=$max_width max_height=$max_height path_only=1}'>
+					{/if}
 				</a>
 			</li><!--col-->
 			{/foreach}

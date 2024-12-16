@@ -29,8 +29,6 @@
  */
 function smarty_function_html_checkbox($params, $template)
 {
-    require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
-
     $name = 'checkbox';
     $value = null;
     $selected = null;

@@ -3,8 +3,6 @@
   $Id: setup.tpl,v 2.11 2010/02/14 12:25:12 andig2 Exp $
 *}
 
-
-
 <table width="100%" >
   <tr>
     <td align="right">
@@ -19,9 +17,6 @@
 
 <form method="post" action="setup.php">
 <input type="hidden" name="save" value="1" />
-<table width="100%" class="tableborder">
-  {include file="options.tpl"}
-</table>
 
 <br />
 <div align="center">
