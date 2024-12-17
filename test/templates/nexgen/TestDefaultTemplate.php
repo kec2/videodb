@@ -1,11 +1,8 @@
 <?php
 /**
- *
  * @package Test
- * @author Andreas Götz <cpuidle@gmx.de>
  */
 
-require_once './core/template.php';
 require_once './vendor/smarty/smarty/libs/Smarty.class.php';
 
 use PHPUnit\Framework\TestCase;
