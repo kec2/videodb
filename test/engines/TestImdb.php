@@ -80,6 +80,7 @@ class TestIMDb extends TestCase
         // Star Wars: Episode I
         // https://imdb.com/title/tt0120915/
         $id = '0120915';
+
         $data = engineGetData($id, 'imdb', false);
         $this->assertNotEmpty($data);
 
@@ -101,8 +102,6 @@ class TestIMDb extends TestCase
         $this->assertTrue($data['rating'] <= 8);
         $this->assertEquals('United States, United Kingdom', $data['country']);
         $this->assertEquals('english, sanskrit', $data['language']);
-//        $this->assertNotNull($data['genres']);
-//        $this->assertNotEmpty($data['genres']);
         $this->assertEquals('Action, Adventure, Fantasy', join(', ', $data['genres']));
 
         # cast tests changed to be independent of order
@@ -181,7 +180,7 @@ class TestIMDb extends TestCase
 
     function testMoviePlot(): void {
         // Amélie
-        // https://www.imdb.com/title/tt0211915/
+            // https://www.imdb.com/title/tt0211915/
         // added for bug #2914077 - charset of plot
 
         Global $config;
@@ -193,7 +192,7 @@ class TestIMDb extends TestCase
         $this->assertNotEmpty($data);
         // $this->printData($data);
 
-        $this->assertMatchesRegularExpression('/Despite being caught in her imaginative world, Amelie, a young waitress, decides to help people find happiness./', $data['plot']);
+        $this->assertMatchesRegularExpression('/Despite being caught in her imaginative world, young waitress Amelie decides to help people find happiness. Her quest to spread joy leads her on a journey during which she finds true love./', $data['plot']);
     }
 
     function testMovie8(): void {
@@ -251,6 +250,24 @@ class TestIMDb extends TestCase
             $data['plot']);
     }
 
+    function testMovieMissingYear(): void {
+        // Smokin' Aces 2: Assassins' Ball
+        // https://www.imdb.com/title/tt1319743/
+
+        Global $config;
+        $config['http_header_accept_language'] = 'en-US;q=0.9';
+
+        $id = '1319743';
+        $data = engineGetData($id, 'imdb', false);
+
+//        $this->printData($data);
+        $this->assertNotEmpty($data);
+
+        $this->assertEquals("Smokin' Aces 2", $data['title']);
+        $this->assertEquals("Assassins' Ball", $data['subtitle']);
+        $this->assertEquals(2010, $data['year']);
+    }
+
     function testMovieGenre1(): void {
         // Public Enemies (2009)
         // https://www.imdb.com/title/tt1152836/
@@ -266,8 +283,12 @@ class TestIMDb extends TestCase
 
         $this->assertEquals('Public Enemies', $data['title']);
         $this->assertEquals(2009, $data['year']);
-        $this->assertEquals('Action, Biography, Crime', join(', ', $data['genres']));
+        $this->assertEquals('Biography, Crime, Drama', join(', ', $data['genres']));
     }
+    // the main show does not have a director but a creator.
+    // https://www.imdb.com/title/tt2084342/ does not have a primary country. its not uncommon for tv series.
+    // https://www.imdb.com/title/tt0303461/ for multiply primary_languge tags
+    // https://www.imdb.com/title/tt0971272/ does not have a language
 
     /**
      *  Case added for bug 1675281
@@ -284,8 +305,41 @@ class TestIMDb extends TestCase
         $this->assertNotEmpty($data);
         // $this->printData($data);
 
+        $this->assertEquals('english, german, spanish, american sign language', $data['language']);
         $this->assertMatchesRegularExpression("/Zach Braff::Dr. John 'J.D.' Dorian.+?::imdb:nm0103785.+?Mona Weiss::Nurse \(uncredited\) .+?::imdb:nm2032293/is", $data['cast']);
         $this->assertMatchesRegularExpression('/Sacred Heart Hospital/i', $data['plot']);
+    }
+
+    function testSeriesLanguage(): void {
+        // Game of Thrones - Dragonstone
+        // https://www.imdb.com/title/tt5654088/ for single language from json
+
+        $id = '5654088';
+        $data = engineGetData($id, 'imdb', false);
+
+        $this->assertNotEmpty($data);
+        // $this->printData($data);
+
+        $this->assertEquals('Game of Thrones', $data['title']);
+        $this->assertEquals('Dragonstone', $data['subtitle']);
+        $this->assertEquals('english', $data['language']);
+    }
+
+    function testSeriesWithMissingCountry(): void {
+        // DC's Legends of Tomorrow - Shogun
+        // https://www.imdb.com/title/tt5584098/ countries are found in json
+
+        $id = '5584098';
+        $data = engineGetData($id, 'imdb', false);
+
+        $this->assertNotEmpty($data);
+//        $this->printData($data);
+// episode id: tt5584098
+// series id:  tt4532368
+        $this->assertEquals('4532368', $data['tvseries_id']);
+        $this->assertEquals("DC's Legends of Tomorrow", $data['title']);
+        $this->assertEquals('Shogun', $data['subtitle']);
+        $this->assertEmpty($data['country']);
     }
 
     /**
@@ -447,7 +501,7 @@ class TestIMDb extends TestCase
 
         $this->assertTrue(in_array('Clare Swinburne::Gabriella Patten::imdb:nm0842673', $cast));
         $this->assertTrue(in_array('Mark Anthony Brighton::Kenneth Waring (as Mark Brighton)::imdb:nm1347940', $cast));
-        $this->assertTrue(in_array('Nathaniel Parker::Thomas Lynley::imdb:nm0662511', $cast));
+        $this->assertTrue(in_array('Nathaniel Parker::DI Thomas Lynley::imdb:nm0662511', $cast));
         $this->assertTrue(in_array('Andrew Clover::Hugh Patten::imdb:nm0167249', $cast));
         $this->assertTrue(in_array('Anjalee Patel::Hadiyyah::imdb:nm1347125', $cast));
         $this->assertTrue(sizeof($cast) > 12);

@@ -33,4 +33,4 @@ RUN mkdir /.composer \
     && chmod -R 777 /.composer \
     && chmod -R 777 /.cache/psalm
 
-RUN composer install
+RUN composer update
