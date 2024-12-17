@@ -80,15 +80,15 @@ $smarty = new Smarty\Smarty;
 $smarty->setCompileDir('./cache/smarty');            // path to compiled templates
 $smarty->loadFilter('output', 'trimwhitespace');     // remove whitespace from output
 
-//$smarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
-$smarty->use_sub_dirs = false;                       // restrict caching to one folder
+$smarty->setUseSubDirs(false);                       // restrict caching to one folder
 $smarty->setCacheDir('./cache/smarty');              // path to cached html
 // set the cache_lifetime to 5 minutes
 $smarty->setCacheLifetime(5 * 60);
+//$smarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
-#$smarty->force_compile  = true;
-#$smarty->debugging      = true;
-$smarty->error_reporting = E_ERROR;
+#$smarty->setForceCompile(true);
+#$smarty->setDebugging(true);
+$smarty->setErrorReporting(E_ERROR);
 
 $smarty->addPluginsDir(['./lib/smarty/custom', './vendor/smarty/smarty/libs/plugins']);
 $smarty->registerPlugin("modifier", "floor", "floor");
