@@ -19,7 +19,7 @@
 </td></tr>
 </table>
 {else}
-    {include file="topspacer.tpl"}
+    <div id="topspacer"></div>
 {/if}
 <form action="permissions.php" method="post">
 <table width="100%">

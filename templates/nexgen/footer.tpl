@@ -1,6 +1,5 @@
 {*
   Footer template
-  $Id: footer.tpl,v 1.2 2013/03/12 19:13:18 andig2 Exp $
 *}
 
 <!-- {$smarty.template} -->

@@ -2,7 +2,6 @@
   IMDB search popup
   $Id: lookup.tpl,v 2.15 2009/04/04 16:21:33 andig2 Exp $
 *}
-{include file="xml.tpl"}
 
 <body>
 
@@ -25,7 +24,6 @@
             <td nowrap="nowrap">
                 <input type="text" name="find" id="find" value="{$q_find}" size="31" style="width:200px" />
                 <input type="submit" class="button" value="{$lang.l_search}" />
-                {include file="lookup_engines.tpl"}
 
                 <script language="JavaScript" type="text/javascript">
                 document.lookup.find.focus();

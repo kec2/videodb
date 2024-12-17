@@ -2,7 +2,6 @@
   This is the header which is displayed on top of every page
   $Id: header.tpl,v 2.13 2013/03/14 17:17:27 andig2 Exp $
 *}
-{include file="xml.tpl"}
 
 <body>
 

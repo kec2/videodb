@@ -5,8 +5,6 @@
 
 <script language="JavaScript" type="text/javascript" src="javascript/search.js"></script>
 
-{include file="searchengines.tpl"}
-
 <form action="search.php" id="search" name="search">
   <table width="100%" class="tableborder" cellpadding="4">
     <tr>
@@ -18,7 +16,6 @@
                 <br/>
                 <input type="text" name="q" id="q" value="{$q_q}" size="45" maxlength="300"/>
                 <br/>
-                {include file="searchradios.tpl"}
                 <input type="button" value="{$lang.l_search}" onClick="submitSearch()" class="button" />
             </td>
           </tr>

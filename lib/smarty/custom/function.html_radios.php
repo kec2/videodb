@@ -43,8 +43,6 @@
 */
 function smarty_function_html_radios($params, $template)
 {
-    require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
-   
     $name = 'radio';
     $values = null;
     $options = null;

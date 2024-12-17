@@ -21,9 +21,6 @@
  */
 function smarty_function_rating_input($params, &$smarty)
 {
-    require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
-    //$smarty->loadPlugin('Smarty_shared_escape_special_chars');
-
     $name = 'rating';
     $value = null;
 
