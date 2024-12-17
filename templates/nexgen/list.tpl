@@ -11,9 +11,7 @@
 	<a href="#" class="close">&times;</a>
 </div>
 {/if}
-17*10 b*h
 
-10cm*10cm
 <div class="row">
 	<div class="small-12 columns small-centered">
 
