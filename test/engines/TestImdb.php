@@ -80,7 +80,7 @@ class TestIMDb extends TestCase
         // Star Wars: Episode I
         // https://imdb.com/title/tt0120915/
         $id = '0120915';
-        $data = engineGetData('0944947', 'imdb', false);
+
         $data = engineGetData($id, 'imdb', false);
         $this->assertNotEmpty($data);
 
@@ -102,8 +102,6 @@ class TestIMDb extends TestCase
         $this->assertTrue($data['rating'] <= 8);
         $this->assertEquals('United States, United Kingdom', $data['country']);
         $this->assertEquals('english, sanskrit', $data['language']);
-//        $this->assertNotNull($data['genres']);
-//        $this->assertNotEmpty($data['genres']);
         $this->assertEquals('Action, Adventure, Fantasy', join(', ', $data['genres']));
 
         # cast tests changed to be independent of order
