@@ -508,8 +508,8 @@ function imdbGetDirectors($data, $json) {
 
 //     dlog('got directors from html');
     // Director
-    if (preg_match_all('/ref_=tt_cl_dr_\d+">(.+?)<\/a>/i', $data, $ary, PREG_PATTERN_ORDER)) {
-        return trim(join(', ', $ary[1]));
+    if (preg_match_all('/ref_=tt_[a-z]{2}_dr_\d+">(.+?)<\/a>/i', $data, $ary, PREG_PATTERN_ORDER)) {
+        return trim(join(', ', array_unique($ary[1])));
     }
     return null;
 }
