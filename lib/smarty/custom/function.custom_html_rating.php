@@ -7,11 +7,11 @@
  */
 
 /**
- * Smarty {html_rating} function plugin
+ * Smarty {custom_html_rating} function plugin
  *
- * File:       function.html_rating.php<br>
+ * File:       function.custom_html_rating.php<br>
  * Type:       function<br>
- * Name:       html_rating<br>
+ * Name:       custom_html_rating<br>
  * Purpose:    Prints out a rating as a series of stars<br>
  * Input:<br>
  *           - name       (optional) - string default "checkbox"
@@ -19,7 +19,7 @@
  *           - id         (optional) - checkbox id (name is default)
  * @return string
  */
-function smarty_function_html_rating($params, &$smarty)
+function smarty_function_custom_html_rating($params, &$smarty)
 {
     $name = 'rating';
     $value = null;

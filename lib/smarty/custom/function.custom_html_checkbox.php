@@ -7,11 +7,11 @@
  */
 
 /**
- * Smarty {html_checkbox} function plugin
+ * Smarty {custom_html_checkbox} function plugin
  *
- * File:       function.html_checkbox.php<br>
+ * File:       function.custom_html_checkbox.php<br>
  * Type:       function<br>
- * Name:       html_checkbox<br>
+ * Name:       custom_html_checkbox<br>
  * Purpose:    Prints out a checkbox input<br>
  * Input:<br>
  *           - name       (optional) - string default "checkbox"
@@ -21,13 +21,13 @@
  *           - label      (optional) - string for checkbox label
  * Examples:
  * <pre>
- * {html_checkbox value=1 name=horst}
- * {html_checkbox value=1 name=horst label="Select Horst"}
+ * {custom_html_checkbox value=1 name=horst}
+ * {custom_html_checkbox value=1 name=horst label="Select Horst"}
  * </pre>
  * @return string
  * @uses smarty_function_escape_special_chars()
  */
-function smarty_function_html_checkbox($params, $template)
+function smarty_function_custom_html_checkbox($params, $template)
 {
     $name = 'checkbox';
     $value = null;
