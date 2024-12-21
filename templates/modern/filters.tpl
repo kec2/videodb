@@ -8,7 +8,7 @@
     <table width="100%" class="tablefilter" cellspacing="5">
     <tr>
         <td class="filter" nowrap="nowrap">
-            {html_radios name=filter options=$filters checked=$filter label_class="filterlink" onclick="submit()"}
+            {custom_html_radios name=filter options=$filters checked=$filter label_class="filterlink" onclick="submit()"}
         </td>
         {if $order_options AND $filter<>'new'}
         <td class="filter" nowrap="nowrap" width="50%">

@@ -90,7 +90,7 @@ Event.observe(window, 'load', function() {
 
 <div id="protoflow">
     {foreach item=video from=$list}
-        {if $video.imgurl}{html_image file=$video.imgurl alt=$video.title link="show.php?id="|cat:$video.id max_width=$IMGWIDTH max_height=$IMGHEIGHT}{/if}
+        {if $video.imgurl}{custom_html_image file=$video.imgurl alt=$video.title link="show.php?id="|cat:$video.id max_width=$IMGWIDTH max_height=$IMGHEIGHT}{/if}
     {/foreach}
 </div>
 

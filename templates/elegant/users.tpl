@@ -42,10 +42,10 @@
 				<input type="text" name="name" value="{$user.name}" />
 			</td>
 			<td class="center">
-				{html_checkbox style="vertical-align:middle;" name="readflag"  value="1" id="readflag"|cat:$user.name  checked=$user.read label=$lang.perm_readall}&nbsp;&nbsp;
-		      	{html_checkbox style="vertical-align:middle;" name="writeflag" value="1" id="writeflag"|cat:$user.name checked=$user.write label=$lang.perm_writeall}&nbsp;&nbsp;
-		      	{html_checkbox style="vertical-align:middle;" name="adultflag" value="1" id="adultflag"|cat:$user.name checked=$user.adult label=$lang.perm_adult}&nbsp;&nbsp;
-		      	{html_checkbox style="vertical-align:middle;" name="adminflag" value="1" id="adminflag"|cat:$user.name checked=$user.admin label=$lang.perm_admin}
+				{custom_html_checkbox style="vertical-align:middle;" name="readflag"  value="1" id="readflag"|cat:$user.name  checked=$user.read label=$lang.perm_readall}&nbsp;&nbsp;
+		      	{custom_html_checkbox style="vertical-align:middle;" name="writeflag" value="1" id="writeflag"|cat:$user.name checked=$user.write label=$lang.perm_writeall}&nbsp;&nbsp;
+		      	{custom_html_checkbox style="vertical-align:middle;" name="adultflag" value="1" id="adultflag"|cat:$user.name checked=$user.adult label=$lang.perm_adult}&nbsp;&nbsp;
+		      	{custom_html_checkbox style="vertical-align:middle;" name="adminflag" value="1" id="adminflag"|cat:$user.name checked=$user.admin label=$lang.perm_admin}
 			</td>
 			<td class="center">
 				{if $user.guest}
@@ -95,10 +95,10 @@
 				<input type="text" name="name" />
 			</td>
 			<td class="center">
-				{html_checkbox style="vertical-align:middle;" name="readflag"  value="1" id="readflagNEWUSER"  label=$lang.perm_readall}&nbsp;&nbsp;
-				{html_checkbox style="vertical-align:middle;" name="writeflag" value="1" id="writeflagNEWUSER" label=$lang.perm_writeall}&nbsp;&nbsp;
-				{html_checkbox style="vertical-align:middle;" name="adultflag" value="1" id="adultflagNEWUSER" label=$lang.perm_adult}&nbsp;&nbsp;
-				{html_checkbox style="vertical-align:middle;" name="adminflag" value="1" id="adminflagNEWUSER" label=$lang.perm_admin}
+				{custom_html_checkbox style="vertical-align:middle;" name="readflag"  value="1" id="readflagNEWUSER"  label=$lang.perm_readall}&nbsp;&nbsp;
+				{custom_html_checkbox style="vertical-align:middle;" name="writeflag" value="1" id="writeflagNEWUSER" label=$lang.perm_writeall}&nbsp;&nbsp;
+				{custom_html_checkbox style="vertical-align:middle;" name="adultflag" value="1" id="adultflagNEWUSER" label=$lang.perm_adult}&nbsp;&nbsp;
+				{custom_html_checkbox style="vertical-align:middle;" name="adminflag" value="1" id="adminflagNEWUSER" label=$lang.perm_admin}
 			</td>
 			<td class="center">
 				<input type="text" name="email" />

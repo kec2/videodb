@@ -21,7 +21,7 @@
         {/if}
 
         <div id="filtersalphabet">
-            {html_radios name=filter options=$filters checked=$filter class="radio"}
+            {custom_html_radios name=filter options=$filters checked=$filter class="radio"}
             <input type="checkbox" name="showtv" id="showtv" value="1" {if $showtv}checked="checked"{/if} /><label for="showtv">{$lang.radio_showtv}</label>
 
             &nbsp;<label for="quicksearch">{$lang.quicksearch}:</label>

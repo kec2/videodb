@@ -124,7 +124,7 @@
 
           <tr>
             <td>{$lang.rating}:</td>
-            <td>{rating_input value=$video.rating}</td>
+            <td>{custom_rating_input value=$video.rating}</td>
           </tr>
 
         <tr>
@@ -242,7 +242,7 @@
         document.edi.title.focus();
     </script>
 
-  {$lang.radio_look_caption}: {html_radios name=lookup options=$lookup checked="$lookup_id"}
+  {$lang.radio_look_caption}: {custom_html_radios name=lookup options=$lookup checked="$lookup_id"}
   <label for="add_flag"><input type="checkbox" name="add_flag" id="add_flag" value="1" {if $add_flag}checked="checked"{/if}/>{$lang.add_another}</label>
   <div align="center"><input type="submit" value="{$lang.save}" class="button" accesskey="s" /></div>
 </form>

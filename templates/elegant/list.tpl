@@ -28,10 +28,10 @@
             <td {if $video.who}class="lent"{elseif $video.mediatype==$smarty.const.MEDIA_WISHLIST}class="wanted"{/if} width="{floor(100/$listcolumns)}%">
 
             <div class="list_item">
-                {if $video.imgurl}{html_image file=$video.imgurl link="show.php?id="|cat:$video.id align=left max_width=$IMGWIDTH max_height=$IMGHEIGHT class="cover"}{/if}
+                {if $video.imgurl}{custom_html_image file=$video.imgurl link="show.php?id="|cat:$video.id align=left max_width=$IMGWIDTH max_height=$IMGHEIGHT class="cover"}{/if}
 {*
             <div class="boxgrid caption">
-                {if $video.imgurl}{html_image file=$video.imgurl link="show.php?id="|cat:$video.id align=left max_width=$IMGWIDTH max_height=$IMGHEIGHT class="cover"}{/if}
+                {if $video.imgurl}{custom_html_image file=$video.imgurl link="show.php?id="|cat:$video.id align=left max_width=$IMGWIDTH max_height=$IMGHEIGHT class="cover"}{/if}
 
                 <div class="cover boxcaption" style="top: 200px">
 					<h3>{$video.title}{if $video.subtitle} - {$video.subtitle}{/if}</h3>

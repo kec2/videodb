@@ -98,7 +98,7 @@ Event.observe(document, 'dom:loaded', function() {
         {if $config.imdbBrowser}{assign var="link" value=$link|escape:url}{assign var="link" value="trace.php?videodburl=$link"}{/if}
         {/if}
         {if $video.imgurl}
-        <span class="img-shadow">{html_image file=$video.imgurl link=$link title=$lang.visit max_width="97" max_height="144" id="coverimg" class="canzoom" targetimg=$video.imgurl}</span>
+        <span class="img-shadow">{custom_html_image file=$video.imgurl link=$link title=$lang.visit max_width="97" max_height="144" id="coverimg" class="canzoom" targetimg=$video.imgurl}</span>
         <a href="{$video.imgurl}" rel="zoom" srcimg="coverimg"><img src="{$template}images/search.gif"/></a>
         {/if}
     </td>
@@ -141,7 +141,7 @@ Event.observe(document, 'dom:loaded', function() {
               <form action="show.php" name="show" id="show">
                 <input type="hidden" name="id" value="{$video.id}" />
                 <input type="hidden" name="save" value="1" />
-                {html_checkbox name="seen" value=1 checked=$video.seen}
+                {custom_html_checkbox name="seen" value=1 checked=$video.seen}
                 <label for="seen" id="seen_label" {if !$video.seen}class="hidden"{/if}><img src="{$template}images/eye.gif"/></label>
               </form>
             </td>
@@ -299,7 +299,7 @@ Event.observe(document, 'dom:loaded', function() {
             <td width="{floor(100/$config.castcolumns)}%">
                 {if $actor.imgurl}
                     {assign var="link" value=$actor.imdburl}
-                    <a href="{if $config.imdbBrowser}{assign var="link" value=$link|escape:url}trace.php?videodburl={/if}{$link}">{html_image file=$actor.imgurl max_width=45 max_height=60 class="thumb canzoom" targetimg=$actor.imgurl}{*<img src="{$actor.imgurl}" width="38" height="52" align="left">*}</a>
+                    <a href="{if $config.imdbBrowser}{assign var="link" value=$link|escape:url}trace.php?videodburl={/if}{$link}">{custom_html_image file=$actor.imgurl max_width=45 max_height=60 class="thumb canzoom" targetimg=$actor.imgurl}{*<img src="{$actor.imgurl}" width="38" height="52" align="left">*}</a>
                 {/if}
                 <a href="search.php?q=%22{$actor.name|escape:url}%22&amp;isname=Y">{$actor.name}</a>
                 {foreach $actor.roles as $role}

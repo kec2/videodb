@@ -19,7 +19,7 @@
         {/if}
 
         {if $option.type == 'boolean'}
-            {html_checkbox name=$option.name id=$option.name value=1 checked=$option.set}
+            {custom_html_checkbox name=$option.name id=$option.name value=1 checked=$option.set}
         {/if}
 
         {if $option.type == 'dropdown'}

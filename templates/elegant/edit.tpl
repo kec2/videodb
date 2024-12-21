@@ -259,7 +259,7 @@ Event.observe(document, 'dom:loaded', function() {
 </table>
 
 <div id="editbuttons">
-	{$lang.radio_look_caption}: {html_radios name=lookup options=$lookup checked="$lookup_id"}
+	{$lang.radio_look_caption}: {custom_html_radios name=lookup options=$lookup checked="$lookup_id"}
 	<label for="add_flag"><input type="checkbox" name="add_flag" id="add_flag" value="1" {if $add_flag}checked="checked"{/if}/>{$lang.add_another}</label>
 	<input type="submit" class="button" value="{$lang.save}" id="savebutton" accesskey="s" />
 </div>

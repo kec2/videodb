@@ -11,7 +11,7 @@
       {if $link}
       {if $config.imdbBrowser}{assign var="link" value=$link|escape:url}{assign var="link" value="trace.php?videodburl=$link"}{/if}
       {/if}
-      {html_image file=$video.imgurl link=$link title=$lang.visit max_width="97" max_height="144"}
+      {custom_html_image file=$video.imgurl link=$link title=$lang.visit max_width="97" max_height="144"}
     </td>
 
     <td colspan="2">
@@ -62,7 +62,7 @@
               <form action="show.php" name="show" id="show">
                 <input type="hidden" name="id" id="id" value="{$video.id}" />
                 <input type="hidden" name="save" id="save" value="1" />
-                {html_checkbox name="seen" value=1 checked=$video.seen onclick="submit()"}
+                {custom_html_checkbox name="seen" value=1 checked=$video.seen onclick="submit()"}
                 {if $video.seen}<label for="seen">{$lang.yes}</label>{/if}
               </form>
             </td>
@@ -70,7 +70,7 @@
 
           <tr>
             <td><b>{$lang.rating}:</b></td>
-            <td>{html_rating value=$video.rating}</td>
+            <td>{custom_html_rating value=$video.rating}</td>
           </tr>
 
       </table>

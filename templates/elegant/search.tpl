@@ -14,7 +14,7 @@
     {if $imgurl}
     <div id="searchimage">
         <span class="img-shadow">
-        <a href='http://uk.imdb.com/Name?{$q|replace:"&quot;|\"":""|escape:url}'>{html_image file=$imgurl max_width=97 max_height=144 id="actorimg"}</a>
+        <a href='http://uk.imdb.com/Name?{$q|replace:"&quot;|\"":""|escape:url}'>{custom_html_image file=$imgurl max_width=97 max_height=144 id="actorimg"}</a>
         </span>
     </div>
     {/if}

@@ -152,13 +152,13 @@ function generate_thumbnail(&$file, &$width, &$height, $max_width, $max_height, 
 }
 
 /**
- * Smarty {html_image} function plugin
+ * Smarty {custom_html_image} function plugin
  * 
  * Type:     function<br>
- * Name:     html_image<br>
+ * Name:     custom_html_image<br>
  * Date:     Feb 24, 2003<br>
  * Purpose:  format HTML tags for the image<br>
- * Examples: {html_image file="/images/masthead.gif"}
+ * Examples: {custom_html_image file="/images/masthead.gif"}
  * Output:   <img src="/images/masthead.gif" width=400 height=23>
  * 
  * @link http://smarty.php.net/manual/en/language.function.html.image.php {html_image}
@@ -178,11 +178,9 @@ function generate_thumbnail(&$file, &$width, &$height, $max_width, $max_height, 
  * @return string 
  * @uses smarty_function_escape_special_chars()
  */
-function smarty_function_html_image($params, $template)
+function smarty_function_custom_html_image($params, $template)
 {
 	global $config;
-
-    require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
 
     $alt = '';
     $file = '';

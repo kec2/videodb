@@ -13,5 +13,5 @@
     {html_options name=area values=$area output=$area selected=$selectedarea}
 {/if}
 {if $engine=="imdb"}
-    {html_checkbox name="searchaka" value="1" checked=$searchaka label=$lang.aka}
+    {custom_html_checkbox name="searchaka" value="1" checked=$searchaka label=$lang.aka}
 {/if}
