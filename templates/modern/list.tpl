@@ -32,7 +32,7 @@
         <table>
         <tr>
             {if $video.imgurl}<td>
-                {html_image file=$video.imgurl link="show.php?id="|cat:$video.id align=left max_width=$IMGWIDTH max_height=$IMGHEIGHT class="cover"}
+                {custom_html_image file=$video.imgurl link="show.php?id="|cat:$video.id align=left max_width=$IMGWIDTH max_height=$IMGHEIGHT class="cover"}
             {if $listcolumns < 4}</td>{/if}
             {/if}
 

@@ -20,7 +20,7 @@
 	        {if $config.imdbBrowser}
 				{assign var="link" value="trace.php?iframe=1&videodburl=$link"}
 	        {/if}
-			<a href='{$link}' class="th radius">{html_image file=$imgurl max_width=$max_width max_height=$max_height}</a>
+			<a href='{$link}' class="th radius">{custom_html_image file=$imgurl max_width=$max_width max_height=$max_height}</a>
 		</div>
 		{/if}
 

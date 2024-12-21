@@ -47,9 +47,9 @@
         {if $imgurl}
         <td>
 {*
-            <a href='http://uk.imdb.com/Name?{$q_q|replace:"&quot;|\"":""|escape:url}'>{html_image file=$imgurl}</a>
+            <a href='http://uk.imdb.com/Name?{$q_q|replace:"&quot;|\"":""|escape:url}'>{custom_html_image file=$imgurl}</a>
 *}
-            <a href='http://uk.imdb.com/Name?{$q|replace:"&quot;|\"":""|escape:url}'>{html_image file=$imgurl}</a>
+            <a href='http://uk.imdb.com/Name?{$q|replace:"&quot;|\"":""|escape:url}'>{custom_html_image file=$imgurl}</a>
             <!--<img align=left src="{$imgurl}" width="97" height="144"/>-->
         </td>
         {/if}

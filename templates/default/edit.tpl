@@ -64,7 +64,7 @@
             <label for="istv">{$lang.tvepisode}</label>
           </td>
           <td>
-            {html_checkbox name="istv" value=1 checked=$video.istv}
+            {custom_html_checkbox name="istv" value=1 checked=$video.istv}
           </td>
         </tr>
 
@@ -73,7 +73,7 @@
             <label for="seen">{$lang.seen}</label>
           </td>
           <td>
-            {html_checkbox name="seen" value=1 checked=$video.seen}
+            {custom_html_checkbox name="seen" value=1 checked=$video.seen}
           </td>
         </tr>
 
@@ -134,7 +134,7 @@
 
           <tr>
             <td>{$lang.rating}:</td>
-            <td>{rating_input value=$video.rating}</td>
+            <td>{custom_rating_input value=$video.rating}</td>
           </tr>
 
         <tr>
@@ -281,8 +281,8 @@
     </tr>
   </table>
 
-  <b>{$lang.radio_look_caption}:</b> {html_radios name=lookup options=$lookup checked="$lookup_id"}
-  {html_checkbox name="add_flag" value=1 checked=$add_flag label=$lang.add_another}
+  <b>{$lang.radio_look_caption}:</b> {custom_html_radios name=lookup options=$lookup checked="$lookup_id"}
+  {custom_html_checkbox name="add_flag" value=1 checked=$add_flag label=$lang.add_another}
   <div align="center"><input type="submit" value="{$lang.save}" accesskey="s" /></div>
   <br />
 </form>

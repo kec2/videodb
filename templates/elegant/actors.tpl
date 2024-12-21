@@ -9,7 +9,7 @@
             <td width="{floor(100/$config.castcolumns)}%">
                 {if $actor.imgurl}
                     {assign var="link" value=$actor.imdburl}
-                    <a href="{if $config.imdbBrowser}{assign var="link" value=$link|escape:url}trace.php?videodburl={/if}{$link}">{html_image file=$actor.imgurl max_width=45 max_height=60 class=thumb}{*<img src="{$actor.imgurl}" width="38" height="52" align="left">*}</a>
+                    <a href="{if $config.imdbBrowser}{assign var="link" value=$link|escape:url}trace.php?videodburl={/if}{$link}">{custom_html_image file=$actor.imgurl max_width=45 max_height=60 class=thumb}{*<img src="{$actor.imgurl}" width="38" height="52" align="left">*}</a>
                 {/if}
                 <a href="search.php?q=%22{$actor.name|escape:url}%22&amp;isname=Y">{$actor.name}</a>
                 {foreach item=role from=$actor.roles}

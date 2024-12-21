@@ -64,7 +64,7 @@ function boxeePlay(id) {
 			{assign var="link" value="trace.php?iframe=1&amp;videodburl=$link"}
         {/if}
         {if $video.imgurl}
-			{html_image file=$video.imgurl link=$link title=$lang.visit}
+			{custom_html_image file=$video.imgurl link=$link title=$lang.visit}
         {/if}
 
 		<h3 class="subheader">{$video.subtitle}</h3>
@@ -300,7 +300,7 @@ function boxeePlay(id) {
 										{assign var="link" value=$link|escape:url}
 										{assign var="link" value="trace.php?iframe=1&amp;videodburl=$link"}
 									{/if}
-									<a href="{$link}">{html_image file=$actor.imgurl max_width=60 max_height=90}</a>
+									<a href="{$link}">{custom_html_image file=$actor.imgurl max_width=60 max_height=90}</a>
 								{/if}
 							</div>
 							<div class="small-8 columns">
@@ -327,7 +327,7 @@ function boxeePlay(id) {
 		<div class="row">
 			<div class="small-3 columns">
 				{if $video.imgurl}
-				{html_image file=$video.imgurl link=$link title=$lang.visit}
+				{custom_html_image file=$video.imgurl link=$link title=$lang.visit}
 				{/if}
 			</div>
 			<div class="small-9 columns">

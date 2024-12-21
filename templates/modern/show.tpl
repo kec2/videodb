@@ -52,7 +52,7 @@
     {/if}
 {*  <a href="{$link}" title="{$lang.visit}">
     <img src="{$video.imgurl}" width="97" height="144" alt="" />{if $video.imdbID}</a>{/if} *}
-    {html_image file=$video.imgurl link=$link title=$lang.visit max_width="97" max_height="144"}
+    {custom_html_image file=$video.imgurl link=$link title=$lang.visit max_width="97" max_height="144"}
     </td>
     <td colspan="2">
       <span class="show_title">{$video.title}</span>
@@ -97,7 +97,7 @@
               <form action="show.php" name="show" id="show">
                 <input type="hidden" name="id" value="{$video.id}" />
                 <input type="hidden" name="save" value="1" />
-                {html_checkbox name="seen" value=1 checked=$video.seen onclick="submit()"}
+                {custom_html_checkbox name="seen" value=1 checked=$video.seen onclick="submit()"}
                 {if $video.seen}<label for="seen">{$lang.yes}</label>{/if}
               </form>
             </td>
@@ -105,7 +105,7 @@
 
           <tr>
             <td><b>{$lang.rating}:</b></td>
-            <td>{html_rating value=$video.rating}</td>
+            <td>{custom_html_rating value=$video.rating}</td>
           </tr>
 
 	{if $engines.trailer}
@@ -245,7 +245,7 @@
             <td width="{math equation="floor(100/x)" x=$config.castcolumns}%">
               {if $actor.imgurl}
                 {assign var="link" value=$actor.imdburl}
-                <a href="{if $config.imdbBrowser}{assign var="link" value=$link|escape:url}trace.php?videodburl={/if}{$link}">{html_image file=$actor.imgurl max_width=45 max_height=60 class=thumb}{*<img src="{$actor.imgurl}" width="38" height="52" align="left">*}</a>
+                <a href="{if $config.imdbBrowser}{assign var="link" value=$link|escape:url}trace.php?videodburl={/if}{$link}">{custom_html_image file=$actor.imgurl max_width=45 max_height=60 class=thumb}{*<img src="{$actor.imgurl}" width="38" height="52" align="left">*}</a>
               {/if}
               <a href="search.php?q=%22{$actor.name|escape:url}%22&isname=Y">{$actor.name}</a><br/>
                 {foreach item=role from=$actor.roles}

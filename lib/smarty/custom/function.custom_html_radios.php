@@ -12,7 +12,7 @@
 *
 * File:       function.custom_html_radios.php<br>
 * Type:       function<br>
-* Name:       html_radios<br>
+* Name:       custom_html_radios<br>
 * Date:       24.Feb.2003<br>
 * Purpose:    Prints out a list of radio input types<br>
 * Examples:
