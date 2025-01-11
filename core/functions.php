@@ -86,7 +86,7 @@ $smarty->setCacheDir('./cache/smarty');              // path to cached html
 $smarty->setCacheLifetime(5 * 60);
 //$smarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
-#$smarty->setForceCompile(true);
+$smarty->setForceCompile(true);
 #$smarty->setDebugging(true);
 $smarty->setErrorReporting(E_ERROR);
 
