@@ -303,7 +303,7 @@ class TestIMDb extends TestCase
         $data = engineGetData($id, 'imdb', false);
 
         $this->assertNotEmpty($data);
-        // $this->printData($data);
+        $this->printData($data);
 
         $this->assertEquals('english, german, spanish, american sign language', $data['language']);
         $this->assertMatchesRegularExpression("/Zach Braff::Dr. John 'J.D.' Dorian.+?::imdb:nm0103785.+?Mona Weiss::Nurse \(uncredited\) .+?::imdb:nm2032293/is", $data['cast']);

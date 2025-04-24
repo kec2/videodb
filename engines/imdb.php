@@ -259,9 +259,11 @@ function imdbData($imdbID)
     $data['runtime'] = getRuntime($resp['data'], $json);
 
     // Director
-    $data['director'] = imdbGetDirectors($resp['data'], $json);
-    $data['creator'] = imdbGetDirectors($resp['data'], $json);
-    $data['writer'] = imdbGetDirectors($resp['data'], $json);
+    $completeCast = imdbGetCastV2($imdbID, $json);
+
+    $data['director'] = $completeCast['director'];
+    $data['creator'] = $completeCast['creator'];
+    $data['writer'] = $completeCast['writer'];
 
     // Rating
     $data['rating'] = imdbGetRating($resp['data'], $json);
@@ -279,7 +281,7 @@ function imdbData($imdbID)
     $data['plot'] = imdbGetPlot($resp['data'], $json);
 
     // Cast
-    $data['cast'] = imdbGetCast($imdbID);
+    $data['cast'] = $completeCast['cast'];
 
     return $data;
 }
@@ -310,6 +312,8 @@ function imdbIsTV($json) {
 }
 
 function imdbGetSeriesId($data, $json) {
+    // going through main page gives: $json->aboveTheFoldData->series
+    // going through full credits gives: $json->contentData->data->title->series
     if (isset($json)) {
 //         dlog('got series id from json');
         if ($json->aboveTheFoldData->series) {
@@ -338,6 +342,8 @@ function imdbGetSeriesId($data, $json) {
 }
 
 function imdbGetGenres($data, $json) {
+    // going through main page gives all genres
+    // going through full credits gives three genres
     if (isset($json) && isset($json->aboveTheFoldData->genres->genres)) {
 //         dlog('get genres from json');
         $genres = [];
@@ -369,6 +375,8 @@ function imdbGetGenres($data, $json) {
  * @return  string          The movie content rating score or null.
  */
 function imdbGetParentalGuide($data, $json) {
+    // going through main page gives all rating
+    // going through full credits gives all rating
     if (isset($json) && isset($json->aboveTheFoldData->certificate)) {
 //         dlog('get certification from json');
         return $json->aboveTheFoldData->certificate->rating;
@@ -381,6 +389,8 @@ function imdbGetParentalGuide($data, $json) {
 }
 
 function imdbGetCountries($data, $json) {
+    // going through main page gives all countries
+    // going through full credits only gets some countries
     if (isset($json)) {
 //         dlog('got countries from json');
         $countries = [];
@@ -398,7 +408,7 @@ function imdbGetCountries($data, $json) {
 /*
  * @param string $imdbID    is the is the ID of the movie
  */
-function imdbGetCast($imdbID) {
+function imdbGetCastV2($imdbID, $json) {
     global $imdbIdPrefix;
     global $imdbServer;
     global $cache;
@@ -407,6 +417,134 @@ function imdbGetCast($imdbID) {
     $resp = httpClient($imdbServer.'/title/tt'.$imdbID.'/fullcredits', $cache);
     if (!$resp['success']) {
         $CLIENTERROR .= $resp['error'].'\n';
+    }
+
+    $completeCast = [];
+
+    $json = getPagePropsJson($resp['data']);
+    if (isset($json)) {
+//        dlog($json);
+//        dlog("got cast from json");
+
+        foreach($json->contentData->categories as $cats) {
+            if ($cats->id == 'cast') {
+                $cast = '';
+                foreach($cats->section->items as $item) {
+                    $actorId = $item->id;
+                    $actor = $item->rowTitle;
+
+                    if (is_array($item->characters)) {
+                        $role = implode(" / ", $item->characters);
+                        if ($item->attributes) {
+                            $role .= " " . $item->attributes;
+                        }
+                    } else {
+                        $role = $item->attributes;
+                    }
+
+                    $cast .= "$actor::$role::$imdbIdPrefix$actorId\n";
+                }
+
+                if ($cats->section->total != count($cats->section->items)) {
+                    dlog("cast is not complete for ".$imdbID." using json");
+                }
+                $completeCast['cast'] = $cast;
+
+
+            } elseif ($cats->id == 'director') {
+                $directors = [];
+                foreach($cats->section->items as $item) {
+                   $directors[] = $item->rowTitle;
+                }
+               $completeCast['director'] = implode(', ', $directors);
+            } elseif ($cats->id == 'writer') {
+                $writers = [];
+                foreach($cats->section->items as $item) {
+                   $writers[] = $item->rowTitle;
+                }
+               $completeCast['writer'] = implode(', ', $writers);
+            } elseif ($cats->id == 'creator') {
+                $creators = [];
+                foreach($cats->section->items as $item) {
+                   $creators[] = $item->rowTitle;
+                }
+                $completeCast['creator'] = implode(', ', $creators);
+            }
+        }
+
+
+
+        return $completeCast;
+    }
+
+    if (preg_match('#<table class="cast_list">(.*)#si', $resp['data'], $match)) {
+        $cast = '';
+        // no idea why it does not always work with (.*?)</table
+        // could be some maximum length of .*?
+        // anyways, I'm cutting it here
+        $casthtml = substr($match[1], 0, strpos($match[1], '</table'));
+        if (preg_match_all('#<td class="primary_photo">\s+<a href="/name/(nm\d+)/?.*?".+?<a .+?>(.+?)</a>.+?<td class="character">(.*?)</td>#si', $casthtml, $ary, PREG_PATTERN_ORDER)) {
+            for ($i = 0; $i < sizeof($ary[0]); $i++) {
+                $actorid = trim(strip_tags($ary[1][$i]));
+                $actor = trim(strip_tags($ary[2][$i]));
+
+                // make spaces, tabs and newlines into spaces
+                $character = preg_replace('/\s/', ' ', $ary[3][$i]);
+                // change HTML brake space into space.
+                $character = preg_replace('/&nbsp;/', ' ', $character);
+                // make multiple spaces into a single space
+                $character = preg_replace('/\s+/', ' ', $character);
+                // replace U+0092 : <control> PRIVATE USE TWO [PU2] with single quote
+                $character = preg_replace('/[\x00\x92]/u', '&#039;', $character);
+                // sometimes appearing in series (e.g. Scrubs)
+                $character = preg_replace('#/ ... #', '', $character);
+                $character = trim(strip_tags($character));
+
+                $cast .= "$actor::$character::$imdbIdPrefix$actorid\n";
+            }
+        }
+
+        // remove html entities and replace &nbsp; with simple space
+        return html_clean_utf8($cast);
+    }
+    dlog('Failed to find a cast for:' . $imdbID);
+    return null;
+}
+
+/*
+ * @param string $imdbID    is the is the ID of the movie
+ */
+function imdbGetCast($imdbID, $json) {
+    global $imdbIdPrefix;
+    global $imdbServer;
+    global $cache;
+
+    // Fetch credits
+    $resp = httpClient($imdbServer.'/title/tt'.$imdbID.'/fullcredits', $cache);
+    if (!$resp['success']) {
+        $CLIENTERROR .= $resp['error'].'\n';
+    }
+
+    $json = getPagePropsJson($resp['data']);
+    if (isset($json)) {
+        //dlog($json);
+    //   dlog("got cast from json");
+
+        $cast;
+        foreach($json->contentData->categories as $cats) {
+            if ($cats->id != 'cast') {
+                continue;
+            }
+            foreach($cats->section->items as $item) {
+                $actorId = $item->id;
+                $actor = $item->rowTitle;
+                $role = implode(", ", $item->characters);
+                $actorImageUrl = $item->imageProps->imageModel->url;
+
+                $cast .= "$actor::$role::$imdbIdPrefix$actorId\n";
+            }
+            return $cast;
+        }
     }
 
     if (preg_match('#<table class="cast_list">(.*)#si', $resp['data'], $match)) {
