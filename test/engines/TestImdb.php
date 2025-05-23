@@ -303,10 +303,10 @@ class TestIMDb extends TestCase
         $data = engineGetData($id, 'imdb', false);
 
         $this->assertNotEmpty($data);
-        $this->printData($data);
+//         $this->printData($data);
 
         $this->assertEquals('english, german, spanish, american sign language', $data['language']);
-        $this->assertMatchesRegularExpression("/Zach Braff::Dr. John 'J.D.' Dorian.+?::imdb:nm0103785.+?Mona Weiss::Nurse \(uncredited\) .+?::imdb:nm2032293/is", $data['cast']);
+        $this->assertMatchesRegularExpression("/Zach Braff::Dr. John 'J.D.' Dorian.+?::imdb:nm0103785.+?Mona Weiss::Nurse \(uncredited\)::imdb:nm2032293/is", $data['cast']);
         $this->assertMatchesRegularExpression('/Sacred Heart Hospital/i', $data['plot']);
     }
 
@@ -436,7 +436,7 @@ class TestIMDb extends TestCase
         $data = engineGetData($id, 'imdb', false);
 
         $this->assertNotEmpty($data);
-        // $this->printData($data);
+//         $this->printData($data);
 
         $this->assertEquals(1, $data['istv']);
         $this->assertEquals('0092455', $data['tvseries_id']);
@@ -459,7 +459,7 @@ class TestIMDb extends TestCase
         $this->assertTrue(in_array("Jonathan Frakes::Commander William Thomas 'Will' Riker::imdb:nm0000408", $cast));
         $this->assertTrue(in_array('Marina Sirtis::Counselor Deanna Troi::imdb:nm0000642', $cast));
         $this->assertTrue(in_array('John de Lancie::Q (as John deLancie)::imdb:nm0209496', $cast));
-        $this->assertTrue(in_array('Rob Bowman::Borg (voice) (uncredited)::imdb:nm0101385', $cast));
+        $this->assertTrue(in_array('Rob Bowman::Borg (Synchronisation) (Nicht genannt)::imdb:nm0101385', $cast));
 
         $this->assertTrue(sizeof($cast) > 15);
         $this->assertTrue(sizeof($cast) < 30);

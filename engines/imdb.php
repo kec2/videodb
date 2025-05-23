@@ -234,7 +234,7 @@ function imdbData($imdbID)
     // add encoding
     $data['encoding'] = $resp['encoding'];
 
-    $json = getPagePropsJson($resp['data']);
+    $json = getPagePropsJson($imdbID, $resp['data']);
 
     $data['istv'] = imdbIsTV($json);
     if ($data['istv']) {
@@ -286,10 +286,19 @@ function imdbData($imdbID)
     return $data;
 }
 
-function getPagePropsJson($data) {
-    if (preg_match('/<script id=".+?" type="application\/json">(.+?)<\/script>/', $data, $ary)) {
-        $json = json_decode($ary[1], false);
+function getPagePropsJson($imdbID, $data) {
+    if (preg_match('/<script id="__NEXT_DATA__" type="application\/json">([^<]*)<\/script>/si', $data, $ary)) {
+        try {
+            $json = json_decode($ary[1]);
+        }   catch (Exception $e) {
+            dlog("Json error, imdbid: $imdbID, ". json_last_error() .", " . json_last_error_msg());
+            dlog($ary[1]);
+        }
+//         dlog("Found json for $imdbID");
+
         return $json->props->pageProps;
+    } else {
+        dlog("Did not find any json for $imdbID");
     }
     return null;
 }
@@ -392,14 +401,14 @@ function imdbGetCountries($data, $json) {
     // going through main page gives all countries
     // going through full credits only gets some countries
     if (isset($json)) {
-//         dlog('got countries from json');
+        dlog('got countries from json');
         $countries = [];
-        foreach($json->mainColumnData->countriesOfOrigin->countries as $country) {
+        foreach($json->mainColumnData->countriesDetails->countries as $country) {
             $countries[] = $country->text;
         }
         return join(', ', $countries);
     } elseif (preg_match_all('/href="\/search\/title\/\?country_of_origin.+?>(.+?)<\/a>/si', $data, $ary, PREG_PATTERN_ORDER)) {
-//         dlog('got countries from html');
+        dlog('got countries from html');
         return trim(join(', ', $ary[1]));
     }
     return null;
@@ -421,13 +430,19 @@ function imdbGetCastV2($imdbID, $json) {
 
     $completeCast = [];
 
-    $json = getPagePropsJson($resp['data']);
-    if (isset($json)) {
-//        dlog($json);
-//        dlog("got cast from json");
+    $json = getPagePropsJson($imdbID, $resp['data']);
 
+    if (isset($json)) {
         foreach($json->contentData->categories as $cats) {
             if ($cats->id == 'cast') {
+                $pageSize = $cats->pagination->queryVariables->first;
+                $total = $cats->section->total;
+                if ($total > $pageSize) {
+                    dlog("Not all cast are included");
+                    $completeCast['cast'] = imdbGetCast($imdbID, $resp['data']);
+                    break;
+                }
+
                 $cast = '';
                 foreach($cats->section->items as $item) {
                     $actorId = $item->id;
@@ -442,21 +457,32 @@ function imdbGetCastV2($imdbID, $json) {
                         $role = $item->attributes;
                     }
 
+                    // make spaces, tabs and newlines into spaces
+                    $role = preg_replace('/\s/', ' ', $role);
+                    // change HTML brake space into space.
+                    $role = preg_replace('/&nbsp;/', ' ', $role);
+                    // make multiple spaces into a single space
+                    $role = preg_replace('/\s+/', ' ', $role);
+                    // replace U+0092 : <control> PRIVATE USE TWO [PU2] with single quote
+                    $role = preg_replace('/[\x00\x92]/u', '&#039;', $role);
+                    // sometimes appearing in series (e.g. Scrubs)
+                    $role = preg_replace('#/ ... #', '', $role);
+                    $role = trim(strip_tags($role));
+
                     $cast .= "$actor::$role::$imdbIdPrefix$actorId\n";
                 }
 
-                if ($cats->section->total != count($cats->section->items)) {
-                    dlog("cast is not complete for ".$imdbID." using json");
-                }
                 $completeCast['cast'] = $cast;
-
-
             } elseif ($cats->id == 'director') {
                 $directors = [];
                 foreach($cats->section->items as $item) {
                    $directors[] = $item->rowTitle;
                 }
-               $completeCast['director'] = implode(', ', $directors);
+                $dirs = implode(', ', $directors);
+                if (strlen($dirs) > 250) {
+                    dlog("WARNING: Directors string to long(250). $imdbID");
+                }
+               $completeCast['director'] = substr($dirs, 0, 250);
             } elseif ($cats->id == 'writer') {
                 $writers = [];
                 foreach($cats->section->items as $item) {
@@ -472,113 +498,79 @@ function imdbGetCastV2($imdbID, $json) {
             }
         }
 
-
-
         return $completeCast;
     }
 
-    if (preg_match('#<table class="cast_list">(.*)#si', $resp['data'], $match)) {
-        $cast = '';
-        // no idea why it does not always work with (.*?)</table
-        // could be some maximum length of .*?
-        // anyways, I'm cutting it here
-        $casthtml = substr($match[1], 0, strpos($match[1], '</table'));
-        if (preg_match_all('#<td class="primary_photo">\s+<a href="/name/(nm\d+)/?.*?".+?<a .+?>(.+?)</a>.+?<td class="character">(.*?)</td>#si', $casthtml, $ary, PREG_PATTERN_ORDER)) {
-            for ($i = 0; $i < sizeof($ary[0]); $i++) {
-                $actorid = trim(strip_tags($ary[1][$i]));
-                $actor = trim(strip_tags($ary[2][$i]));
+    $cast = getImdbCast($imdbID, $resp['data']);
 
-                // make spaces, tabs and newlines into spaces
-                $character = preg_replace('/\s/', ' ', $ary[3][$i]);
-                // change HTML brake space into space.
-                $character = preg_replace('/&nbsp;/', ' ', $character);
-                // make multiple spaces into a single space
-                $character = preg_replace('/\s+/', ' ', $character);
-                // replace U+0092 : <control> PRIVATE USE TWO [PU2] with single quote
-                $character = preg_replace('/[\x00\x92]/u', '&#039;', $character);
-                // sometimes appearing in series (e.g. Scrubs)
-                $character = preg_replace('#/ ... #', '', $character);
-                $character = trim(strip_tags($character));
-
-                $cast .= "$actor::$character::$imdbIdPrefix$actorid\n";
-            }
-        }
-
-        // remove html entities and replace &nbsp; with simple space
-        return html_clean_utf8($cast);
-    }
     dlog('Failed to find a cast for:' . $imdbID);
-    return null;
+    return $cast;
 }
 
 /*
  * @param string $imdbID    is the is the ID of the movie
  */
-function imdbGetCast($imdbID, $json) {
+function imdbGetCast($imdbID, $data) {
     global $imdbIdPrefix;
-    global $imdbServer;
     global $cache;
 
-    // Fetch credits
-    $resp = httpClient($imdbServer.'/title/tt'.$imdbID.'/fullcredits', $cache);
-    if (!$resp['success']) {
-        $CLIENTERROR .= $resp['error'].'\n';
-    }
+    $cast = '';
+    $after = '';
 
-    $json = getPagePropsJson($resp['data']);
-    if (isset($json)) {
-        //dlog($json);
-    //   dlog("got cast from json");
+    do {
+        $url = 'https://caching.graphql.imdb.com/?operationName=TitleCreditSubPagePagination&variables={"after":"'.$after.'","category":"cast","const":"tt'.$imdbID.'","first":250,"locale":"en-US","originalTitleText":false,"tconst":"tt'.$imdbID.'"}&extensions={"persistedQuery":{"sha256Hash":"716fbcc1b308c56db263f69e4fd0499d4d99ce1775fb6ca75a75c63e2c86e89c","version":1}}';
 
-        $cast;
-        foreach($json->contentData->categories as $cats) {
-            if ($cats->id != 'cast') {
-                continue;
-            }
-            foreach($cats->section->items as $item) {
-                $actorId = $item->id;
-                $actor = $item->rowTitle;
-                $role = implode(", ", $item->characters);
-                $actorImageUrl = $item->imageProps->imageModel->url;
-
-                $cast .= "$actor::$role::$imdbIdPrefix$actorId\n";
-            }
-            return $cast;
-        }
-    }
-
-    if (preg_match('#<table class="cast_list">(.*)#si', $resp['data'], $match)) {
-        $cast = '';
-        // no idea why it does not always work with (.*?)</table
-        // could be some maximum length of .*?
-        // anyways, I'm cutting it here
-        $casthtml = substr($match[1], 0, strpos($match[1], '</table'));
-        if (preg_match_all('#<td class="primary_photo">\s+<a href="/name/(nm\d+)/?.*?".+?<a .+?>(.+?)</a>.+?<td class="character">(.*?)</td>#si', $casthtml, $ary, PREG_PATTERN_ORDER)) {
-            for ($i = 0; $i < sizeof($ary[0]); $i++) {
-                $actorid = trim(strip_tags($ary[1][$i]));
-                $actor = trim(strip_tags($ary[2][$i]));
-
-                // make spaces, tabs and newlines into spaces
-                $character = preg_replace('/\s/', ' ', $ary[3][$i]);
-                // change HTML brake space into space.
-                $character = preg_replace('/&nbsp;/', ' ', $character);
-                // make multiple spaces into a single space
-                $character = preg_replace('/\s+/', ' ', $character);
-                // replace U+0092 : <control> PRIVATE USE TWO [PU2] with single quote
-                $character = preg_replace('/[\x00\x92]/u', '&#039;', $character);
-                // sometimes appearing in series (e.g. Scrubs)
-                $character = preg_replace('#/ ... #', '', $character);
-                $character = trim(strip_tags($character));
-
-                $cast .= "$actor::$character::$imdbIdPrefix$actorid\n";
-            }
+        $param = [ 'header' => [
+              'Accept' => 'application/json',
+              'User-Agent' => 'Mozilla/5.0',
+              'Content-Type' => 'application/json',
+              ]
+        ];
+        $resp = httpClient($url, $cache, $param);
+        if (!$resp['success']) {
+            $CLIENTERROR .= $resp['error'].'\n';
         }
 
-        // remove html entities and replace &nbsp; with simple space
-        return html_clean_utf8($cast);
-    }
-    dlog('Failed to find a cast for:' . $imdbID);
-    return null;
+        $json = json_decode($resp['data']);
+        $credits = $json->data->title->credits;
+
+        foreach($credits->edges as $edge) {
+            $actorId = $edge->node->name->id;
+            $actor = $edge->node->name->nameText->text;
+            $role;
+            if (is_array($edge->node->characters)) {
+                $characterNames = array_map(function ($char) {
+                    return $char->name;
+                }, $edge->node->characters);
+                $role = implode(' / ', $characterNames);
+
+                if ($edge->node->attributes) {
+                    foreach($edge->node->attributes as $attr) {
+                        $role .= " (" . $attr->text . ")";
+                    }
+                }
+            } else {
+                $role = $edge->node->attributes;
+            }
+        
+            // make spaces, tabs and newlines into spaces
+            $role = preg_replace('/\s/', ' ', $role);
+            // change HTML brake space into space.
+            $role = preg_replace('/&nbsp;/', ' ', $role);
+            // make multiple spaces into a single space
+            $role = preg_replace('/\s+/', ' ', $role);
+            // replace U+0092 : <control> PRIVATE USE TWO [PU2] with single quote
+            $role = preg_replace('/[\x00\x92]/u', '&#039;', $role);
+            // sometimes appearing in series (e.g. Scrubs)
+            $role = preg_replace('#/ ... #', '', $role);
+            $role = trim(strip_tags($role));
+
+            $cast .= "$actor::$role::$imdbIdPrefix$actorId\n";
+        }
+        $after = $credits->pageInfo->endCursor;
+    } while ($credits->pageInfo->hasNextPage);
+
+    return $cast;
 }
 
 function imdbGetPlot($data, $json) {

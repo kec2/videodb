@@ -142,7 +142,7 @@ function httpClient($url, $cache = false, $para = null, $reload = false)
 
     // additional request headers
     if (!empty($para) && !empty($para['header'])) {
-        $requestConfig += ['headers' => $para['header']];
+        $requestConfig['headers'] = array_merge($requestConfig['headers'], $para['header']);
     }
 
     if (empty($requestConfig['headers']['Accept'])) {
