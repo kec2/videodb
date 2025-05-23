@@ -50,7 +50,7 @@ class TestDVDFR extends TestCase
 		$this->assertEquals('Star Wars: Episode I - The Phantom Menace', $data['origtitle']);
 		$this->assertArrayNotHasKey('language', $data);
 		$this->assertEquals(1999, $data['year']);
-		$this->assertEquals('https://www.dvdfr.com/images/dvd/covers/100x140/0cc3a79c3a4b3c5f60accb2b611e2043/2869/old-star_wars_1.0.jpg', $data['coverurl']);
+		$this->assertEquals('https://www.dvdfr.com/images/dvd/covers/200x280/0cc3a79c3a4b3c5f60accb2b611e2043/2869/old-star_wars_1.0.jpg', $data['coverurl']);
 		$this->assertEquals(130, $data['runtime']);
 		$this->assertEquals('4,53', $data['rating']);
 		$this->assertEquals('George Lucas', $data['director']);
@@ -86,7 +86,7 @@ class TestDVDFR extends TestCase
 		$this->assertEquals('Terminator: The Sarah Connor Chronicles', $data['origtitle']);
 		$this->assertArrayNotHasKey('language', $data);
 		$this->assertEquals(2008, $data['year']);
-		$this->assertEquals('https://www.dvdfr.com/images/dvd/covers/100x140/c336f6fca8cf8bab696dcdef453a80f0/151323/old-terminator_the_sarah_connor_chronicles_saison_1_br.0.jpg', $data['coverurl']);
+		$this->assertEquals('https://www.dvdfr.com/images/dvd/covers/200x280/c336f6fca8cf8bab696dcdef453a80f0/151323/old-terminator_the_sarah_connor_chronicles_saison_1_br.0.jpg', $data['coverurl']);
 		$this->assertEquals(487, $data['runtime']);
 		$this->assertEquals('4,00', $data['rating']);
 		$this->assertStringContainsString('David Nutter', $data['director']);
@@ -185,7 +185,7 @@ class TestDVDFR extends TestCase
 	    $data = engineActor($name, $id, 'dvdfr');
 
         $this->assertEquals('/stars/s4028-scarlett-johansson.html', $data[0][0]);
-        $this->assertEquals("https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Scarlett_Johansson_by_Gage_Skidmore_2_%28cropped%29.jpg/600px-Scarlett%20Johansson%20by%20Gage%20Skidmore%202%20%28cropped%29.jpg", $data[0][1]);
+        $this->assertEquals("https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Scarlett_Johansson_by_Gage_Skidmore_2_%28cropped%29_%28cropped%29.jpg/600px-Scarlett%20Johansson%20by%20Gage%20Skidmore%202%20%28cropped%29%20%28cropped%29.jpg", $data[0][1]);
 	}
 
 	function testEngineActorWithoutImage(): void
