@@ -1,4 +1,4 @@
-FROM php:8.3-apache
+FROM php:8.4-apache
 
 # install GD dependencies
 RUN apt-get update && apt-get install -y \
