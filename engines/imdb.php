@@ -552,7 +552,7 @@ function imdbGetCast($imdbID, $data) {
             } else {
                 $role = $edge->node->attributes->text;
             }
-            if ($edge->node->episodeCredits) {
+            if ($edge->node->episodeCredits && $edge->node->episodeCredits->total > 0) {
                 $total = $edge->node->episodeCredits->total;
                 $from = $edge->node->episodeCredits->yearRange->year;
                 $to = $edge->node->episodeCredits->yearRange->endYear;
