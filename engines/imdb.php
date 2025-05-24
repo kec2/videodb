@@ -550,7 +550,17 @@ function imdbGetCast($imdbID, $data) {
                     }
                 }
             } else {
-                $role = $edge->node->attributes;
+                $role = $edge->node->attributes->text;
+            }
+            if ($edge->node->episodeCredits) {
+                $total = $edge->node->episodeCredits->total;
+                $from = $edge->node->episodeCredits->yearRange->year;
+                $to = $edge->node->episodeCredits->yearRange->endYear;
+
+                $role .= ", $total episodes, $from";
+                if ($to) {
+                    $role .= "-$to";
+                }
             }
         
             // make spaces, tabs and newlines into spaces
