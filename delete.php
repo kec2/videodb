@@ -49,12 +49,13 @@ if (count($res))
 runSQL('DELETE FROM '.TBL_DATA.' WHERE id = '.$id);
 runSQL('DELETE FROM '.TBL_VIDEOGENRE.' WHERE video_id = '.$id);
 
+// Disabled because on a large collection, this takes hours.
 // Delete from actors what is not found in any movie.
-runSQL('delete from '.TBL_ACTORS
-      .' where not exists ('
-            .' select actors'
-            .' from '.TBL_DATA.' as D'
-            .' where position('.TBL_ACTORS.'.actorid in D.actors) <> 0)');
+// runSQL('delete from '.TBL_ACTORS
+//       .' where not exists ('
+//             .' select actors'
+//             .' from '.TBL_DATA.' as D'
+//             .' where position('.TBL_ACTORS.'.actorid in D.actors) <> 0)');
 
 // clear smarty cache for this item
 #!! this does not work- at least not with Smarty3
