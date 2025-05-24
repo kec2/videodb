@@ -68,7 +68,9 @@ $config['debug'] = 0;
     <body>
 <?php
 
-$testClasses = findTestClasses('./test', $_REQUEST['test'] || '');
+$testName = $_REQUEST['test'];
+
+$testClasses = findTestClasses('./test', $testName);
 
 // 'loadedExtensions', 'extensions', 'notLoadedExtensions' is just to avoid PHP 7.4 warnings.
 $args = [];
@@ -109,7 +111,7 @@ $config['debug'] = $origDebug;
  * @param string    pattern If set then only test containing this pattern will be executed
  * @psalm-return array<string, string>
  */
-function findTestClasses(string $rootDir, string $pattern = 'FooBar'): array {
+function findTestClasses(string $rootDir, $pattern): array {
     $result = array();
 
     $directory = new \RecursiveDirectoryIterator($rootDir);
