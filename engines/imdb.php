@@ -519,7 +519,7 @@ function imdbGetCast($imdbID, $data) {
 
     do {
         $url = 'https://caching.graphql.imdb.com/?operationName=TitleCreditSubPagePagination&variables={"after":"'.$after.'","category":"cast","const":"tt'.$imdbID.'","first":250,"locale":"en-US","originalTitleText":false,"tconst":"tt'.$imdbID.'"}&extensions={"persistedQuery":{"sha256Hash":"716fbcc1b308c56db263f69e4fd0499d4d99ce1775fb6ca75a75c63e2c86e89c","version":1}}';
-
+        // dlog("Calling: $url");
         $param = [ 'header' => [
               'Accept' => 'application/json',
               'User-Agent' => 'Mozilla/5.0',
@@ -746,9 +746,16 @@ function imdbGetCoverURL($data, $json) {
     global $CLIENTERROR;
     global $cache;
 
-    if (isset($json) && isset($json->aboveTheFoldData->primaryImage)) {
-//         dlog('get cover image url from json');
-        return $json->aboveTheFoldData->primaryImage->url;
+    if (isset($json)) {
+        // dlog('get cover image url from json');
+        $url = '';
+        if (isset($json->aboveTheFoldData->primaryImage)) {
+            $url = $json->aboveTheFoldData->primaryImage->url;
+            // dlog("imdb movie cover: $url");
+            $url = str_replace('.jpg', 'QL95_UY600_.jpg', $url);
+            // dlog("imdb movie cover: $url");
+        }
+        return $url;
     }
 
     // find cover image url
@@ -831,8 +838,29 @@ function imdbActor($name, $actorid)
     global $cache;
 
     // search directly by id or via name?
-    $resp = httpClient(imdbActorUrl($name, $actorid), $cache);
+    $url = imdbActorUrl($name, $actorid);
+    // dlog("look for actor image here: $url");
+    $resp = httpClient($url, $cache);
 
+    $json = getPagePropsJson($actorId, $resp['data']);
+    if ($json) {
+        // dlog("found json");
+        $actorUrl = [];
+        if ($json->mainColumnData->primaryImage) {
+            // dlog("found image url");
+            $actorUrl[0][0] = "/name/".$json->mainColumnData->id;
+
+            // https://m.media-amazon.com/images/M/MV5BNTdlYWY3Y2QtYjM4Yy00MTJiLTk4NDUtM2IyMmY2YTBmNDU5XkEyXkFqcGc@._V1_.jpg
+            //@@._V1_QL75_UY207_CR6,0,140,207_.jpg
+            $url = $json->mainColumnData->primaryImage->url;
+            // change uqlaity to 95 and height to 300
+            $url = str_replace('.jpg', 'QL95_UY300_.jpg', $url);
+            // dlog($url);
+            $actorUrl[0][1] = $url;
+        }
+        return $actorUrl;
+    }
+    dlog("look for actor image url in html");
     // if not direct match load best match
     if (preg_match('#<b>Popular Names</b>.+?<a\s+href="(.*?)">#i', $resp['data'], $m)
             || preg_match('#<b>Names \(Exact Matches\)</b>.+?<a\s+href="(.*?)">#i', $resp['data'], $m)
