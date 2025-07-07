@@ -24,7 +24,7 @@ require_once './core/edit.core.php';
 <body>
     <h2>Fetch all data</h2>
     Fetch all data for either all movies or a specific movie.
-    <br>Leave <b<Video ID</b> empty for fetching for all movies.
+    <br>Leave <b>Video ID</b> empty for fetching for all movies.
     <br>
     <br>
     <h3>All data for all users on all engines are updated!</h3>
