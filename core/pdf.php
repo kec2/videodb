@@ -127,7 +127,7 @@ class PDF extends FPDF2File
 
     function VerifyFont($font, string $mode = ''): void
     {
-        $default_fonts = array('Arial', 'Courier', 'Helvetica', 'Times');
+        $default_fonts = array('Helvetica', 'Courier', 'Arial', 'Times');
 
         if (!in_array($font, $default_fonts)) {
             if ($mode) {
@@ -142,6 +142,7 @@ class PDF extends FPDF2File
     {
         global $config;
         //HTML parser
+        if (empty($html)) $html = '';
         $html = str_replace("\n", ' ', $html);
         $a = preg_split('/<(.*)>/U', $html, -1, PREG_SPLIT_DELIM_CAPTURE);
         foreach ($a as $i => $e) {
@@ -327,7 +328,7 @@ function pdfexport($WHERE): void
     }
 
     // get data
-    $result = iconv_array('utf-8', 'iso-8859-1', exportData($WHERE));
+    $result = exportData($WHERE);
 
     foreach ($result as $row) {
         set_time_limit(300); // rise per movie execution timeout limit if safe_mode is not set in php.ini
@@ -405,6 +406,8 @@ function pdfexport($WHERE): void
         $pdf->SetFont($font_plot, '', $font_size - 1);
         $pdf->SetXY($left_margin + $image_width + $margin, $ypos + 3 + 3);
         $pdf->SetLeftMargin($left_margin + $image_width + $margin);
+
+        if (empty($plot)) $plot = '';
         $pdf->WriteHTML($plot);
         // image
         $file = getThumbnail($row['imgurl']);

@@ -60,7 +60,7 @@ function exportData($WHERE)
     for($i=0; $i<count($result); $i++)
     {
         $result[$i]['genres'] = getItemGenres($result[$i]['id'], true);
-    }    
+    }
 
     return $result;
 }
