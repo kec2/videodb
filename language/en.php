@@ -213,8 +213,8 @@ $lang['filter_available']    = '<available>';
 # Trailers
 #
 
-$lang['trailer_search']  	   = "Searching for trailer...";
-$lang['trailer_show']  	   = "Show trailers";
+$lang['trailer_search']  	 = "Searching for trailer...";
+$lang['trailer_show']  	     = "Show trailers";
 
 #
 # Statistics
@@ -250,15 +250,16 @@ $lang['aka']                 = "Aka";
 # Config Help
 #
 
-$lang['opt_general']          = 'General';
-$lang['opt_custom']           = 'Custom Fields';
-$lang['opt_engines']          = 'Data Providers';
-$lang['opt_security']         = 'Network and Security';
-$lang['opt_caching']          = 'Caching';
-$lang['opt_apikeys']          = 'API Keys';
-$lang['opt_export']           = 'Import and export';
-$lang['opt_boxee']            = 'Boxee';
-$lang['opt_debug']            = 'Debug';
+$lang['opt_general']         = 'General';
+$lang['opt_custom']          = 'Custom Fields';
+$lang['opt_engines']         = 'Data Providers';
+$lang['opt_security']        = 'Network and Security';
+$lang['opt_caching']         = 'Caching';
+$lang['opt_apikeys']         = 'API Keys';
+$lang['opt_export']          = 'Import and export';
+$lang['opt_boxee']           = 'Boxee';
+$lang['opt_pdf']             = 'PDF export';
+$lang['opt_debug']           = 'Debug';
 
 $lang['enable']              = "enable";
 
@@ -346,6 +347,13 @@ $lang['help_rss']     = "Export you movie collection to RSS. Filter options appl
 $lang['help_rssn']    = "RSS";
 $lang['help_pdf']     = "Export you movie collection to PDF. Filter options applies.";
 $lang['help_pdfn']    = "PDF";
+
+$lang['help_pdf_scale']             = "Use the original image size or not.";
+$lang['help_pdf_scalen']            = "PDF scale";
+$lang['help_pdf_image_max_height']  = "Max height of pixel of images in PDF export.";
+$lang['help_pdf_image_max_heightn'] = "PDF max image height";
+$lang['help_pdf_image_max_width']   = "Max width in pixel of images in PDF export.";
+$lang['help_pdf_image_max_widthn']  = "PDF max image width";
 
 $lang['help_boxeeHost']     = "Host address of Boxee.";
 $lang['help_boxeeHostn']    = "Host";

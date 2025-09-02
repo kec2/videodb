@@ -20,6 +20,7 @@ $SETUP_GLOBAL = array('language', 'autoid', 'mediadefault', 'langdefault',
                       'pageno', 'showtools', 'http_header_accept_language', 'diskid_digits',
                       'hierarchical', 'cache_pruning', 'xml', 'xls', 'pdf', 'rss', 'boxeeHost', 'boxeePort',
                       'lookupdefault_edit', 'lookupdefault_new', 'thumbnail_level', 'thumbnail_quality', 'offline',
+                      'pdf_scale', 'pdf_image_max_height', 'pdf_image_max_width',
                       'debug', 'httpclientlog');
 
 $SETUP_QUICK  = array('template');
@@ -128,6 +129,11 @@ function setup_mkOptions($isprofile = false)
     $setup[] = setup_addOption($isprofile, 'rss', 'boolean');
     $setup[] = setup_addOption($isprofile, 'xls', 'boolean');
     $setup[] = setup_addOption($isprofile, 'pdf', 'boolean');
+
+    if (!$isprofile) $setup[] = setup_addSection('opt_pdf');
+    $setup[] = setup_addOption($isprofile, 'pdf_scale', 'boolean');
+    $setup[] = setup_addOption($isprofile, 'pdf_image_max_height', 'text');
+    $setup[] = setup_addOption($isprofile, 'pdf_image_max_width', 'text');
 
     if (!$isprofile) $setup[] = setup_addSection('opt_boxee');
     $setup[] = setup_addOption($isprofile, 'boxeeHost', 'text');
