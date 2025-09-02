@@ -79,8 +79,8 @@ class TestEngines extends TestCase {
         $engine = 'imdb';
 
         $actor = engineActor($actorName, $actorId, $engine, false);
-        $expectedActorUrl = "/name/nm0586568/";
-        $expectedActorImageUrl = "https://m.media-amazon.com/images/M/MV5BMTcyMTU5MzgxMF5BMl5BanBnXkFtZTYwMDI0NjI1._V1_QL75_UX140_CR0,1,140,207_.jpg";
+        $expectedActorUrl = "/name/nm0586568";
+        $expectedActorImageUrl = "https://m.media-amazon.com/images/M/MV5BMTcyMTU5MzgxMF5BMl5BanBnXkFtZTYwMDI0NjI1._V1_QL95_UY300_.jpg";
 
         $this->assertEquals($expectedActorUrl, $actor[0][0]);
         $this->assertEquals($expectedActorImageUrl, $actor[0][1]);

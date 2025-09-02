@@ -306,7 +306,7 @@ class TestIMDb extends TestCase
 //         $this->printData($data);
 
         $this->assertEquals('english, german, spanish, american sign language', $data['language']);
-        $this->assertMatchesRegularExpression("/Zach Braff::Dr. John 'J.D.' Dorian.+?::imdb:nm0103785.+?Mona Weiss::Nurse \(uncredited\)::imdb:nm2032293/is", $data['cast']);
+        $this->assertMatchesRegularExpression("/Zach Braff::Dr. John 'J.D.' Dorian \/ Mrs. Zeebee.+?::imdb:nm0103785.+?Mona Weiss::Nurse \(uncredited\), 2 episodes, 2006::imdb:nm2032293/is", $data['cast']);
         $this->assertMatchesRegularExpression('/Sacred Heart Hospital/i', $data['plot']);
     }
 
@@ -590,7 +590,7 @@ class TestIMDb extends TestCase
     {
         $url = engineGetSearchUrl('Clerks 2', 'imdb');
 
-        $this->assertEquals('https://www.imdb.com/find?s=tt&q=Clerks+2', $url);
+        $this->assertEquals('https://www.imdb.com/find?s=tt&q=Clerks%202', $url);
     }
 
     function testSearch(): void

@@ -28,7 +28,7 @@ class TestAllocine extends TestCase
 
 		$this->assertEquals('allocine:20754', $data['id']);
         $this->assertEquals('Star Wars : Episode I', $data['title']);
-		$this->assertEquals('La Menace fantôme', $data['subtitle']);
+		$this->assertEquals('La Menace fantôme de George Lucas', $data['subtitle']);
 		$this->assertEquals('Star Wars: Episode I - The Phantom Menace', $data['origtitle']);
 		$this->assertEquals(1999, $data['year']);
 		$this->assertEquals('https://fr.web.img6.acsta.net/c_310_420/pictures/24/02/19/14/31/0585421.jpg', $data['coverurl']);
@@ -85,7 +85,7 @@ class TestAllocine extends TestCase
 
 		$this->assertEquals('allocine:40623', $data['id']);
         $this->assertEquals('Star Wars : Episode III', $data['title']);
-		$this->assertEquals('La Revanche des Sith', $data['subtitle']);
+		$this->assertEquals('La Revanche des Sith de George Lucas', $data['subtitle']);
 		$this->assertEquals(2005, $data['year']);
 		$this->assertEquals("https://fr.web.img6.acsta.net/c_310_420/medias/nmedia/18/35/53/23/18423997.jpg", $data['coverurl']);
 		$this->assertEquals(140, $data['runtime']);

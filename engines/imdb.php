@@ -36,7 +36,7 @@ function imdbMeta(): array {
 function imdbSearchUrl($title)
 {
     global $imdbServer;
-    return $imdbServer.'/find?s=tt&q='.urlencode($title);
+    return $imdbServer.'/find?s=tt&q='.rawurlencode($title);
 }
 
 /**
