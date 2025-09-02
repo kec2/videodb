@@ -83,52 +83,53 @@ CREATE TABLE videogenre (
 
 # add genres
 
-INSERT INTO genres (id, name) VALUES (1,'Action');
-INSERT INTO genres (id, name) VALUES (2,'Adventure');
-INSERT INTO genres (id, name) VALUES (3,'Animation');
-INSERT INTO genres (id, name) VALUES (4,'Comedy');
-INSERT INTO genres (id, name) VALUES (5,'Crime');
-INSERT INTO genres (id, name) VALUES (6,'Documentary');
-INSERT INTO genres (id, name) VALUES (7,'Drama');
-INSERT INTO genres (id, name) VALUES (8,'Family');
-INSERT INTO genres (id, name) VALUES (9,'Fantasy');
-INSERT INTO genres (id, name) VALUES (10,'Film-Noir');
-INSERT INTO genres (id, name) VALUES (11,'Horror');
-INSERT INTO genres (id, name) VALUES (12,'Musical');
-INSERT INTO genres (id, name) VALUES (13,'Mystery');
-INSERT INTO genres (id, name) VALUES (14,'Romance');
-INSERT INTO genres (id, name) VALUES (15,'Sci-Fi');
-INSERT INTO genres (id, name) VALUES (16,'Short');
-INSERT INTO genres (id, name) VALUES (17,'Thriller');
-INSERT INTO genres (id, name) VALUES (18,'War');
-INSERT INTO genres (id, name) VALUES (19,'Western');
-INSERT INTO genres (id, name) VALUES (20,'Adult');
-INSERT INTO genres (id, name) VALUES (21,'Music');
-INSERT INTO genres (id, name) VALUES (22,'Biography');
-INSERT INTO genres (id, name) VALUES (23,'History');
-INSERT INTO genres (id, name) VALUES (24,'Sport');
+INSERT INTO genres (id, name) VALUES (1, 'Action');
+INSERT INTO genres (id, name) VALUES (2, 'Adventure');
+INSERT INTO genres (id, name) VALUES (3, 'Animation');
+INSERT INTO genres (id, name) VALUES (4, 'Comedy');
+INSERT INTO genres (id, name) VALUES (5, 'Crime');
+INSERT INTO genres (id, name) VALUES (6, 'Documentary');
+INSERT INTO genres (id, name) VALUES (7, 'Drama');
+INSERT INTO genres (id, name) VALUES (8, 'Family');
+INSERT INTO genres (id, name) VALUES (9, 'Fantasy');
+INSERT INTO genres (id, name) VALUES (10, 'Film-Noir');
+INSERT INTO genres (id, name) VALUES (11, 'Horror');
+INSERT INTO genres (id, name) VALUES (12, 'Musical');
+INSERT INTO genres (id, name) VALUES (13, 'Mystery');
+INSERT INTO genres (id, name) VALUES (14, 'Romance');
+INSERT INTO genres (id, name) VALUES (15, 'Sci-Fi');
+INSERT INTO genres (id, name) VALUES (16, 'Short');
+INSERT INTO genres (id, name) VALUES (17, 'Thriller');
+INSERT INTO genres (id, name) VALUES (18, 'War');
+INSERT INTO genres (id, name) VALUES (19, 'Western');
+INSERT INTO genres (id, name) VALUES (20, 'Adult');
+INSERT INTO genres (id, name) VALUES (21, 'Music');
+INSERT INTO genres (id, name) VALUES (22, 'Biography');
+INSERT INTO genres (id, name) VALUES (23, 'History');
+INSERT INTO genres (id, name) VALUES (24, 'Sport');
 
 # add mediatypes
 
-INSERT INTO mediatypes (id, name) VALUES (1,'DVD');
-INSERT INTO mediatypes (id, name) VALUES (2,'SVCD');
-INSERT INTO mediatypes (id, name) VALUES (3,'VCD');
-INSERT INTO mediatypes (id, name) VALUES (4,'CD-R');
-INSERT INTO mediatypes (id, name) VALUES (5,'CD-RW');
-INSERT INTO mediatypes (id, name) VALUES (6,'VHS');
-INSERT INTO mediatypes (id, name) VALUES (7,'DVD-R');
-INSERT INTO mediatypes (id, name) VALUES (8,'DVD-RW');
-INSERT INTO mediatypes (id, name) VALUES (9,'DVD+R');
-INSERT INTO mediatypes (id, name) VALUES (10,'DVD+RW');
-INSERT INTO mediatypes (id, name) VALUES (11,'DVD-DL');
-INSERT INTO mediatypes (id, name) VALUES (12,'DVD+DL');
-INSERT INTO mediatypes (id, name) VALUES (13,'LaserDisc');
-INSERT INTO mediatypes (id, name) VALUES (14,'HDD');
-INSERT INTO mediatypes (id, name) VALUES (15,'HD-DVD');
-INSERT INTO mediatypes (id, name) VALUES (16,'Blu-ray');
-INSERT INTO mediatypes (id, name) VALUES (17,'AVCHD');
-INSERT INTO mediatypes (id, name) VALUES (18,'CD');
-INSERT INTO mediatypes (id, name) VALUES (50,'wanted');
+INSERT INTO mediatypes (id, name) VALUES (1, 'DVD');
+INSERT INTO mediatypes (id, name) VALUES (2, 'SVCD');
+INSERT INTO mediatypes (id, name) VALUES (3, 'VCD');
+INSERT INTO mediatypes (id, name) VALUES (4, 'CD-R');
+INSERT INTO mediatypes (id, name) VALUES (5, 'CD-RW');
+INSERT INTO mediatypes (id, name) VALUES (6, 'VHS');
+INSERT INTO mediatypes (id, name) VALUES (7, 'DVD-R');
+INSERT INTO mediatypes (id, name) VALUES (8, 'DVD-RW');
+INSERT INTO mediatypes (id, name) VALUES (9, 'DVD+R');
+INSERT INTO mediatypes (id, name) VALUES (10, 'DVD+RW');
+INSERT INTO mediatypes (id, name) VALUES (11, 'DVD-DL');
+INSERT INTO mediatypes (id, name) VALUES (12, 'DVD+DL');
+INSERT INTO mediatypes (id, name) VALUES (13, 'LaserDisc');
+INSERT INTO mediatypes (id, name) VALUES (14, 'HDD');
+INSERT INTO mediatypes (id, name) VALUES (15, 'HD-DVD');
+INSERT INTO mediatypes (id, name) VALUES (16, 'Blu-ray');
+INSERT INTO mediatypes (id, name) VALUES (17, 'AVCHD');
+INSERT INTO mediatypes (id, name) VALUES (18, 'CD');
+INSERT INTO mediatypes (id, name) VALUES (19, 'UHD');
+INSERT INTO mediatypes (id, name) VALUES (50, 'wanted');
 
 # configuration
 CREATE TABLE config (
@@ -220,7 +221,9 @@ REPLACE INTO `config` (opt, value) VALUES ('lookupdefault_edit', 0);
 REPLACE INTO `config` (opt, value) VALUES ('lookupdefault_new', 2);
 REPLACE INTO `config` (opt, value) VALUES ('thumbnail_level', 1);
 REPLACE INTO `config` (opt, value) VALUES ('thumbnail_quality', 95);
-
+REPLACE INTO `config` (opt, value) VALUES ('pdf_scale', '1');
+REPLACE INTO `config` (opt, value) VALUES ('pdf_image_max_height', '200');
+REPLACE INTO `config` (opt, value) VALUES ('pdf_image_max_width', '100');
 
 # user permissions
 CREATE TABLE permissions (
@@ -244,4 +247,4 @@ INSERT IGNORE INTO users (id, name, passwd, permissions) VALUES (10000 ,'Guest',
 # core/constants.php when changing the database structure!
 #
 
-REPLACE INTO config (opt,value) VALUES ('dbversion', 43);
+REPLACE INTO config (opt,value) VALUES ('dbversion', 44);

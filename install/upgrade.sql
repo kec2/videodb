@@ -427,11 +427,21 @@ INSERT IGNORE INTO config (opt, value) VALUES ('thumbnail_level', '1');
 INSERT IGNORE INTO config (opt, value) VALUES ('thumbnail_quality', '95');
 INSERT IGNORE INTO config (opt, value) VALUES ('shownew', '12');
 
-# 
+#
+# changes in DB version 44
+#
+
+REPLACE INTO mediatypes (id, name) VALUES (19, 'UHD');
+
+REPLACE INTO config (opt, value) VALUES ('pdf_scale', '1');
+REPLACE INTO config (opt, value) VALUES ('pdf_image_max_height', '200');
+REPLACE INTO config (opt, value) VALUES ('pdf_image_max_width', '100');
+
+#
 # IMPORTANT
 # 
 # Always increase this number in install/install.sql, install/upgrade.sql and
 # core/constants.php when changing the database structure!
 # 
 
-REPLACE INTO config (opt,value) VALUES ('dbversion', 43);
+REPLACE INTO config (opt, value) VALUES ('dbversion', 44);
