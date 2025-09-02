@@ -661,7 +661,7 @@ class TestIMDb extends TestCase
         sort($data);
 //         $this->printData($data);
 
-        $this->assertEquals(4, count($data));
+        $this->assertEquals(3, count($data));
 
         $this->assertEquals('0080684', $data[0]['id']);
         $this->assertEquals('8.7', $data[0]['rating']);
@@ -674,9 +674,9 @@ class TestIMDb extends TestCase
         $this->assertEquals('1983', $data[1]['year']);
 
         $this->assertEquals('0458290', $data[2]['id']);
-        $this->assertEquals('8.4', $data[2]['rating']);
+        $this->assertEquals('8.5', $data[2]['rating']);
         $this->assertEquals('Star Wars: The Clone Wars', $data[2]['title']);
-        $this->assertEquals('2020', $data[2]['year']);
+        $this->assertEquals('2008', $data[2]['year']);
     }
 }
 

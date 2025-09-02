@@ -76,6 +76,32 @@ function imdbRecommendations($id, $required_rating, $required_year)
 
     $recommendations = array();
 
+    $json = getPagePropsJson($id, $resp['data']);
+    if (!empty($json)) {
+        $moreLikeThis = $json->mainColumnData->moreLikeThisTitles->edges;
+        foreach($moreLikeThis as $item) {
+            $imdbId = str_replace('tt', '', $item->node->id);
+            $title  = $item->node->titleText->text;
+            $year   = $item->node->releaseYear->year;
+            $rating = $item->node->ratingsSummary->aggregateRating;
+
+            // matching at least required rating?
+            if (empty($required_rating) || (float) $rating < $required_rating) continue;
+
+            // matching at least required year?
+            if (empty($required_year) || (int) $year < $required_year) continue;
+
+            $data = array();
+            $data['id']     = $imdbId;
+            $data['rating'] = $rating;
+            $data['title']  = $title;
+            $data['year']   = $year;
+
+            $recommendations[] = $data;
+        }
+        return $recommendations;
+    }
+
     // get sections of recommendation
     preg_match('/<section data-testid="MoreLikeThis"(.+?)<\/section>/si', $resp['data'], $rec_block);
     preg_match_all('/<a class="ipc-lockup-overlay ipc-focusable" href="\/title\/tt(\d+)\/\?ref_=tt_sims_tt_i_\d+" aria-label="View title page for.+?">/si', $rec_block[1], $ary, PREG_SET_ORDER);
