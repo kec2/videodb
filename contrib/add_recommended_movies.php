@@ -80,7 +80,7 @@ if ($submit) {
             continue;
         }
 
-        $engine = strtoupper(engineGetEngine($video['imdbID']));
+        $engine = strtolower(engineGetEngine($video['imdbID']));
         echo "Fetching recommendations for <b>{$video['title']}</b> ($engine Id {$video['imdbID']})<br/>";
 
         $data = engineGetRecommendations($video['imdbID'], $required_rating, $required_year, $engine);
