@@ -64,7 +64,7 @@ class TestIMDb extends TestCase
         $this->assertTrue(in_array('Liam Neeson::Qui-Gon Jinn::imdb:nm0000553', $cast));
         $this->assertTrue(in_array('Ewan McGregor::Obi-Wan Kenobi::imdb:nm0000191', $cast));
         $this->assertTrue(in_array('Natalie Portman::Queen Amidala / Padmé::imdb:nm0000204', $cast));
-        $this->assertTrue(in_array('Anthony Daniels::C-3PO (voice)::imdb:nm0000355', $cast));
+        $this->assertTrue(in_array('Anthony Daniels::C-3PO (Synchronisation)::imdb:nm0000355', $cast));
         $this->assertTrue(in_array('Kenny Baker::R2-D2::imdb:nm0048652', $cast));
         $this->assertTrue(sizeof($cast) > 90);
 

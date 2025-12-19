@@ -460,7 +460,8 @@ function imdbGetCastV2($imdbID, $json) {
 
     if (isset($json)) {
         foreach($json->contentData->categories as $cats) {
-            if ($cats->id == 'cast') {
+        # dlog("categories:" . $cats->name);
+            if ($cats->name == 'Cast' || $cats->name == 'Besetzung') {
                 $pageSize = $cats->pagination->queryVariables->first;
                 $total = $cats->section->total;
                 if ($total > $pageSize) {
@@ -499,7 +500,7 @@ function imdbGetCastV2($imdbID, $json) {
                 }
 
                 $completeCast['cast'] = $cast;
-            } elseif ($cats->id == 'director') {
+            } elseif ($cats->name == 'Director' || $cats->name == 'Directors' || $cats->name == 'Regisseur/-in') {
                 $directors = [];
                 foreach($cats->section->items as $item) {
                    $directors[] = $item->rowTitle;
@@ -509,13 +510,13 @@ function imdbGetCastV2($imdbID, $json) {
                     dlog("WARNING: Directors string to long(250). $imdbID");
                 }
                $completeCast['director'] = substr($dirs, 0, 250);
-            } elseif ($cats->id == 'writer') {
+            } elseif ($cats->id == 'Writer' || $cats->id == 'Writers' || $cats->name == 'Autor/-in') {
                 $writers = [];
                 foreach($cats->section->items as $item) {
                    $writers[] = $item->rowTitle;
                 }
                $completeCast['writer'] = implode(', ', $writers);
-            } elseif ($cats->id == 'creator') {
+            } elseif ($cats->id == 'Creator' || $cats->id == 'Creator') {
                 $creators = [];
                 foreach($cats->section->items as $item) {
                    $creators[] = $item->rowTitle;
@@ -545,7 +546,7 @@ function imdbGetCast($imdbID, $data) {
 
     do {
         $url = 'https://caching.graphql.imdb.com/?operationName=TitleCreditSubPagePagination&variables={"after":"'.$after.'","category":"cast","const":"tt'.$imdbID.'","first":250,"locale":"en-US","originalTitleText":false,"tconst":"tt'.$imdbID.'"}&extensions={"persistedQuery":{"sha256Hash":"716fbcc1b308c56db263f69e4fd0499d4d99ce1775fb6ca75a75c63e2c86e89c","version":1}}';
-        // dlog("Calling: $url");
+        dlog("Calling: $url");
         $param = [ 'header' => [
               'Accept' => 'application/json',
               'User-Agent' => 'Mozilla/5.0',
@@ -560,7 +561,13 @@ function imdbGetCast($imdbID, $data) {
         $json = json_decode($resp['data']);
         $credits = $json->data->title->credits;
 
+$i = 0;
         foreach($credits->edges as $edge) {
+      if ($i == 0) {
+      dlog($edge);
+      $i=1;
+      }
+
             $actorId = $edge->node->name->id;
             $actor = $edge->node->name->nameText->text;
             $role;
