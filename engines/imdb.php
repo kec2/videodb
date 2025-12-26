@@ -201,6 +201,18 @@ function imdbSearch($title, $aka=null)
 
     // add encoding
     $data['encoding'] = $resp['encoding'];
+    $json = getPagePropsJson(@$title, $resp['data']);
+    if (!empty($json)) {
+        foreach($json->titleResults->results as $result) {
+            dlog($result);
+            $info = [];
+            $info['id'] = $imdbIdPrefix . preg_replace('/tt(\d+)/', '$1', $result->listItem->titleId);
+            $info['title'] = $result->listItem->titleText;
+            $info['year'] = $result->listItem->releaseYear;
+            $data[] = $info;
+        }
+        return $data;
+    }
 
     // direct match (redirecting to individual title)?
     if (preg_match('/^'.preg_quote($imdbServer,'/').'\/[Tt]itle(\?|\/tt)([0-9?]+)\/?/', $resp['url'], $single)) {
@@ -316,13 +328,12 @@ function getPagePropsJson($imdbID, $data) {
     if (preg_match('/<script id="__NEXT_DATA__" type="application\/json">([^<]*)<\/script>/si', $data, $ary)) {
         try {
             $json = json_decode($ary[1]);
+//         dlog("Found json for $imdbID");
+            return $json->props->pageProps;
         }   catch (Exception $e) {
             dlog("Json error, imdbid: $imdbID, ". json_last_error() .", " . json_last_error_msg());
             dlog($ary[1]);
         }
-//         dlog("Found json for $imdbID");
-
-        return $json->props->pageProps;
     } else {
         dlog("Did not find any json for $imdbID");
     }
@@ -427,7 +438,7 @@ function imdbGetCountries($data, $json) {
     // going through main page gives all countries
     // going through full credits only gets some countries
     if (isset($json)) {
-        dlog('got countries from json');
+//         dlog('got countries from json');
         $countries = [];
         foreach($json->mainColumnData->countriesDetails->countries as $country) {
             $countries[] = $country->text;
@@ -546,7 +557,7 @@ function imdbGetCast($imdbID, $data) {
 
     do {
         $url = 'https://caching.graphql.imdb.com/?operationName=TitleCreditSubPagePagination&variables={"after":"'.$after.'","category":"cast","const":"tt'.$imdbID.'","first":250,"locale":"en-US","originalTitleText":false,"tconst":"tt'.$imdbID.'"}&extensions={"persistedQuery":{"sha256Hash":"716fbcc1b308c56db263f69e4fd0499d4d99ce1775fb6ca75a75c63e2c86e89c","version":1}}';
-        dlog("Calling: $url");
+//         dlog("Calling: $url");
         $param = [ 'header' => [
               'Accept' => 'application/json',
               'User-Agent' => 'Mozilla/5.0',
@@ -561,13 +572,7 @@ function imdbGetCast($imdbID, $data) {
         $json = json_decode($resp['data']);
         $credits = $json->data->title->credits;
 
-$i = 0;
         foreach($credits->edges as $edge) {
-      if ($i == 0) {
-      dlog($edge);
-      $i=1;
-      }
-
             $actorId = $edge->node->name->id;
             $actor = $edge->node->name->nameText->text;
             $role;
