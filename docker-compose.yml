@@ -49,6 +49,7 @@ services:
         condition: service_healthy
     volumes:
       - ./liquibase:/liquibase/changelog
+      - ./liquibase/lib:/liquibase/lib
     command: 'update --defaults-file=/liquibase/changelog/liquibase.properties'
 
 #    command: ['--defaults-file=/liquibase/changelog/liquibase.properties',
