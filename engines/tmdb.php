@@ -8,9 +8,7 @@
  * @author  Andreas Gohr    <a.gohr@web.de>
  * @link    http://www.tmdb.com  Internet Movie Database
  */
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL);
+
 $GLOBALS['tmdbServer'] = 'https://api.themoviedb.org';
 $GLOBALS['tmdbIdPrefix'] = 'tmdb:';
 define('TMDB_API_KEY', 'apikey');
@@ -28,7 +26,7 @@ function tmdbMeta(): array {
     return array('name' => 'TMDB', 'stable' => 1, 'php' => '8.1.0', 'capabilities' => array('movie', 'image'),
         'config' => array(
             array('opt' => TMDB_API_KEY, 'name' => 'TMDB API key',
-                'desc' => 'To use the TMDB search engine you need to obtain your own THDM API key <a href="https://imdb-api.com">here</a>).')
+                'desc' => 'To use the TMDB search engine you need to obtain your own THDM API key <a href="https://developer.themoviedb.org/docs/getting-started">here</a>).')
         ));
 }
 
