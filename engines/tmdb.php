@@ -81,33 +81,33 @@ function tmdbContentUrl($id)
  */
 function tmdbRecommendations($id, $required_rating, $required_year)
 {
-    global $CLIENTERROR;
     global $tmdbIdPrefix;
-    global $config;
     global $tmdbServer;
 
-    $tmdbId = preg_replace('/^'.$tmdbIdPrefix.'/', '', $id);
-    $url = $tmdbServer.'/3/movie/'.$tmdbId.'/recommendations';
-
-    $apikey = $config['tmdbapikey'];
-    $param = [ 'header' => [
-        'Accept' => 'application/json',
-        'Authorization' => 'Bearer '. $apikey,
-        'Content-Type' => 'application/json'
-    ]
-    ];
-
-    $resp = httpClient($url, true, $param);
-    if (!$resp['success']) {
-        $CLIENTERROR .= $resp['error']."\n";
+    $isTv = 0;
+    if (str_ends_with($id, 'TV')) {
+        $isTv = 1;
+        $id = str_replace('TV', '', $id);
     }
 
-    $json = json_decode($resp['data']);
+    $tmdbId = preg_replace('/^'.$tmdbIdPrefix.'/', '', $id);
+
+    if ($isTv) {
+        $url = $tmdbServer.'/3/tv/'.$tmdbId.'/recommendations';
+    } else {
+        $url = $tmdbServer.'/3/movie/'.$tmdbId.'/recommendations';
+    }
+    $json = callTmdbApi($url);
 
     $recommendations = [];
     foreach ($json->results as $result) {
         $rating =  $result->vote_average;
-        $year = substr($result->release_date, 0, 4);
+
+        if ($isTv) {
+            $year = substr($result->first_air_date, 0, 4);
+        } else {
+            $year = substr($result->release_date, 0, 4);
+        }
 
         // matching at least required rating?
         if (empty($required_rating) || (float) $rating < $required_rating) continue;
@@ -115,10 +115,16 @@ function tmdbRecommendations($id, $required_rating, $required_year)
         // matching at least required year?
         if (empty($required_year) || (int) $year < $required_year) continue;
 
+        if ($isTv) {
+            $title = $result->name;
+        } else {
+            $title = $result->title;
+        }
+
         $data = [];
         $data['id']     = $tmdbIdPrefix . $result->id;
         $data['rating'] = $rating;
-        $data['title']  = $result->title;
+        $data['title']  = $title;
         $data['year']   = $year;
 
         $recommendations[] = $data;
@@ -433,10 +439,16 @@ function getTmdbTitles($json): array {
         $title = tmdbSplitTitle($json->name);
         $titles['title'] = $title[0];
         $titles['subtitle'] = $title[1];
+    } elseif(isset($json->title)) {
+        $title = tmdbSplitTitle($json->title);
+        $titles['title'] = $title[0];
+        $titles['subtitle'] = $title[1];
     }
 
     if (isset($json->original_name)) {
         $titles['origtitle'] = $json->original_name;
+    } elseif (isset($json->original_title)) {
+        $titles['origtitle'] = $json->original_title;
     }
 
     return $titles;
