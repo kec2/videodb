@@ -138,7 +138,7 @@ function httpClient($url, $cache = false, $para = null, $reload = false)
         $requestConfig += ['headers' => ['Accept-Language' => $config['http_header_accept_language']]];
     }
 
-    addRequestHeader($requestConfig, $para);
+    $requestConfig = addRequestHeader($requestConfig, $para);
 
     // additional request headers
     if (!empty($para) && !empty($para['header'])) {

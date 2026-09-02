@@ -19,6 +19,18 @@ require_once './core/edit.core.php';
 
 require_once './engines/engines.php';
 
+global $config;
+global $smarty;
+
+$import = req_string('import');
+$genres = req_array('genres');
+$id = req_int('id');
+$ajax_prefetch_id = req_string('ajax_prefetch_id');
+$ajax_autocomplete_title = req_string('ajax_autocomplete_title');
+$ajax_autocomplete_subtitle = req_string('ajax_autocomplete_subtitle');
+$ajax_type = req_string('ajax_type');
+$ajax_check_duplicate = req_string('ajax_check_duplicate');
+$imdbID = req_string('imdbID');
 
 // check for localnet
 localnet_or_die();
@@ -68,7 +80,8 @@ if ($ajax_prefetch_id || $ajax_autocomplete_title || $ajax_autocomplete_subtitle
 		echo(json_encode($data));
 		exit;
     }
-    
+
+    $ret = '';
     foreach ($data as $item)
     {
         $text = preg_replace('/('.$ajax_autocomplete_title.')/i', '<em>\1</em>', $item['title']);
@@ -127,7 +140,9 @@ if ($config['xml'] && $import == 'xml') {
 }
 
 // legacy
-if ($imdb) $lookup = 1;
+if ($imdb) {
+    $lookup = 1;
+}
 
 // get default lookup mode (0=ignore, 1=lookup, 2=overwrite) if not set
 if (!isset($lookup)) $lookup = (empty($id)) ? $lookup = $config['lookupdefault_new'] : $config['lookupdefault_edit'];
