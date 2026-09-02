@@ -13,6 +13,8 @@
 require_once './core/functions.php';
 require_once './engines/engines.php';
 
+$searchtype = req_string('searchtype');
+
 /**
  *  Update item list asynchronously
  *
@@ -69,7 +71,7 @@ switch ($engine)
                     {
                         $result     = engineSearch($find, $engine, $searchaka);
                         $searchurl  = engineGetSearchUrl($find, $engine);
-                    }    
+                    }
                     break;
 
     default:

@@ -996,5 +996,68 @@ function get_username($userId)
     return $result[0]['name'];
 }
 
+/**
+ * A few functions for input filtering
+ */
+
+/**
+ * @param string $name
+ * @return string[] array of strings
+ */
+function req_array ($name) {
+    return req_raw($name, FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES | FILTER_REQUIRE_ARRAY);
+}
+
+/**
+ * @param string $name
+ * @return string
+ */
+function req_email ($name) {
+    return req_raw($name, FILTER_SANITIZE_EMAIL);
+}
+
+/**
+ * @param string $name
+ * @return string
+ */
+function req_string ($name) {
+    return req_raw($name, FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES | FILTER_REQUIRE_SCALAR);
+}
+
+/**
+ * @param string $name
+ * @return float
+ */
+function req_float ($name) {
+    return req_raw($name, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_THOUSAND | FILTER_REQUIRE_SCALAR);
+}
+
+/**
+ * @param string $name
+ * @return int
+ */
+function req_int ($name) {
+    return req_raw($name, FILTER_SANITIZE_NUMBER_INT);
+}
+
+/**
+ * @param string $name
+ * @return string
+ */
+function req_url ($name) {
+    return req_raw($name, FILTER_SANITIZE_URL);
+}
+
+/**
+ * @param string $name
+ * @return mixed type depends on $filter, returns false on failure, null is not set.
+ */
+function req_raw ($name, $filter = FILTER_UNSAFE_RAW, $options = FILTER_REQUIRE_SCALAR) {
+    $value = filter_input(INPUT_POST, $name, $filter, $options);
+    if (is_null($value)) {
+        $value = filter_input(INPUT_GET, $name, $filter, $options);
+    }
+    return $value;
+}
 
 ?>
