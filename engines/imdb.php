@@ -539,7 +539,7 @@ function imdbGetCastV2($imdbID, $json) {
         return $completeCast;
     }
 
-    $cast = getImdbCast($imdbID, $resp['data']);
+    $cast = imdbGetCast($imdbID, $resp['data']);
 
     dlog('Failed to find a cast for:' . $imdbID);
     return $cast;
