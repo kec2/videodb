@@ -108,10 +108,10 @@ function tmdbRecommendations($id, $required_rating, $required_year)
         }
 
         // matching at least required rating?
-        if (empty($required_rating) || (float) $rating < $required_rating) continue;
+        if (isset($required_rating) && (float) $rating < $required_rating) continue;
 
         // matching at least required year?
-        if (empty($required_year) || (int) $year < $required_year) continue;
+        if (isset($required_year) && (int) $year < $required_year) continue;
 
         if ($isTv) {
             $title = $result->name;
