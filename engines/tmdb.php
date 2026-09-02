@@ -44,7 +44,12 @@ function tmdbSearchUrl($title)
 {
     global $tmdbServer;
 
-    return $tmdbServer.'/3/search/multi?query='.rawurlencode($title);
+    $url = $tmdbServer.'/3/search/multi?query='.rawurlencode($title);
+    if (check_permission(PERM_ADULT) || empty($config['adultgenres'])) {
+        $url .= '&include_adult=true';
+    }
+
+    return $url;
 }
 
 /**
@@ -136,9 +141,6 @@ function tmdbRecommendations($id, $required_rating, $required_year)
 function tmdbSearch($title)
 {
     global $tmdbIdPrefix;
-    global $CLIENTERROR;
-    global $cache;
-    global $config;
 
     $url = tmdbSearchUrl($title);
     $json = callTmdbApi($url);
@@ -389,6 +391,10 @@ function getTmdbGenres($json): array
                 $genres[] = $genre->name;
             }
         }
+    }
+
+    if ($json->adult && !in_array('Adult', $genres)) {
+        $genres[] = 'Adult';
     }
 
     return $genres;
